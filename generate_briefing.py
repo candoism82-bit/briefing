@@ -402,17 +402,15 @@ def generate_html(youtube_data, date_info):
 완전한 HTML 파일만 출력. <!DOCTYPE html>부터 </html>까지. 마크다운 없이.
 """
 
-    print("  [2차] HTML 생성 중 (웹 검색 없음)...")
-    response = client.messages.create(
-        model="claude-sonnet-4-6",
-        max_tokens=32000,   # 웹 검색 없으므로 전부 HTML 생성에 사용 가능
-        messages=[{"role": "user", "content": prompt}]
-    )
-
+    print("  [2차] HTML 생성 중 (웹 검색 없음, 스트리밍)...")
     html_content = ""
-    for block in response.content:
-        if hasattr(block, "text"):
-            html_content += block.text
+    with client.messages.stream(
+        model="claude-sonnet-4-6",
+        max_tokens=16000,
+        messages=[{"role": "user", "content": prompt}]
+    ) as stream:
+        for text in stream.text_stream:
+            html_content += text
 
     # HTML 범위 추출
     if "<!DOCTYPE html>" in html_content:
