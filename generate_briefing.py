@@ -221,9 +221,22 @@ def generate_html(youtube_data, date_info):
 
     # HTML 범위만 추출
     if "<!DOCTYPE html>" in html_content:
-        start        = html_content.index("<!DOCTYPE html>")
-        end          = html_content.rindex("</html>") + 7
-        html_content = html_content[start:end]
+        start = html_content.index("<!DOCTYPE html>")
+        # </html> 없을 경우 대비 (웹 검색 블록이 섞인 경우)
+        if "</html>" in html_content:
+            end          = html_content.rindex("</html>") + 7
+            html_content = html_content[start:end]
+        else:
+            html_content = html_content[start:]
+            if "</body>" not in html_content:
+                html_content += "\n</body>\n</html>"
+            else:
+                html_content += "\n</html>"
+    else:
+        # HTML이 전혀 없으면 재시도
+        print("  ⚠️ HTML 없음 — 응답 내용 확인:")
+        print(html_content[:500])
+        raise ValueError("Claude API 응답에 HTML이 없습니다. 재시도 필요.")
 
     return html_content
 
