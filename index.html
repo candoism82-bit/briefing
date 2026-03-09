@@ -7,25 +7,20 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <title>🦎 크레스티드 게코 커뮤니티 아침 브리핑 · 2026년 03월 09일</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Noto+Serif+KR:wght@700;900&family=DM+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Noto+Serif+KR:wght@900&family=DM+Mono&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;display:flex;justify-content:center;padding:16px}
 .card{width:100%;max-width:480px;border-radius:16px;overflow:hidden;background:#161b22;box-shadow:0 8px 32px rgba(0,0,0,.5)}
-
-/* HEADER */
 .hd{background:linear-gradient(135deg,#1a2332,#0d1f35);padding:24px;position:relative;overflow:hidden}
 .hd::before{content:'🦎';position:absolute;right:-10px;top:-10px;font-size:80px;opacity:.08}
 .hd-eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;color:#58a6ff;text-transform:uppercase;margin-bottom:4px}
-.hd-title{font-family:'Noto Serif KR',serif;font-size:26px;font-weight:900;color:#fff;display:flex;align-items:center;gap:8px}
-.hd-sub{font-size:11px;color:rgba(255,255,255,.4);margin-top:4px;letter-spacing:.05em}
+.hd-title{font-family:'Noto Serif KR',serif;font-size:26px;font-weight:900;color:#fff}
+.hd-sub{font-size:11px;color:rgba(255,255,255,.4);margin-top:4px}
 .hd-inner{display:flex;justify-content:space-between;align-items:flex-start}
 .hd-date-big{font-family:'DM Mono',monospace;font-size:52px;font-weight:700;color:#58a6ff;line-height:1}
 .hd-date-small{font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,.4);text-align:right;letter-spacing:.08em}
-
-/* PROMO */
-.promo-banner{background:linear-gradient(160deg,#0a1f08,#1a3a15,#0e2a0a);border-bottom:3px solid #3d7a3a;position:relative;overflow:hidden}
+.promo-banner{background:linear-gradient(160deg,#0a1f08,#1a3a15,#0e2a0a);border-bottom:3px solid #3d7a3a}
 .promo-inner{padding:22px 24px 20px}
 .promo-badge-row{display:flex;align-items:center;gap:8px;margin-bottom:14px}
 .promo-badge{background:#3d7a3a;color:#c8f0a0;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border-radius:20px}
@@ -44,8 +39,6 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 .promo-qr-label{font-size:9px;color:rgba(255,255,255,.3);display:block;text-align:center}
 .promo-img-wrap{border-radius:8px;overflow:hidden;border:1px solid rgba(106,173,69,.25)}
 .promo-img-wrap img{width:100%;display:block}
-
-/* SECTION HEADER */
 .sec-hd{display:flex;align-items:center;gap:8px;padding:20px 20px 12px}
 .sec-hd-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;color:#58a6ff;text-transform:uppercase}
 .sec-hd-line{flex:1;height:1px;background:rgba(255,255,255,.08)}
@@ -54,10 +47,7 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 .tag-eco{background:rgba(63,185,80,.15);color:#3fb950}
 .tag-pol{background:rgba(248,81,73,.15);color:#f85149}
 .tag-zod{background:rgba(210,153,34,.15);color:#d2a61a}
-.tag-hor{background:rgba(188,140,255,.15);color:#bc8cff}
-.tag-meme{background:rgba(255,166,87,.15);color:#ffa657}
-
-/* WEATHER */
+.tag-yt{background:rgba(255,166,87,.15);color:#ffa657}
 .weather-ov{display:flex;align-items:center;gap:12px;padding:0 20px 14px}
 .weather-ov-icon{font-size:36px}
 .weather-ov-title{font-size:15px;font-weight:700;color:#e6edf3;margin-bottom:3px}
@@ -74,8 +64,6 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 .wd-icon{font-size:16px;margin-bottom:4px}
 .wd-high{font-size:12px;font-weight:700;color:#e6edf3}
 .wd-low{font-size:10px;color:rgba(255,255,255,.35)}
-
-/* NEWS */
 .news-list{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px}
 .news-item{display:flex;gap:10px;background:#0d1117;border-radius:8px;padding:12px;border:1px solid rgba(255,255,255,.06)}
 .news-num{font-family:'DM Mono',monospace;font-size:11px;color:#58a6ff;flex-shrink:0;padding-top:2px}
@@ -83,39 +71,15 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 .news-title:hover{color:#58a6ff}
 .news-summary{font-size:11px;color:rgba(255,255,255,.55);line-height:1.6;margin-bottom:4px}
 .news-source{font-size:10px;color:#3fb950}
-
-/* ZODIAC */
-.ztabs{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;padding:0 16px 12px}
-.ztab{background:#0d1117;border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:6px 2px;font-size:16px;color:rgba(255,255,255,.5);cursor:pointer;text-align:center;line-height:1.3;transition:.2s}
-.ztab span{font-size:8px;display:block;margin-top:2px}
-.ztab.active{background:rgba(210,153,34,.15);border-color:#d2a61a;color:#e6edf3}
-.zpanels{padding:0 16px 16px}
-.zpanel{display:none}
-.zpanel.active{display:block}
-.zpanel-summary{font-size:12px;color:#d2a61a;margin-bottom:10px;padding:8px 12px;background:rgba(210,153,34,.08);border-radius:6px;border-left:3px solid #d2a61a}
-.zy-item{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)}
-.zy-year{font-family:'DM Mono',monospace;font-size:10px;color:#58a6ff;flex-shrink:0;padding-top:2px;min-width:40px}
-.zy-text{font-size:12px;color:rgba(255,255,255,.75);line-height:1.6}
-
-/* HOROSCOPE */
-.hor-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 16px 16px}
-.hor-card{background:#0d1117;border-radius:8px;padding:10px;border:1px solid rgba(255,255,255,.06)}
-.hor-emoji{font-size:20px;margin-bottom:3px}
-.hor-sign{font-size:11px;font-weight:700;color:#e6edf3;margin-bottom:1px}
-.hor-date{font-size:9px;color:rgba(255,255,255,.35);margin-bottom:4px}
-.hor-text{font-size:10px;color:rgba(255,255,255,.6);line-height:1.5}
-
-/* MEME */
+.fortune-img{padding:0 16px 16px}
+.fortune-img img{width:100%;border-radius:8px;display:block;border:1px solid rgba(255,255,255,.08)}
+.fortune-empty{padding:20px 16px;text-align:center;color:rgba(255,255,255,.25);font-size:12px;background:#0d1117;border-radius:8px;margin:0 16px 16px;border:1px dashed rgba(255,255,255,.1)}
 .mtabs{display:flex;gap:6px;padding:0 16px 12px;flex-wrap:wrap}
 .mtab{background:#0d1117;border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:5px 12px;font-size:11px;color:rgba(255,255,255,.5);cursor:pointer;transition:.2s}
 .mtab.active{background:rgba(255,166,87,.15);border-color:#ffa657;color:#ffa657}
 .mpanel{display:none;padding:0 16px 16px}
 .mpanel.active{display:block}
-.drip-item{background:#0d1117;border-radius:8px;padding:12px;margin-bottom:8px;font-size:13px;color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.06);line-height:1.6}
-.yt-wrap iframe{width:100%;aspect-ratio:9/16;border-radius:8px}
-.yt-link{display:block;margin-top:8px;font-size:11px;color:#58a6ff;text-decoration:none}
-
-/* FOOTER */
+.yt-link{display:block;margin-top:8px;font-size:11px;color:#58a6ff;text-decoration:none;line-height:1.5}
 .footer{padding:20px;text-align:center;border-top:1px solid rgba(255,255,255,.06);font-size:10px;color:rgba(255,255,255,.25);line-height:1.8}
 </style>
 </head>
@@ -128,7 +92,7 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
     <div>
       <div class="hd-eyebrow">Crested Gecko Community</div>
       <div class="hd-title">🦎 아침 브리핑</div>
-      <div class="hd-sub">날씨 · 경제 · 정치 · 운세 · 밈</div>
+      <div class="hd-sub">날씨 · 경제 · 정치 · 운세 · 유튜브</div>
     </div>
     <div>
       <div class="hd-date-big">09</div>
@@ -146,8 +110,10 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
     <div class="promo-sub-text"><strong>집사님들이 관심을 가져주셔야!</strong><br>더 좋은 환경에서 키우실 수 있습니다! 🦎</div>
   </div>
   <div class="promo-org-box">
-    <div><div class="promo-org-name">사단법인 작은생명공존연합 <span>‼️</span></div>
-    <a class="promo-org-url" href="https://www.littlelives.or.kr/" target="_blank">🔗 www.littlelives.or.kr</a></div>
+    <div>
+      <div class="promo-org-name">사단법인 작은생명공존연합 <span>‼️</span></div>
+      <a class="promo-org-url" href="https://www.littlelives.or.kr/" target="_blank">🔗 www.littlelives.or.kr</a>
+    </div>
     <div><div class="promo-qr-emoji">🐊</div><span class="promo-qr-label">Little Lives</span></div>
   </div>
   <div class="promo-img-wrap"><img src="images/littlelives.png" alt="작은생명공존연합"></div>
@@ -158,304 +124,169 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 <div class="weather-ov">
   <div class="weather-ov-icon">🌤</div>
   <div>
-    <div class="weather-ov-title">2026년 3월 9일(월) 전국 대체로 흐리고 일부 지역 비 또는 눈. 밤부터 차차 맑아짐. 아침 기온 -3~3℃, 낮 기온 8~13℃.</div>
-    <div class="weather-ov-sub">전국이 대체로 흐리며 늦은 새벽부터 낮 사이 일부 지역에 비 또는 눈이 내릴 것으로 예상됨. 이번 주 아침 최저기온은 -2~7℃, 낮 최고기온은 8~16℃로 평년과 비슷한 수준. 주말(14~15일)은 전국 가끔 구름많음 예상.</div>
+    <div class="weather-ov-title">3월 9일(월) 전국 대체로 흐리며 꽃샘추위 기승. 중부지방 중심 비 또는 눈, 밤부터 차차 맑아짐. 아침 최저 -3~5도, 낮 최고 5~13도로 일교차 큼.</div>
+    <div class="weather-ov-sub">중부지방은 대체로 흐리다가 밤부터 차차 맑아지겠고, 남부지방과 제주도는 가끔 구름많다가 밤부터 점차 맑아질 전망. 강원 영동·경북 동해안은 오후부터 흐려지며 비 또는 눈. 당분간 아침 기온 낮겠으니 서리 주의. 주간 기온은 아침 -2~7℃, 낮 8~16℃ 수준으로 평년과 비슷.</div>
   </div>
 </div>
-<div class="cities">
-        <div class="city-card">
-          <div class="city-name">서울</div>
+<div class="cities"><div class="city-card">
+          <div class="city-name">SEOUL</div>
           <div class="city-high">8</div>
           <div class="city-low">1</div>
-          <div class="city-icon">🌧️</div>
-        </div>
-        <div class="city-card">
-          <div class="city-name">인천</div>
-          <div class="city-high">7</div>
-          <div class="city-low">1</div>
-          <div class="city-icon">🌧️</div>
-        </div>
-        <div class="city-card">
-          <div class="city-name">부산</div>
-          <div class="city-high">11</div>
+          <div class="city-icon">cloudy</div>
+        </div><div class="city-card">
+          <div class="city-name">BUSAN</div>
+          <div class="city-high">12</div>
           <div class="city-low">2</div>
-          <div class="city-icon">⛅</div>
-        </div>
-        <div class="city-card">
-          <div class="city-name">대구</div>
+          <div class="city-icon">partly_cloudy</div>
+        </div><div class="city-card">
+          <div class="city-name">DAEGU</div>
           <div class="city-high">10</div>
           <div class="city-low">0</div>
-          <div class="city-icon">⛅</div>
-        </div>
-        <div class="city-card">
-          <div class="city-name">광주</div>
+          <div class="city-icon">partly_cloudy</div>
+        </div><div class="city-card">
+          <div class="city-name">DAEJEON</div>
           <div class="city-high">9</div>
+          <div class="city-low">-3</div>
+          <div class="city-icon">cloudy</div>
+        </div><div class="city-card">
+          <div class="city-name">GWANGJU</div>
+          <div class="city-high">10</div>
           <div class="city-low">-2</div>
-          <div class="city-icon">🌧️</div>
-        </div>
-        <div class="city-card">
-          <div class="city-name">제주</div>
-          <div class="city-high">13</div>
+          <div class="city-icon">partly_cloudy</div>
+        </div><div class="city-card">
+          <div class="city-name">JEJU</div>
+          <div class="city-high">10</div>
           <div class="city-low">3</div>
-          <div class="city-icon">🌦️</div>
+          <div class="city-icon">partly_cloudy</div>
         </div></div>
-<div class="weekly">
-        <div class="week-day">
-          <div class="wd-label">3/9(월)</div>
-          <div class="wd-icon">🌧️</div>
+<div class="weekly"><div class="week-day">
+          <div class="wd-label">03/09(월)</div>
+          <div class="wd-icon">cloudy</div>
           <div class="wd-high">8</div>
           <div class="wd-low">1</div>
-        </div>
-        <div class="week-day">
-          <div class="wd-label">3/10(화)</div>
-          <div class="wd-icon">⛅</div>
+        </div><div class="week-day">
+          <div class="wd-label">03/10(화)</div>
+          <div class="wd-icon">partly_cloudy</div>
           <div class="wd-high">10</div>
+          <div class="wd-low">2</div>
+        </div><div class="week-day">
+          <div class="wd-label">03/11(수)</div>
+          <div class="wd-icon">cloudy</div>
+          <div class="wd-high">9</div>
+          <div class="wd-low">1</div>
+        </div><div class="week-day">
+          <div class="wd-label">03/12(목)</div>
+          <div class="wd-icon">sunny</div>
+          <div class="wd-high">11</div>
           <div class="wd-low">0</div>
-        </div>
-        <div class="week-day">
-          <div class="wd-label">3/11(수)</div>
-          <div class="wd-icon">🌤️</div>
+        </div><div class="week-day">
+          <div class="wd-label">03/13(금)</div>
+          <div class="wd-icon">partly_cloudy</div>
           <div class="wd-high">12</div>
-          <div class="wd-low">1</div>
-        </div>
-        <div class="week-day">
-          <div class="wd-label">3/12(목)</div>
-          <div class="wd-icon">🌤️</div>
+          <div class="wd-low">2</div>
+        </div><div class="week-day">
+          <div class="wd-label">03/14(토)</div>
+          <div class="wd-icon">partly_cloudy</div>
           <div class="wd-high">13</div>
-          <div class="wd-low">2</div>
-        </div>
-        <div class="week-day">
-          <div class="wd-label">3/13(금)</div>
-          <div class="wd-icon">⛅</div>
-          <div class="wd-high">12</div>
-          <div class="wd-low">1</div>
-        </div>
-        <div class="week-day">
-          <div class="wd-label">3/14(토)</div>
-          <div class="wd-icon">⛅</div>
-          <div class="wd-high">14</div>
-          <div class="wd-low">2</div>
-        </div>
-        <div class="week-day">
-          <div class="wd-label">3/15(일)</div>
-          <div class="wd-icon">⛅</div>
-          <div class="wd-high">16</div>
           <div class="wd-low">3</div>
+        </div><div class="week-day">
+          <div class="wd-label">03/15(일)</div>
+          <div class="wd-icon">partly_cloudy</div>
+          <div class="wd-high">14</div>
+          <div class="wd-low">4</div>
         </div></div>
 
 <!-- ECONOMY NEWS -->
 <div class="sec-hd"><span class="sec-hd-label">Economy</span><div class="sec-hd-line"></div><span class="sec-tag tag-eco">경제·주식</span></div>
-<div class="news-list">
-        <div class="news-item">
+<div class="news-list"><div class="news-item">
           <span class="news-num">01</span>
           <div class="news-body">
-            <a class="news-title" href="https://www.hankyung.com" target="_blank">항공주 일제 급락…고유가·고환율 이중고, 환율 1490원대</a>
-            <div class="news-summary">중동 사태 여파로 국제유가(WTI)가 18% 이상 폭등하고 원·달러 환율이 1493원에 개장하며 2009년 금융위기 이후 최고 수준을 기록. 대한항공(-7.76%), 티웨이항공(-10.26%) 등 항공주 전체 급락세.</div>
-            <div class="news-source">▸ 한국경제</div>
+            <a class="news-title" href="https://www.mt.co.kr/stock/2026/03/09/2026030915561248801" target="_blank">코스피 서킷브레이커 발동…오일 쇼크에 5,251.87 마감 (-5.96%)</a>
+            <div class="news-summary">중동 이란 전쟁 장기화 우려로 국제유가가 폭등하며 코스피가 5.96% 급락, 5,251.87에 마감. 오전 서킷브레이커와 코스닥 매도사이드카가 동시 발동됐으며, 외국인이 5,441억원 순매도. 코스닥도 4.54% 내린 1,102.28 마감.</div>
+            <div class="news-source">▸ 머니투데이</div>
           </div>
-        </div>
-        <div class="news-item">
+        </div><div class="news-item">
           <span class="news-num">02</span>
           <div class="news-body">
-            <a class="news-title" href="https://n.news.naver.com/mnews/article/030/0003405343" target="_blank">이재명 대통령, 중동 사태 비상경제회의 소집</a>
-            <div class="news-summary">이재명 대통령이 중동 사태로 인한 경제적 영향을 점검하기 위해 비상경제회의를 소집. 재정경제부·산업통상부 등 참석, 국제 유가·원자재 가격 변동과 환율·증시 영향 집중 논의.</div>
-            <div class="news-source">▸ 네이버뉴스/뉴스1</div>
-          </div>
-        </div>
-        <div class="news-item">
-          <span class="news-num">03</span>
-          <div class="news-body">
-            <a class="news-title" href="https://www.hankyung.com" target="_blank">코스피 6% 급락…중동발 오일쇼크에 5251.87 마감</a>
-            <div class="news-summary">중동 지역 군사 충돌 격화로 국제유가가 급등하면서 코스피가 6% 이상 하락 마감. 중동발 지정학적 리스크로 국내 증시 변동성이 코로나19 이후 최고 수준을 기록하며 변동성완화장치(VI)가 나흘간 3,000회 이상 발동.</div>
+            <a class="news-title" href="https://www.hankyung.com" target="_blank">원·달러 환율 1,493원 개장…2009년 금융위기 이후 최고</a>
+            <div class="news-summary">9일 원·달러 환율이 전장 대비 16.6원 급등한 1,493원에 개장하며 2009년 3월 금융위기 이후 가장 높은 수준을 기록. WTI 유가도 18%대 폭등하며 배럴당 108달러를 돌파. 항공주(대한항공 -7.76%, 티웨이항공 -10.26% 등) 일제히 급락.</div>
             <div class="news-source">▸ 한국경제</div>
           </div>
-        </div>
-        <div class="news-item">
+        </div><div class="news-item">
+          <span class="news-num">03</span>
+          <div class="news-body">
+            <a class="news-title" href="https://n.news.naver.com/mnews/article/030/0003405343" target="_blank">이재명 대통령, 중동 사태 경제 영향 점검 비상경제회의 소집</a>
+            <div class="news-summary">이재명 대통령이 중동 사태로 인한 국내 경제 영향을 점검하기 위해 비상경제회의를 소집. 재정경제부·산업통상부 등 참석, 국제 유가·원자재 가격 변동, 증시·환율 대응 방안 논의.</div>
+            <div class="news-source">▸ 뉴스핌</div>
+          </div>
+        </div><div class="news-item">
           <span class="news-num">04</span>
           <div class="news-body">
-            <a class="news-title" href="https://www.new1cm.com/2026/03/2026-03-08_01654129493.html" target="_blank">다주택자 주담대 1년새 36조 증가…한국은행 규제 강화 시사</a>
-            <div class="news-summary">지난해 전체 주택담보대출에서 다주택자 비중이 31.9%로 증가 전환. 2건 이상 주담대 잔액이 337조원에서 373조원으로 36조원 급증. 한국은행은 만기 연장 규제가 가계 부채 증가 둔화에 기여할 것이라고 밝힘.</div>
-            <div class="news-source">▸ new1cm / 한국은행</div>
+            <a class="news-title" href="https://www.hankyung.com" target="_blank">서울 아파트 평균 월세 150만원 돌파…사상 최고치</a>
+            <div class="news-summary">한국부동산원에 따르면 1월 서울 아파트 평균 월세가 150만 4,000원으로 사상 최고치를 경신. 전세 대출 규제 강화와 전세 매물 감소가 겹치며 '전세의 월세화'가 가속화되는 추세.</div>
+            <div class="news-source">▸ 한국경제</div>
           </div>
         </div></div>
 
 <!-- POLITICS NEWS -->
 <div class="sec-hd"><span class="sec-hd-label">Politics</span><div class="sec-hd-line"></div><span class="sec-tag tag-pol">정치·사회</span></div>
-<div class="news-list">
-        <div class="news-item">
+<div class="news-list"><div class="news-item">
           <span class="news-num">01</span>
           <div class="news-body">
-            <a class="news-title" href="https://www.khan.co.kr/" target="_blank">국민의힘 내부 '윤 어게인 반대' 결의…당 지도부에 노선 변경 요구</a>
-            <div class="news-summary">국민의힘 내부에서 '윤석열 전 대통령 복귀 반대' 결의문이 나오며 당 지도부에 노선 변경 요구가 분출. 오세훈 서울시장은 이를 '다행스러운 일'이라며 공천은 당과 의논하겠다고 밝힘.</div>
+            <a class="news-title" href="https://www.khan.co.kr/" target="_blank">국민의힘 의원 일동 '윤석열 복귀 반대' 결의문…오세훈·김태흠 공천 신청</a>
+            <div class="news-summary">국민의힘 의원들이 윤석열 전 대통령의 당 복귀에 반대하는 결의문을 채택. 오세훈 서울시장과 김태흠 충남지사는 6·3 지방선거 공천 신청 의사를 밝혀 본격적인 선거 레이스 돌입.</div>
             <div class="news-source">▸ 경향신문</div>
           </div>
-        </div>
-        <div class="news-item">
+        </div><div class="news-item">
           <span class="news-num">02</span>
           <div class="news-body">
-            <a class="news-title" href="https://www.cj-ilbo.com/news/articleView.html?idxno=1170802" target="_blank">윤석열 측, 내란 특검법 헌법소원 청구</a>
-            <div class="news-summary">윤석열 전 대통령 측이 헌법재판소에 내란 특검법 주요 조항이 위헌이라며 헌법소원 심판을 청구. 앞서 재판부가 1심에서 징역 5년 선고 후 위헌 신청을 기각·각하하자 직접 헌재에 제소.</div>
-            <div class="news-source">▸ 중부일보</div>
-          </div>
-        </div>
-        <div class="news-item">
-          <span class="news-num">03</span>
-          <div class="news-body">
-            <a class="news-title" href="https://www.hankookilbo.com/News/Politics" target="_blank">이재명 대통령·시진핑 주석 한중 정상회담…'관계 전면 복원' 합의</a>
-            <div class="news-summary">이재명 대통령과 시진핑 중국 국가주석이 베이징 정상회담에서 한중관계의 전면 복원에 공감대를 형성. 시 주석은 미중 패권 경쟁 속 한국의 균형 있는 태도를 촉구했으며 대북 우회로 모색에는 중국의 반응이 냉랭했다는 평가.</div>
-            <div class="news-source">▸ 한국일보</div>
-          </div>
-        </div>
-        <div class="news-item">
-          <span class="news-num">04</span>
-          <div class="news-body">
-            <a class="news-title" href="https://www.khan.co.kr/" target="_blank">삼성전자 노조, 쟁의행위 찬반투표 돌입…총파업 2년 만에 재현 가능성</a>
-            <div class="news-summary">삼성전자 노동조합 공동투쟁본부가 9일부터 18일까지 전체 조합원 약 9만 명을 대상으로 쟁의행위 찬반 투표 실시. 총파업이 현실화하면 2024년 이후 2년 만이자 창사 이래 두 번째.</div>
+            <a class="news-title" href="https://www.khan.co.kr/" target="_blank">삼성전자 노조, 9일부터 쟁의행위 찬반투표 돌입…2024년 이후 2년 만 총파업 가능성</a>
+            <div class="news-summary">삼성전자 노동조합 공동투쟁본부가 9일부터 18일까지 약 9만 명 조합원을 대상으로 쟁의행위 찬반 투표 실시. 총파업이 현실화될 경우 삼성전자 창사 이래 두 번째이자 2024년 이후 2년 만.</div>
             <div class="news-source">▸ 경향신문</div>
           </div>
-        </div></div>
-
-<!-- ZODIAC -->
-<div class="sec-hd"><span class="sec-hd-label">Zodiac</span><div class="sec-hd-line"></div><span class="sec-tag tag-zod">띠별 운세</span></div>
-<div class="ztabs"><button class="ztab active" onclick="showZod(0)">🐭<br><span>쥐</span></button><button class="ztab " onclick="showZod(1)">🐮<br><span>소</span></button><button class="ztab " onclick="showZod(2)">🐯<br><span>호랑이</span></button><button class="ztab " onclick="showZod(3)">🐰<br><span>토끼</span></button><button class="ztab " onclick="showZod(4)">🐲<br><span>용</span></button><button class="ztab " onclick="showZod(5)">🐍<br><span>뱀</span></button><button class="ztab " onclick="showZod(6)">🐴<br><span>말</span></button><button class="ztab " onclick="showZod(7)">🐑<br><span>양</span></button><button class="ztab " onclick="showZod(8)">🐵<br><span>원숭이</span></button><button class="ztab " onclick="showZod(9)">🐔<br><span>닭</span></button><button class="ztab " onclick="showZod(10)">🐶<br><span>개</span></button></div>
-<div class="zpanels">
-        <div class="zpanel active" id="zpanel-0">
-          <div class="zpanel-summary">한 걸음 내다보고 계획하면 안전하다. 예기치 않은 변화나 스트레스가 생길 수 있으니 현상 유지에 힘쓰는 것이 현명하다.</div>
-          <div class="zy-item"><span class="zy-year">1960</span><span class="zy-text">성공의 기운이 맴도니 욕심을 버리고 정진하라. 부지런히 움직여야 하는 날, 일찍 일어나는 새가 먹이를 얻는다.</span></div><div class="zy-item"><span class="zy-year">1972</span><span class="zy-text">포기해야 할 것은 빨리 포기하라. 실속 없는 일에 힘만 쓰고 몸이 상하기 쉬우니 간절한 마음으로 집중하라.</span></div><div class="zy-item"><span class="zy-year">1984</span><span class="zy-text">빠른 결정과 신속한 행동이 필요한 하루다. 주저하거나 망설이면 일이 꼬일 수 있다.</span></div><div class="zy-item"><span class="zy-year">1996</span><span class="zy-text">잠시 쉬어가며 힘과 체력을 비축하라. 오늘은 푹 쉬면서 기분 전환을 하는 것이 좋다.</span></div><div class="zy-item"><span class="zy-year">2008</span><span class="zy-text">무리하게 일을 추진하기보다는 현상 유지에 힘쓰는 것이 현명하다. 감정대로 행동하지 말고 냉정한 판단이 필요하다.</span></div>
-        </div>
-        <div class="zpanel " id="zpanel-1">
-          <div class="zpanel-summary">갈등 해소나 분쟁 해결에 좋은 날이다. 쉽게 포기하지 말고 인내와 끈기를 발휘하라. 피로한 상태에서 하루를 출발하겠으니 말을 아껴라.</div>
-          <div class="zy-item"><span class="zy-year">1961</span><span class="zy-text">오늘은 말보다 행동으로 경계를 보여주라. 남을 배려하는 자세가 주변으로부터 존경을 받는다.</span></div><div class="zy-item"><span class="zy-year">1973</span><span class="zy-text">요청이 많으면 우선순위를 먼저 제시하라. 뜻밖에 찾아온 손님이 결정적인 도움을 줄 수 있다.</span></div><div class="zy-item"><span class="zy-year">1985</span><span class="zy-text">내 시간을 지키면 마음이 안정된다. 상대를 배려하는 역지사지의 자세가 필요한 날이다.</span></div><div class="zy-item"><span class="zy-year">1997</span><span class="zy-text">거절은 짧게, 대안은 가능하면 하나만. 기대가 큰 만큼 실망도 클 수 있으니 마음을 비워라.</span></div><div class="zy-item"><span class="zy-year">2009</span><span class="zy-text">인내와 끈기를 발휘하며 포기하지 말라. 일의 마무리나 문 단속, 화재 예방 등을 철저히 하라.</span></div>
-        </div>
-        <div class="zpanel " id="zpanel-2">
-          <div class="zpanel-summary">뜻하지 않은 조력자를 만날 수 있는 날이다. 사람을 대할 때는 솔직한 모습으로 정성을 다하라. 다양한 방법을 찾지만 해답을 구하기 어려울 수 있다.</div>
-          <div class="zy-item"><span class="zy-year">1962</span><span class="zy-text">다른 사람들이 보지 않아도 흐트러지지 마라. 진실과 숨은 노력이 빛을 보는 하루다.</span></div><div class="zy-item"><span class="zy-year">1974</span><span class="zy-text">심기일전, 새로운 마음가짐이 필요한 날이다. 어려운 고비는 다 지나갔으니 경험자의 조언을 듣는 것이 최선이다.</span></div><div class="zy-item"><span class="zy-year">1986</span><span class="zy-text">옳지 않은 일이나 잘못된 인연은 단호하게 끊어라. 새로운 도전이 행운을 가져다주니 망설이지 말고 시도하라.</span></div><div class="zy-item"><span class="zy-year">1998</span><span class="zy-text">다른 사람과의 경쟁은 피해야 할 때다. 결과가 불확실한 일에는 뛰어들지 마라.</span></div><div class="zy-item"><span class="zy-year">2010</span><span class="zy-text">솔직한 모습으로 정성을 다하면 좋은 결과가 따른다. 불편한 요구는 웃으며 넘기지 말고 정리해야 한다.</span></div>
-        </div>
-        <div class="zpanel " id="zpanel-3">
-          <div class="zpanel-summary">하늘도 당신을 돕는 날이다. 그동안 쌓은 덕이 부와 명성으로 돌아올 것이다. 관운이 좋고 명예가 높아지는 하루다.</div>
-          <div class="zy-item"><span class="zy-year">1963</span><span class="zy-text">관운이 좋으니 명예가 높아지는 날이다. 칭송이 자자하고 널리 이름을 알릴 것이다.</span></div><div class="zy-item"><span class="zy-year">1975</span><span class="zy-text">승진을 하거나 지위가 오르는 하루다. 자만하지 말고 더욱 열심히 노력하라.</span></div><div class="zy-item"><span class="zy-year">1987</span><span class="zy-text">사람들에게 아량과 덕을 베풀도록 하라. 모든 불화와 구설이 깨끗이 사라질 것이다.</span></div><div class="zy-item"><span class="zy-year">1999</span><span class="zy-text">새로운 친구를 사귀기에 좋은 날이다. 짝이 없는 분들은 좋은 인연을 만날 것이다.</span></div><div class="zy-item"><span class="zy-year">2011</span><span class="zy-text">나도 모르는 것을 다른 사람에게 가르칠 수 없다. 먼저 배우고 익히는 자세가 필요하다.</span></div>
-        </div>
-        <div class="zpanel " id="zpanel-4">
-          <div class="zpanel-summary">금전을 추구하면 명예가 떨어질 것이다. 만사가 순조롭고 강한 행운이 따르지만 감정 조절에 유의해야 한다.</div>
-          <div class="zy-item"><span class="zy-year">1964</span><span class="zy-text">느긋하고 여유로운 마음이 행운을 불러오는 날이다. 사소한 감정으로 인해 일이 커질 수 있으니 주의하라.</span></div><div class="zy-item"><span class="zy-year">1976</span><span class="zy-text">이직이나 전업은 피하라. 합법적인 방법으로 투자하고 매매해야 한다.</span></div><div class="zy-item"><span class="zy-year">1988</span><span class="zy-text">멋진 이성을 만날 수 있는 날이다. 짝이 있는 분들은 삼각관계에 주의하라.</span></div><div class="zy-item"><span class="zy-year">2000</span><span class="zy-text">좋은 기회가 찾아온다면 놓치지 마라. 조금 욕심을 부려보는 것도 좋다.</span></div><div class="zy-item"><span class="zy-year">2012</span><span class="zy-text">최고의 길일이니 만사가 순조로울 것이다. 와신상담의 자세로 목표를 향해 나아가라.</span></div>
-        </div>
-        <div class="zpanel " id="zpanel-5">
-          <div class="zpanel-summary">쉽게 생각하지 말고 충분한 계획을 세워라. 까마귀 날자 배 떨어지는 격이니 남들의 오해를 살 만한 언행은 피하라.</div>
-          <div class="zy-item"><span class="zy-year">1965</span><span class="zy-text">바깥 출입은 삼가고 안에 머물러야 할 때다. 먼저 호의를 베풀면 후일 크게 보상받는다.</span></div><div class="zy-item"><span class="zy-year">1977</span><span class="zy-text">투기성 있는 일은 절대 피하라. 직장 이동이나 이사 등의 변화가 있을 수 있다.</span></div><div class="zy-item"><span class="zy-year">1989</span><span class="zy-text">사소한 시비나 오해로 대인관계에 흠이 생긴다. 거짓말이나 변명은 피하고 진실한 태도만이 사람들에게 통한다.</span></div><div class="zy-item"><span class="zy-year">2001</span><span class="zy-text">한번 마음먹은 일은 끝까지 밀고 가라. 잠들기 전에 오늘 하루를 반성하라.</span></div><div class="zy-item"><span class="zy-year">2013</span><span class="zy-text">가꾸어 온 소망이 성취되는 하루다. 재물과 명예가 함께하는 날이니 자신감을 가져라.</span></div>
-        </div>
-        <div class="zpanel " id="zpanel-6">
-          <div class="zpanel-summary">뭔가 배울 수 있는 일이 있다면 열심히 하라. 자신의 실수나 잘못이 있다면 깨끗이 인정하는 자세가 필요하다.</div>
-          <div class="zy-item"><span class="zy-year">1966</span><span class="zy-text">귀하에게 불리하게 전개되니 상대방과 타협하라. 오늘은 선을 긋는 게 오히려 친절이다.</span></div><div class="zy-item"><span class="zy-year">1978</span><span class="zy-text">여러 사람의 도움으로 일이 잘 풀려 성공한다. 관계에서의 규칙이 마음을 편하게 한다.</span></div><div class="zy-item"><span class="zy-year">1990</span><span class="zy-text">달콤한 휴식을 맛볼 수 있는 기회를 가져라. 일에 박차를 가하는 것도 좋은 날이다.</span></div><div class="zy-item"><span class="zy-year">2002</span><span class="zy-text">내가 싫은 것은 다른 사람도 같을 것이다. 사람이 많이 모인 곳을 피하는 것이 좋다.</span></div><div class="zy-item"><span class="zy-year">2014</span><span class="zy-text">무언가 배울 수 있는 일을 적극적으로 찾아라. 선택지를 넓히지 말고 확정부터 하라.</span></div>
-        </div>
-        <div class="zpanel " id="zpanel-7">
-          <div class="zpanel-summary">남의 떡이 커 보이는 법이므로 비교하지 마라. 유비무환의 자세로 미리 대비하면 좋은 결과를 얻을 수 있다.</div>
-          <div class="zy-item"><span class="zy-year">1967</span><span class="zy-text">계획성을 가지고 밀어붙이면 성공할 운이다. 좋은 결과가 찾아오니 거절은 길게 말할수록 어려워진다.</span></div><div class="zy-item"><span class="zy-year">1979</span><span class="zy-text">귀하의 그릇을 알고 그 외에 욕심은 부리지 마라. 무리한 전진은 실패를 가져오니 좋은 사람과 아이디어를 얻는 날이다.</span></div><div class="zy-item"><span class="zy-year">1991</span><span class="zy-text">후퇴할 줄 모르는 강한 하루다. 작은 것에 만족하고 즉답 대신 확인 시간을 요청하라.</span></div><div class="zy-item"><span class="zy-year">2003</span><span class="zy-text">그동안의 공덕이 하늘에 닿는 하루다. 불편했던 상태에서 벗어나 서로의 마음을 열게 된다.</span></div><div class="zy-item"><span class="zy-year">2015</span><span class="zy-text">오늘은 나를 먼저 챙겨도 된다. 미리 준비하는 자세가 앞으로 어려운 상황을 잘 넘기게 해준다.</span></div>
-        </div>
-        <div class="zpanel " id="zpanel-8">
-          <div class="zpanel-summary">새로운 접근이 필요하다. 내가 갖고 있는 지식이 전부는 아니니 단기간에 큰 성과를 내려 무리하지 말고 현상 유지에 주력하라.</div>
-          <div class="zy-item"><span class="zy-year">1968</span><span class="zy-text">어렵게 계약은 성사되지만 방심은 금물이다. 능률이 오르고 성과도 좋으니 주변 사람들의 인정도 받는다.</span></div><div class="zy-item"><span class="zy-year">1980</span><span class="zy-text">경제 관련 기사에 관심을 가질 필요가 있다. 적극적인 태도와 솔선수범이 필요하니 먼저 나서야 사람들도 따른다.</span></div><div class="zy-item"><span class="zy-year">1992</span><span class="zy-text">완전하게 보여도 부족한 점이 많다. 마음이 급할수록 조금 돌아가라, 서두르면 일이 꼬일 수 있다.</span></div><div class="zy-item"><span class="zy-year">2004</span><span class="zy-text">경쟁이 과열되는 것에 주의해야 한다. 적당한 기분 전환이 필요하니 일이나 공부도 좋지만 잠시 쉬어가라.</span></div><div class="zy-item"><span class="zy-year">2016</span><span class="zy-text">뜻하지 않은 귀인의 도움을 받을 수 있다. 수동적인 자세로만 있다가는 기회를 놓치게 된다.</span></div>
-        </div>
-        <div class="zpanel " id="zpanel-9">
-          <div class="zpanel-summary">막혔던 운이 술술 풀려 광명이 보인다. 도화살의 기운이 겹쳐 사람들의 시선을 확 끌고 매력이 넘치는 날이다.</div>
-          <div class="zy-item"><span class="zy-year">1969</span><span class="zy-text">어디를 가나 인기가 높아지는 날이다. 선을 그으면 오히려 관계가 정돈되니 무리한 지출을 삼가라.</span></div><div class="zy-item"><span class="zy-year">1981</span><span class="zy-text">계획을 세웠으면 주저하지 말고 바로 실천하라. 업무 범위는 문서로 남기면 편하다.</span></div><div class="zy-item"><span class="zy-year">1993</span><span class="zy-text">좋은 시작이면 좋은 결과가 따른다. 연락은 빠르지 않아도 정확하면 된다.</span></div><div class="zy-item"><span class="zy-year">2005</span><span class="zy-text">부탁하기 전에 한번 더 생각해 보라. 공부 시간은 방해 요소부터 차단하라.</span></div><div class="zy-item"><span class="zy-year">2017</span><span class="zy-text">잠재된 능력을 최대한 발휘하라. 지금 현재에 충실하고 취미나 여가 생활도 즐겨보라.</span></div>
-        </div>
-        <div class="zpanel " id="zpanel-10">
-          <div class="zpanel-summary">발상의 전환을 도모하면 새로운 세계가 열린다. 지금 현재에 충실한 것이 좋은 날이며 지난 일이나 과거는 빨리 잊도록 하라.</div>
-          <div class="zy-item"><span class="zy-year">1970</span><span class="zy-text">아직도 갈 길은 많이 남아 있다. 앞만 바라보며 조건을 먼저 말하면 오해가 줄어든다.</span></div><div class="zy-item"><span class="zy-year">1982</span><span class="zy-text">작은 일을 소홀히 하면 큰 것을 잃게 된다. 불편한 부탁은 문장 하나로 정리하라.</span></div><div class="zy-item"><span class="zy-year">1994</span><span class="zy-text">보다 길게 보고 자신의 재능을 키워라. 나를 지키는 선택이 결과를 좋게 한다.</span></div><div class="zy-item"><span class="zy-year">2006</span><span class="zy-text">사람 많은 장소는 피하는 것이 좋다. 선생님이나 멘토의 조언 덕분에 진로나 학업의 고민이 해결된다.</span></div><div class="zy-item"><span class="zy-year">2018</span><span class="zy-text">눈빛만 봐도 통하는 협력자가 나타나고 진행하는 일마다 탄력을 받아 술술 풀린다. 대인운과 애정운이 좋은 날이다.</span></div>
-        </div></div>
-
-<!-- HOROSCOPE -->
-<div class="sec-hd"><span class="sec-hd-label">Horoscope</span><div class="sec-hd-line"></div><span class="sec-tag tag-hor">별자리 운세</span></div>
-<div class="hor-grid">
-        <div class="hor-card">
-          <div class="hor-emoji">♈</div>
-          <div class="hor-sign">양자리</div>
-          <div class="hor-date">3.21~4.19</div>
-          <div class="hor-text">주변이 고요하다고 여겨질 정도로 조용한 하루가 될 것입니다. 기분이 약간 다운될 수 있으니 신체적인 활력을 찾기 위해 노력하세요. 사람들이 많이 모이는 장소에 나가보는 것도 좋습니다. 재물운은 나쁘지 않은 편이나, 타인의 재정 상황에 조언하는 것은 피하세요. 행운의 아이템: 거울 / 행운의 색: 블랙</div>
-        </div>
-        <div class="hor-card">
-          <div class="hor-emoji">♉</div>
-          <div class="hor-sign">황소자리</div>
-          <div class="hor-date">4.20~5.20</div>
-          <div class="hor-text">안정적인 하루가 예상됩니다. 그간 당신을 괴롭히던 근심 걱정이 일거에 해결되는 때입니다. 급하게 서두르기보다는 차분하게 계획을 점검하고 내실을 다지는 데 집중하는 것이 좋습니다. 꾸준함이 빛을 발하는 날입니다. 행운의 아이템: 저금통</div>
-        </div>
-        <div class="hor-card">
-          <div class="hor-emoji">♊</div>
-          <div class="hor-sign">쌍둥이자리</div>
-          <div class="hor-date">5.21~6.21</div>
-          <div class="hor-text">활발한 의사소통이 행운을 가져다줍니다. 새로운 사람들과의 만남에서 좋은 정보를 얻거나 귀인을 만날 수 있습니다. 긍정적인 태도로 대화를 이끌어보세요. 행운의 아이템: 스마트폰 케이스</div>
-        </div>
-        <div class="hor-card">
-          <div class="hor-emoji">♋</div>
-          <div class="hor-sign">게자리</div>
-          <div class="hor-date">6.22~7.22</div>
-          <div class="hor-text">가족이나 가까운 사람들과 따뜻한 시간을 보내기 좋은 날입니다. 사소한 오해가 있었다면 오늘 대화를 통해 풀 수 있습니다. 감정적인 안정이 무엇보다 중요합니다. 행운의 아이템: 가족사진</div>
-        </div>
-        <div class="hor-card">
-          <div class="hor-emoji">♌</div>
-          <div class="hor-sign">사자자리</div>
-          <div class="hor-date">7.23~8.22</div>
-          <div class="hor-text">금전운이 매우 밝아 뜻밖의 수입을 기대해 볼 만합니다. 리더십을 발휘하여 주변 사람들을 이끌면 더 큰 성과를 얻을 수 있습니다. 겸손한 태도를 잃지 않는 것이 중요합니다. 행운의 아이템: 금속 액세서리</div>
-        </div>
-        <div class="hor-card">
-          <div class="hor-emoji">♍</div>
-          <div class="hor-sign">처녀자리</div>
-          <div class="hor-date">8.23~9.22</div>
-          <div class="hor-text">사소한 실수가 발생하기 쉬운 날이니 평소보다 꼼꼼한 확인이 필요합니다. 건강에 신경 쓰고 충분한 휴식을 취하는 것이 중요합니다. 스트레스 관리에 유의하세요. 행운의 아이템: 비타민 영양제</div>
-        </div>
-        <div class="hor-card">
-          <div class="hor-emoji">♎</div>
-          <div class="hor-sign">천칭자리</div>
-          <div class="hor-date">9.23~10.23</div>
-          <div class="hor-text">대인관계에서 균형을 잡는 것이 중요한 하루입니다. 주변 사람들의 의견을 경청하고 조율하는 역할을 맡게 될 수 있습니다. 싱글이라면 짧지만 짜릿한 애정을 경험할 수도 있으며, 커플이라면 상대방에 대한 배려의 마음이 중요합니다. 행운의 아이템: 아이보리 색 소품</div>
-        </div>
-        <div class="hor-card">
-          <div class="hor-emoji">♏</div>
-          <div class="hor-sign">전갈자리</div>
-          <div class="hor-date">10.24~11.21</div>
-          <div class="hor-text">통찰력이 높아져 문제의 본질을 꿰뚫어 볼 수 있습니다. 집중력이 필요한 중요한 결정을 내리기에 적합한 날입니다. 혼자만의 시간을 가지며 깊이 생각해보세요. 행운의 아이템: 검은색 옷</div>
-        </div>
-        <div class="hor-card">
-          <div class="hor-emoji">♐</div>
-          <div class="hor-sign">사수자리</div>
-          <div class="hor-date">11.22~12.21</div>
-          <div class="hor-text">꼬여있던 문제의 실마리가 보이기 시작합니다. 당신의 직감을 믿고 과감하게 행동하세요. 오늘은 생각보다 몸이 먼저 움직이는 것이 좋은 결과를 가져올 수 있습니다. 행운의 아이템: 여행 가이드북</div>
-        </div>
-        <div class="hor-card">
-          <div class="hor-emoji">♑</div>
-          <div class="hor-sign">염소자리</div>
-          <div class="hor-date">12.22~1.19</div>
-          <div class="hor-text">책임감이 무겁게 느껴질 수 있지만, 이를 잘 이겨내면 주변의 신뢰를 얻게 됩니다. 어려운 일이라도 피하지 말고 정면으로 부딪히는 용기가 필요한 하루입니다. 행운의 아이템: 손목시계</div>
-        </div>
-        <div class="hor-card">
-          <div class="hor-emoji">♒</div>
-          <div class="hor-sign">물병자리</div>
-          <div class="hor-date">1.20~2.18</div>
-          <div class="hor-text">굉장히 바쁜 날이 될 것입니다. 모든 일이 당신에게만 들어오는 느낌이 들 수 있습니다. 다른 사람의 일에 참견하는 것은 절대 금물입니다. 싱글이라면 새로운 이성을 만날 수 있지만 마음에 들지는 미지수입니다. 커플이라면 자신의 개성을 상대방에게 표현하세요. 행운의 아이템: 비상금</div>
-        </div>
-        <div class="hor-card">
-          <div class="hor-emoji">♓</div>
-          <div class="hor-sign">물고기자리</div>
-          <div class="hor-date">2.19~3.20</div>
-          <div class="hor-text">이래저래 정신이 없는 날입니다. 갑자기 바빠지고 또 갑자기 한가해지니 자신의 스케줄을 잘 체크하는 것이 필요합니다. 예상치 못한 행운과 금전적인 좋은 소식을 기대해 볼 만합니다. 커플이라면 상대방을 지나치게 구속하지 마세요. 행운의 아이템: 다이어리</div>
-        </div></div>
-
-<!-- MEME -->
-<div class="sec-hd"><span class="sec-hd-label">Meme Zone</span><div class="sec-hd-line"></div><span class="sec-tag tag-meme">오늘의 밈</span></div>
-<div class="mtabs">
-  <button class="mtab active" onclick="showMeme('shorts')">📺 Shorts</button>
-  <button class="mtab " onclick="showMeme('drip')">💬 드립</button>
-</div>
-
-        <div class="mpanel active" id="mpanel-shorts">
-          <div class="yt-wrap">
-            <iframe src="https://www.youtube.com/embed/SnxHtBl8EcE?autoplay=0" frameborder="0" allowfullscreen style="width:100%;aspect-ratio:9/16;border-radius:8px;"></iframe>
-            <a class="yt-link" href="https://www.youtube.com/shorts/SnxHtBl8EcE" target="_blank">▶ YouTube에서 보기 — The Moment This Baby Gecko Was Born… #shorts</a>
+        </div><div class="news-item">
+          <span class="news-num">03</span>
+          <div class="news-body">
+            <a class="news-title" href="https://hwanse85.com/2026/03/09/%EC%A0%95%EC%B9%98-2026%EB%85%84-03%EC%9B%94-08%EC%9D%BC%EC%9D%BC-%EC%A0%80%EB%85%81-%EC%A3%BC%EC%9A%94-%ED%95%AB%EC%9D%B4%EC%8A%88-10%EA%B0%80%EC%A7%80/" target="_blank">6·3 지방선거 앞두고 민주당 예비후보 382명 vs 국민의힘 205명…두 배 격차</a>
+            <div class="news-summary">6·3 지방선거를 80여 일 앞두고 더불어민주당 예비후보 382명, 국민의힘 205명으로 두 배 가까운 격차. 대구·경북을 제외한 전 지역에서 민주당 우세, 국민의힘은 당내 갈등 지속.</div>
+            <div class="news-source">▸ hwanse85 정치브리핑</div>
           </div>
-        </div>
-<div class="mpanel " id="mpanel-drip">
-  <div class="drip-item">💬 트럼프가 그린란드 사려다가 덴마크 총선 판도까지 흔들어버림 — 부동산 투자도 이제 국제 외교급으로 해야 하나요? 🏔️💸</div><div class="drip-item">💬 이혜훈 전 의원 집 압수수색 소식에 양자리가 조용한 하루 보내라는 별자리 운세... 오늘만큼은 별들도 눈치 봅니다 ⭐🚔</div><div class="drip-item">💬 GDC 2026 개막 + Xbox 신모델 루머 = 게임 좋아하는 사수자리는 오늘 직감 믿고 행동하라고 하더니, 예약 구매 버튼 누르라는 우주의 계시인 듯 🎮🔮</div>
+        </div><div class="news-item">
+          <span class="news-num">04</span>
+          <div class="news-body">
+            <a class="news-title" href="https://www.hankookilbo.com/News/Politics" target="_blank">이재명 대통령·시진핑 주석 한중 정상회담…'한중관계 전면 복원' 공감대</a>
+            <div class="news-summary">이재명 대통령과 시진핑 중국 국가주석이 베이징 정상회담에서 '2026년을 한중관계 전면 복원의 원년'으로 만들자는 데 공감. 그러나 대북 우회로 모색에 중국은 냉랭하게 반응, 지정학적 이슈에선 입장 차 선명.</div>
+            <div class="news-source">▸ 한국일보</div>
+          </div>
+        </div></div>
+
+<!-- ZODIAC (이미지) -->
+<div class="sec-hd"><span class="sec-hd-label">Zodiac</span><div class="sec-hd-line"></div><span class="sec-tag tag-zod">띠별 · 별자리 운세</span></div>
+<div class="fortune-img">
+  <img src="images/zodiac.png" alt="띠별 운세"
+       onerror="this.parentElement.innerHTML='<div class=\'fortune-empty\'>🔮 오늘의 운세 이미지 준비 중<br><small>images/zodiac.png</small></div>'">
 </div>
+<div class="fortune-img">
+  <img src="images/horoscope.png" alt="별자리 운세"
+       onerror="this.parentElement.innerHTML='<div class=\'fortune-empty\'>⭐ 별자리 운세 이미지 준비 중<br><small>images/horoscope.png</small></div>'">
+</div>
+
+<!-- YOUTUBE -->
+<div class="sec-hd"><span class="sec-hd-label">YouTube</span><div class="sec-hd-line"></div><span class="sec-tag tag-yt">🦎 게코 Shorts</span></div>
+<div class="mtabs"><button class="mtab active" onclick="showVid(0)">📺 Shorts 1</button><button class="mtab " onclick="showVid(1)">📺 Shorts 2</button><button class="mtab " onclick="showVid(2)">📺 Shorts 3</button></div>
+<div class="mpanel active" id="vpanel-0">
+          <iframe src="https://www.youtube.com/embed/SnxHtBl8EcE?autoplay=0" frameborder="0" allowfullscreen
+            style="width:100%;aspect-ratio:9/16;border-radius:8px;display:block;"></iframe>
+          <a class="yt-link" href="https://www.youtube.com/shorts/SnxHtBl8EcE" target="_blank">▶ The Moment This Baby Gecko Was Born… #shorts — Hush Lore</a>
+        </div><div class="mpanel " id="vpanel-1">
+          <iframe src="https://www.youtube.com/embed/ZQIaaU3WCfI?autoplay=0" frameborder="0" allowfullscreen
+            style="width:100%;aspect-ratio:9/16;border-radius:8px;display:block;"></iframe>
+          <a class="yt-link" href="https://www.youtube.com/shorts/ZQIaaU3WCfI" target="_blank">▶ 꼬리 자른다고 협박 하는 도마뱀 — 다이노크레</a>
+        </div><div class="mpanel " id="vpanel-2">
+          <iframe src="https://www.youtube.com/embed/qoRUkFRbdAQ?autoplay=0" frameborder="0" allowfullscreen
+            style="width:100%;aspect-ratio:9/16;border-radius:8px;display:block;"></iframe>
+          <a class="yt-link" href="https://www.youtube.com/shorts/qoRUkFRbdAQ" target="_blank">▶ #gecko #nature #animals #wildlife #lizard — Lizard world_ yt2</a>
+        </div>
 
 <!-- FOOTER -->
 <div class="footer">
@@ -465,15 +296,9 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 
 </div>
 <script>
-function showZod(i){
-  document.querySelectorAll('.ztab').forEach((t,idx)=>t.classList.toggle('active',idx===i));
-  document.querySelectorAll('.zpanel').forEach((p,idx)=>p.classList.toggle('active',idx===i));
-}
-function showMeme(id){
-  document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.mpanel').forEach(p=>p.classList.remove('active'));
-  event.target.classList.add('active');
-  document.getElementById('mpanel-'+id).classList.add('active');
+function showVid(i) {
+  document.querySelectorAll('.mtab').forEach((t,idx) => t.classList.toggle('active', idx===i));
+  document.querySelectorAll('.mpanel').forEach((p,idx) => p.classList.toggle('active', idx===i));
 }
 </script>
 </body>
