@@ -93,7 +93,22 @@ def collect_data(date_info):
     raw = re.sub(r"```json\s*|```", "", raw).strip()
     s, e = raw.find("{"), raw.rfind("}") + 1
     if s == -1: raise ValueError("JSON 없음")
-    data = json.loads(raw[s:e])
+    raw_json = raw[s:e]
+
+    try:
+        data = json.loads(raw_json)
+    except json.JSONDecodeError as err:
+        print(f"  ⚠️ JSON 오류({err}) — Claude에 수정 요청 중...")
+        fix_res = client.messages.create(
+            model="claude-sonnet-4-6", max_tokens=8000,
+            messages=[{"role": "user", "content":
+                f"아래 JSON의 문법 오류를 수정해서 유효한 JSON만 반환하세요. 설명 없이 JSON만.\n\n{raw_json}"}]
+        )
+        fixed = "".join(b.text for b in fix_res.content if hasattr(b, "text"))
+        fixed = re.sub(r"```json\s*|```", "", fixed).strip()
+        fs, fe = fixed.find("{"), fixed.rfind("}") + 1
+        data = json.loads(fixed[fs:fe])
+
     print(f"  [1차] 완료 — 뉴스 {len(data.get('economy_news',[]))+len(data.get('politics_news',[]))}건, 운세 {len(data.get('zodiac',[]))}띠")
     return data
 
