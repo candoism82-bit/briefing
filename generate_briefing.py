@@ -85,44 +85,62 @@ def call_with_retry(fn, max_retries=3):
 
 
 def collect_data(date_info):
-    """1차: 웹 검색으로 데이터 수집 → JSON 반환"""
+    """웹 검색 2회로 데이터 수집 — 날씨/뉴스 + 운세/별자리/밈"""
     client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
-    prompt = f"""오늘 {date_info['date_ko']} 한국 데이터를 웹 검색해서 JSON으로만 반환. 설명·마크다운 없이 JSON만 출력.
+    # ── 1-A: 날씨 + 뉴스 ──
+    prompt_a = f"""오늘 {date_info['date_ko']} 한국 데이터를 웹 검색해서 JSON으로만 반환. 설명 없이 JSON만.
+키:
+- weather: overview(str), detail(str), cities(배열6, name/high/low/icon), weekly(배열7, day/icon/high/low)
+- economy_news: 배열4, title/summary/url/source
+- politics_news: 배열4, title/summary/url/source"""
 
-반환할 JSON 키:
-- weather: overview(str), detail(str), cities(배열, name/high/low/icon), weekly(배열7개, day/icon/high/low)
-- economy_news: 배열4개, title/summary/url/source
-- politics_news: 배열4개, title/summary/url/source
-- zodiac: 배열12개(쥐🐭/소🐮/호랑이🐯/토끼🐰/용🐲/뱀🐍/말🐴/양🐑/원숭이🐵/닭🐔/개🐶/돼지🐷), 각각 sign/emoji/summary/years(배열5개, year/text)
-  - 쥐:60/72/84/96/08, 소:61/73/85/97/09, 호랑이:62/74/86/98/10, 토끼:63/75/87/99/11
-  - 용:64/76/88/00/12, 뱀:65/77/89/01/13, 말:66/78/90/02/14, 양:67/79/91/03/15
-  - 원숭이:68/80/92/04/16, 닭:69/81/93/05/17, 개:70/82/94/06/18, 돼지:71/83/95/07/19
-- horoscope: 배열12개(양자리♈/황소자리♉/쌍둥이자리♊/게자리♋/사자자리♌/처녀자리♍/천칭자리♎/전갈자리♏/사수자리♐/염소자리♑/물병자리♒/물고기자리♓), 각각 sign/emoji/date/text
-- meme_drips: 오늘 뉴스 기반 드립 3개 배열"""
-
-    print("  [1차] 웹 검색 데이터 수집 중...")
-    res = call_with_retry(lambda: client.messages.create(
-        model="claude-sonnet-4-6", max_tokens=6000,
+    print("  [A] 날씨·뉴스 수집 중...")
+    res_a = call_with_retry(lambda: client.messages.create(
+        model="claude-sonnet-4-6", max_tokens=4000,
         tools=[{"type": "web_search_20250305", "name": "web_search"}],
-        messages=[{"role": "user", "content": prompt}]
+        messages=[{"role": "user", "content": prompt_a}]
     ))
-    raw = "".join(b.text for b in res.content if hasattr(b, "text"))
-    raw = re.sub(r"```json\s*|```", "", raw).strip()
-    s, e = raw.find("{"), raw.rfind("}") + 1
-    if s == -1: raise ValueError("JSON 없음")
-    raw_json = raw[s:e]
-
+    raw_a = "".join(b.text for b in res_a.content if hasattr(b, "text"))
+    raw_a = re.sub(r"```json\s*|```", "", raw_a).strip()
+    sa, ea = raw_a.find("{"), raw_a.rfind("}") + 1
     try:
-        data = json.loads(raw_json)
-    except json.JSONDecodeError as err:
-        print(f"  ⚠️ JSON 오류 — json_repair로 수정 중...")
+        data_a = json.loads(raw_a[sa:ea])
+    except json.JSONDecodeError:
         from json_repair import repair_json
-        data = json.loads(repair_json(raw_json))
-        print("  → 수정 완료")
+        data_a = json.loads(repair_json(raw_a[sa:ea]))
+    print(f"  [A] 완료 — 뉴스 {len(data_a.get('economy_news',[]))+len(data_a.get('politics_news',[]))}건")
 
-    print(f"  [1차] 완료 — 뉴스 {len(data.get('economy_news',[]))+len(data.get('politics_news',[]))}건, 운세 {len(data.get('zodiac',[]))}띠")
-    return data
+    # ── 1-B: 운세 + 별자리 + 밈 ──
+    prompt_b = f"""오늘 {date_info['date_ko']} 운세를 웹 검색해서 JSON으로만 반환. 설명 없이 JSON만.
+키:
+- zodiac: 배열12(쥐🐭/소🐮/호랑이🐯/토끼🐰/용🐲/뱀🐍/말🐴/양🐑/원숭이🐵/닭🐔/개🐶/돼지🐷)
+  각각 sign/emoji/summary/years(배열5, year/text)
+  생년: 쥐60/72/84/96/08, 소61/73/85/97/09, 호랑이62/74/86/98/10, 토끼63/75/87/99/11,
+        용64/76/88/00/12, 뱀65/77/89/01/13, 말66/78/90/02/14, 양67/79/91/03/15,
+        원숭이68/80/92/04/16, 닭69/81/93/05/17, 개70/82/94/06/18, 돼지71/83/95/07/19
+- horoscope: 배열12(양자리♈3.21~4.19/황소자리♉4.20~5.20/쌍둥이자리♊5.21~6.21/게자리♋6.22~7.22/사자자리♌7.23~8.22/처녀자리♍8.23~9.22/천칭자리♎9.23~10.23/전갈자리♏10.24~11.21/사수자리♐11.22~12.21/염소자리♑12.22~1.19/물병자리♒1.20~2.18/물고기자리♓2.19~3.20)
+  각각 sign/emoji/date/text
+- meme_drips: 오늘 뉴스 기반 재미있는 드립 3개 배열"""
+
+    print("  [B] 운세·별자리·밈 수집 중...")
+    res_b = call_with_retry(lambda: client.messages.create(
+        model="claude-sonnet-4-6", max_tokens=5000,
+        tools=[{"type": "web_search_20250305", "name": "web_search"}],
+        messages=[{"role": "user", "content": prompt_b}]
+    ))
+    raw_b = "".join(b.text for b in res_b.content if hasattr(b, "text"))
+    raw_b = re.sub(r"```json\s*|```", "", raw_b).strip()
+    sb, eb = raw_b.find("{"), raw_b.rfind("}") + 1
+    try:
+        data_b = json.loads(raw_b[sb:eb])
+    except json.JSONDecodeError:
+        from json_repair import repair_json
+        data_b = json.loads(repair_json(raw_b[sb:eb]))
+    print(f"  [B] 완료 — 운세 {len(data_b.get('zodiac',[]))}띠, 별자리 {len(data_b.get('horoscope',[]))}개")
+
+    return {**data_a, **data_b}
+
 
 def build_html(data, youtube, date_info):
     """Claude API 없이 Python으로 직접 HTML 조립 — 절대 잘리지 않음"""
