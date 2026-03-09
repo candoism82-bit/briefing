@@ -3,892 +3,1113 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-<title>🦎 크레스티드 게코 커뮤니티 아침 브리핑 · 2026.03.09</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<meta http-equiv="Cache-Control" content="no-cache">
+<title>🦎 크레스티드 게코 커뮤니티 · 아침 브리핑 · 2026.03.09</title>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --ink:#0c100c;
-  --paper:#f4f7f0;
-  --cream:#e6ede0;
-  --accent:#3d7a3a;
-  --accent2:#6aad45;
-  --dark:#141a12;
-  --muted:#5a6854;
-  --border:#cfdac8;
-  --red:#bf3317;
-  --navy:#162843;
-  --purple:#4a1c7a;
-}
-body{
-  background:#141a12;
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  padding:32px 16px 60px;
-  font-family:'Noto Sans KR',sans-serif;
-}
-.card{
-  width:100%;
-  max-width:660px;
-  background:var(--paper);
-  border-radius:3px;
-  overflow:hidden;
-  box-shadow:0 32px 100px rgba(0,0,0,.7);
-}
+  :root {
+    --bg: #0d1117;
+    --card: #161b22;
+    --border: #30363d;
+    --accent: #58a6ff;
+    --accent2: #3fb950;
+    --accent3: #f78166;
+    --accent4: #d2a8ff;
+    --text: #e6edf3;
+    --text-muted: #8b949e;
+    --text-dim: #6e7681;
+    --yellow: #e3b341;
+    --orange: #f0883e;
+    --red: #f85149;
+    --tab-active: #58a6ff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
 
-/* ════════════════════════════
-   ★ PROMO BANNER
-════════════════════════════ */
-.promo-banner{
-  background:linear-gradient(160deg,#0a1f08 0%,#1a3a15 50%,#0e2a0a 100%);
-  padding:0;
-  position:relative;
-  overflow:hidden;
-  border-bottom:3px solid #3d7a3a;
-}
-.promo-banner::before{
-  content:'🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿';
-  position:absolute;
-  top:-10px;left:0;right:0;
-  font-size:40px;
-  opacity:.05;
-  letter-spacing:8px;
-  line-height:1;
-  pointer-events:none;
-  white-space:nowrap;
-  overflow:hidden;
-}
-.promo-inner{padding:22px 24px 20px;position:relative;z-index:1;}
-.promo-badge-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
-.promo-badge{
-  background:#3d7a3a;color:#c8f0a0;
-  font-family:'DM Mono',monospace;font-size:9px;
-  letter-spacing:.12em;text-transform:uppercase;
-  padding:3px 10px;border-radius:20px;font-weight:500;
-}
-.promo-badge-line{flex:1;height:1px;background:rgba(255,255,255,.08);}
-.promo-copy{text-align:center;margin-bottom:18px;}
-.promo-heart{font-size:28px;margin-bottom:8px;display:block;animation:heartbeat 1.8s ease infinite;}
-@keyframes heartbeat{0%,100%{transform:scale(1)}30%{transform:scale(1.18)}50%{transform:scale(1)}70%{transform:scale(1.1)}}
-.promo-main-text{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:900;color:#fff;line-height:1.55;margin-bottom:6px;}
-.promo-main-text em{color:#7ae050;font-style:normal;}
-.promo-sub-text{font-size:13px;color:rgba(255,255,255,.65);line-height:1.7;margin-top:4px;}
-.promo-sub-text strong{color:#a8e060;font-weight:700;}
-.promo-org-box{
-  background:rgba(106,173,69,.12);
-  border:1px solid rgba(106,173,69,.35);
-  border-radius:8px;padding:14px 18px;
-  margin-bottom:16px;
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
-}
-.promo-org-name{
-  font-family:'Noto Serif KR',serif;font-size:16px;font-weight:900;color:#fff;
-  display:flex;align-items:center;gap:6px;margin-bottom:4px;
-}
-.promo-org-name .bang{color:#7ae050;font-size:18px;}
-.promo-org-url{
-  font-family:'DM Mono',monospace;font-size:11px;color:#6aad45;
-  letter-spacing:.04em;text-decoration:none;
-  border-bottom:1px solid rgba(106,173,69,.4);padding-bottom:1px;
-}
-.promo-org-url:hover{color:#9add75;}
-.promo-qr-emoji{font-size:36px;}
-.promo-qr-label{font-family:'DM Mono',monospace;font-size:9px;color:rgba(255,255,255,.3);letter-spacing:.08em;margin-top:3px;display:block;}
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 16px 40px;
+  }
 
-/* ════════════════
-   HEADER
-════════════════ */
-.hd{background:var(--dark);position:relative;overflow:hidden;}
-.hd-stripe{
-  height:4px;
-  background:linear-gradient(90deg,#3d7a3a,#6aad45,#a8c84a,#6aad45,#3d7a3a);
-  background-size:300px 4px;
-  animation:stripe 4s linear infinite;
-}
-@keyframes stripe{to{background-position:300px 0}}
-.hd-inner{
-  padding:24px 28px 22px;
-  display:flex;justify-content:space-between;align-items:flex-end;
-  position:relative;z-index:1;
-}
-.hd-inner::before{
-  content:'🦎';
-  position:absolute;right:20px;top:50%;
-  transform:translateY(-50%) scaleX(-1);
-  font-size:80px;opacity:.06;pointer-events:none;
-}
-.hd-eyebrow{font-family:'DM Mono',monospace;font-size:10px;color:#4a6644;letter-spacing:.16em;text-transform:uppercase;margin-bottom:8px;}
-.hd-title{font-family:'Noto Serif KR',serif;font-size:28px;font-weight:900;color:#fff;letter-spacing:-.02em;line-height:1;display:flex;align-items:center;gap:10px;}
-.hd-sub{font-size:11px;color:#4a6644;margin-top:7px;letter-spacing:.06em;}
-.hd-right{text-align:right;flex-shrink:0;margin-left:16px;}
-.hd-date-big{font-family:'Noto Serif KR',serif;font-size:42px;font-weight:900;color:var(--accent2);line-height:1;}
-.hd-date-small{font-family:'DM Mono',monospace;font-size:10px;color:#4a6644;letter-spacing:.08em;margin-top:4px;}
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #0d2137 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 20px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -40px; left: -40px; right: -40px; bottom: -40px;
+    background: radial-gradient(ellipse at 50% 0%, rgba(88,166,255,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-badge {
+    display: inline-block;
+    background: rgba(88,166,255,0.12);
+    border: 1px solid rgba(88,166,255,0.3);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+  }
+  .header-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+  }
+  .header-title span { color: var(--accent); }
+  .header-date {
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .header-date strong {
+    color: var(--yellow);
+    font-weight: 700;
+  }
+  .header-gecko {
+    font-size: 36px;
+    margin-bottom: 10px;
+    display: block;
+  }
 
-/* ════════════════
-   SECTION HEADER
-════════════════ */
-.sec-hd{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
-.sec-hd-label{font-family:'DM Mono',monospace;font-size:9.5px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
-.sec-hd-line{flex:1;height:1px;background:var(--border);}
-.sec-hd-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:2px;white-space:nowrap;font-weight:500;}
-.tag-weather{background:#eaf2f5;color:#1a4a5c;border:1px solid #aed0de;}
-.tag-econ{background:#fdf0ea;color:var(--red);border:1px solid #f0c4ae;}
-.tag-poli{background:#eaf2ee;color:var(--accent);border:1px solid #aed4bc;}
-.tag-fortune{background:#f5eefa;color:var(--purple);border:1px solid #d0aef0;}
-.tag-meme{background:#141a12;color:#8adf6a;border:1px solid #3d6a1a;}
+  /* SECTION */
+  .section {
+    margin-top: 24px;
+  }
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-title .icon { font-size: 16px; }
 
-/* ════════════════
-   WEATHER
-════════════════ */
-.weather-sec{background:linear-gradient(160deg,#1a2e3a 0%,#0d1e28 55%,#121f12 100%);padding:22px 28px;}
-.weather-sec .sec-hd-label{color:rgba(255,255,255,.3);}
-.weather-sec .sec-hd-line{background:rgba(255,255,255,.08);}
-.weather-overview{
-  display:flex;align-items:center;gap:16px;
-  margin-bottom:16px;padding:14px 16px;
-  background:rgba(255,255,255,.05);border-radius:6px;border:1px solid rgba(255,255,255,.08);
-}
-.weather-ov-icon{font-size:30px;flex-shrink:0;}
-.weather-ov-title{font-size:13px;font-weight:700;color:#fff;line-height:1.5;}
-.weather-ov-sub{font-size:11px;color:rgba(255,255,255,.4);margin-top:3px;}
-.weather-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
-.weather-city-card{
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);
-  border-radius:6px;padding:10px 10px 8px;text-align:center;
-}
-.wc-name{font-size:11px;color:rgba(255,255,255,.45);font-family:'DM Mono',monospace;letter-spacing:.04em;margin-bottom:5px;}
-.wc-temps{display:flex;justify-content:center;align-items:baseline;gap:6px;}
-.wc-hi{font-size:18px;font-weight:700;color:#a8e060;font-family:'Noto Serif KR',serif;line-height:1;}
-.wc-lo{font-size:12px;color:rgba(255,255,255,.3);font-family:'DM Mono',monospace;}
-.wc-icon{font-size:14px;margin-top:4px;}
-.weather-week{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:6px;padding:12px 14px;}
-.ww-title{font-family:'DM Mono',monospace;font-size:9px;color:rgba(255,255,255,.28);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;}
-.ww-row{display:flex;justify-content:space-between;gap:4px;}
-.ww-day{flex:1;text-align:center;padding:6px 4px;background:rgba(255,255,255,.03);border-radius:4px;}
-.ww-day-name{font-family:'DM Mono',monospace;font-size:9px;color:rgba(255,255,255,.3);margin-bottom:4px;letter-spacing:.04em;}
-.ww-day-icon{font-size:16px;margin-bottom:3px;}
-.ww-day-hi{font-size:12px;font-weight:700;color:#a8e060;}
-.ww-day-lo{font-size:10px;color:rgba(255,255,255,.25);}
+  /* CARD */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 10px;
+  }
+  .card:last-child { margin-bottom: 0; }
 
-/* ════════════════
-   NEWS SECTION
-════════════════ */
-.news-sec{padding:22px 28px;border-bottom:1px solid var(--border);}
-.news-item{
-  display:flex;gap:14px;
-  padding:12px 0;
-  border-bottom:1px solid var(--border);
-}
-.news-item:last-child{border-bottom:none;}
-.news-num{
-  font-family:'DM Mono',monospace;font-size:11px;
-  font-weight:500;color:var(--muted);
-  flex-shrink:0;width:18px;padding-top:2px;
-}
-.news-body{}
-.news-title{
-  font-size:13px;font-weight:700;color:var(--ink);
-  line-height:1.5;margin-bottom:4px;
-}
-.news-title a{color:inherit;text-decoration:none;}
-.news-title a:hover{color:var(--accent);}
-.news-summary{font-size:11.5px;color:var(--muted);line-height:1.6;}
-.news-source{
-  font-family:'DM Mono',monospace;font-size:9.5px;
-  color:var(--accent2);margin-top:5px;
-  letter-spacing:.04em;
-}
+  /* WEATHER */
+  .weather-overview {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  .weather-overview strong { color: var(--text); }
 
-/* ════════════════
-   FORTUNE — 띠별
-════════════════ */
-.fortune-sec{padding:22px 28px;background:linear-gradient(180deg,#fdf9ff 0%,#f4f7f0 100%);border-bottom:1px solid var(--border);}
-.fortune-tabs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px;}
-.ftab{
-  font-family:'DM Mono',monospace;font-size:10px;
-  padding:4px 10px;border-radius:20px;cursor:pointer;
-  background:#e8e0f5;color:var(--purple);
-  border:1px solid #d0aef0;
-  transition:all .2s;
-}
-.ftab.active,.ftab:hover{background:var(--purple);color:#fff;}
-.fortune-panel{display:none;}
-.fortune-panel.active{display:block;}
-.fortune-zodiac-header{
-  display:flex;align-items:center;gap:10px;
-  margin-bottom:12px;padding-bottom:10px;
-  border-bottom:1px solid var(--border);
-}
-.fortune-zodiac-icon{font-size:28px;}
-.fortune-zodiac-name{font-family:'Noto Serif KR',serif;font-size:17px;font-weight:900;color:var(--purple);}
-.fortune-zodiac-sub{font-size:11px;color:var(--muted);margin-top:2px;}
-.fortune-year-list{display:flex;flex-direction:column;gap:8px;}
-.fortune-year-item{
-  background:#fff;border:1px solid var(--border);
-  border-radius:6px;padding:10px 12px;
-  display:flex;gap:10px;align-items:flex-start;
-}
-.fortune-year-badge{
-  font-family:'DM Mono',monospace;font-size:10px;font-weight:500;
-  color:var(--purple);background:#f0e8ff;
-  padding:2px 8px;border-radius:10px;white-space:nowrap;flex-shrink:0;
-  border:1px solid #d8c4f5;
-}
-.fortune-year-text{font-size:12px;color:var(--ink);line-height:1.6;}
+  .weather-cities {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  @media (max-width: 400px) {
+    .weather-cities { grid-template-columns: repeat(3, 1fr); }
+  }
+  .city-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 8px;
+    text-align: center;
+  }
+  .city-name {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  .city-icon { font-size: 20px; margin-bottom: 4px; display: block; }
+  .city-temps {
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+  }
+  .city-high { color: var(--orange); font-weight: 700; }
+  .city-low { color: var(--accent); font-weight: 600; }
 
-/* ════════════════
-   FORTUNE — 별자리
-════════════════ */
-.star-fortune-sec{padding:22px 28px;border-bottom:1px solid var(--border);}
-.star-fortune-tabs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px;}
-.sftab{
-  font-family:'DM Mono',monospace;font-size:10px;
-  padding:4px 10px;border-radius:20px;cursor:pointer;
-  background:#eaf5ff;color:#1a4a7c;
-  border:1px solid #aed0f0;transition:all .2s;
-}
-.sftab.active,.sftab:hover{background:#1a4a7c;color:#fff;}
-.star-panel{display:none;}
-.star-panel.active{display:block;}
-.star-card{
-  background:#fff;border:1px solid var(--border);
-  border-radius:8px;padding:14px 16px;
-}
-.star-card-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-.star-icon{font-size:26px;}
-.star-name{font-family:'Noto Serif KR',serif;font-size:16px;font-weight:900;color:#1a4a7c;}
-.star-date-range{font-size:11px;color:var(--muted);margin-top:2px;}
-.star-desc{font-size:12.5px;color:var(--ink);line-height:1.7;margin-bottom:8px;}
-.star-lucky{
-  display:inline-block;
-  font-family:'DM Mono',monospace;font-size:10px;
-  background:#eaf5ff;color:#1a4a7c;
-  padding:3px 10px;border-radius:10px;
-  border:1px solid #aed0f0;
-}
+  .weekly-title {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+  .weekly-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+  }
+  @media (max-width: 420px) {
+    .weekly-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+  .weekly-day {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 4px;
+    text-align: center;
+  }
+  .weekly-day.today {
+    border-color: var(--accent);
+    background: rgba(88,166,255,0.08);
+  }
+  .weekly-day-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  .weekly-day.today .weekly-day-label { color: var(--accent); }
+  .weekly-day-icon { font-size: 16px; margin-bottom: 4px; display: block; }
+  .weekly-day-high { font-size: 11px; color: var(--orange); font-weight: 700; display: block; }
+  .weekly-day-low { font-size: 10px; color: var(--accent); font-weight: 600; display: block; }
 
-/* ════════════════
-   MEME ZONE
-════════════════ */
-.meme-sec{background:var(--dark);padding:22px 28px;}
-.meme-sec .sec-hd-label{color:rgba(255,255,255,.3);}
-.meme-sec .sec-hd-line{background:rgba(255,255,255,.08);}
-.meme-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
-.mtab{
-  font-family:'DM Mono',monospace;font-size:10px;
-  padding:5px 12px;border-radius:2px;cursor:pointer;
-  background:rgba(255,255,255,.06);color:rgba(255,255,255,.4);
-  border:1px solid rgba(255,255,255,.08);transition:all .2s;
-}
-.mtab.active,.mtab:hover{background:#3d7a3a;color:#c8f0a0;border-color:#3d7a3a;}
-.meme-panel{display:none;}
-.meme-panel.active{display:block;}
+  .weather-detail-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-muted);
+    font-size: 12px;
+    padding: 6px 12px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+    transition: all 0.2s;
+  }
+  .weather-detail-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .weather-detail {
+    display: none;
+    margin-top: 10px;
+    padding: 12px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.8;
+  }
+  .weather-detail.open { display: block; }
 
-/* Shorts */
-.shorts-wrap{
-  border-radius:8px;overflow:hidden;
-  border:1px solid rgba(255,255,255,.08);
-  background:rgba(0,0,0,.4);
-  margin-bottom:10px;
-}
-.shorts-wrap iframe{display:block;width:100%;aspect-ratio:9/16;max-height:480px;border:none;}
-.shorts-meta{
-  padding:10px 14px;
-  background:rgba(255,255,255,.04);
-  border-top:1px solid rgba(255,255,255,.06);
-}
-.shorts-title{font-size:12px;font-weight:700;color:#fff;margin-bottom:3px;}
-.shorts-channel{font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,.35);}
-.shorts-link{
-  display:inline-block;margin-top:8px;
-  font-family:'DM Mono',monospace;font-size:10px;
-  color:#8adf6a;text-decoration:none;
-  border-bottom:1px solid rgba(138,223,106,.3);
-  padding-bottom:1px;letter-spacing:.04em;
-}
-.shorts-link:hover{color:#b8f090;}
+  /* NEWS */
+  .news-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    transition: border-color 0.2s;
+  }
+  .news-card:hover { border-color: rgba(88,166,255,0.4); }
+  .news-card:last-child { margin-bottom: 0; }
+  .news-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .news-source {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent);
+    background: rgba(88,166,255,0.1);
+    border: 1px solid rgba(88,166,255,0.2);
+    padding: 2px 8px;
+    border-radius: 20px;
+    letter-spacing: 0.3px;
+  }
+  .news-source.politics {
+    color: var(--accent4);
+    background: rgba(210,168,255,0.1);
+    border-color: rgba(210,168,255,0.2);
+  }
+  .news-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+    line-height: 1.5;
+  }
+  .news-title a { color: var(--text); }
+  .news-title a:hover { color: var(--accent); text-decoration: none; }
+  .news-summary {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
 
-/* GIF zone */
-.gif-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px;}
-.gif-card{
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:6px;padding:14px;text-align:center;
-}
-.gif-placeholder{font-size:36px;margin-bottom:6px;}
-.gif-caption{font-size:11px;color:rgba(255,255,255,.35);line-height:1.5;}
+  /* ZODIAC TABS */
+  .zodiac-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .zodiac-tab {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .zodiac-tab:hover {
+    border-color: rgba(88,166,255,0.4);
+    color: var(--text);
+  }
+  .zodiac-tab.active {
+    background: rgba(88,166,255,0.12);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .zodiac-panel { display: none; }
+  .zodiac-panel.active { display: block; }
+  .zodiac-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .zodiac-emoji { font-size: 36px; }
+  .zodiac-sign-name {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text);
+  }
+  .zodiac-summary {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 14px;
+    padding: 12px 14px;
+    background: rgba(255,255,255,0.03);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+  }
+  .zodiac-years { display: flex; flex-direction: column; gap: 8px; }
+  .zodiac-year-item {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .zodiac-year-badge {
+    background: rgba(88,166,255,0.12);
+    border: 1px solid rgba(88,166,255,0.25);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .zodiac-year-text {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
 
-/* Drip */
-.drip-list{display:flex;flex-direction:column;gap:10px;}
-.drip-item{
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(138,223,106,.12);
-  border-left:3px solid #6aad45;
-  border-radius:0 6px 6px 0;
-  padding:12px 14px;
-}
-.drip-text{font-size:13px;color:rgba(255,255,255,.85);line-height:1.6;}
-.drip-tag{
-  display:inline-block;margin-top:6px;
-  font-family:'DM Mono',monospace;font-size:9px;
-  color:#6aad45;letter-spacing:.08em;
-}
+  /* STAR SIGN PLACEHOLDER */
+  .star-placeholder {
+    background: var(--card);
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+    padding: 32px 16px;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+  .star-placeholder .icon { font-size: 32px; margin-bottom: 8px; display: block; }
 
-/* 짤 */
-.meme-img-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.meme-img-card{
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.06);
-  border-radius:6px;overflow:hidden;text-align:center;padding:16px 10px;
-}
-.meme-img-emoji{font-size:40px;margin-bottom:8px;display:block;}
-.meme-img-caption{font-size:11px;color:rgba(255,255,255,.4);line-height:1.5;}
+  /* MEME ZONE */
+  .meme-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0;
+  }
+  .meme-tab {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 12px 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: -1px;
+  }
+  .meme-tab:hover { color: var(--text); }
+  .meme-tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .meme-panel { display: none; }
+  .meme-panel.active { display: block; }
+  .video-wrapper {
+    position: relative;
+    padding-bottom: 177.78%;
+    height: 0;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #000;
+    margin-bottom: 10px;
+  }
+  .video-wrapper iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: none;
+    border-radius: 10px;
+  }
+  .video-meta {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+    line-height: 1.5;
+  }
+  .video-link {
+    font-size: 12px;
+    color: var(--accent);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .video-link::before { content: '▶'; font-size: 10px; }
 
-/* ════════════════
-   FOOTER
-════════════════ */
-.footer{
-  background:#0c100c;
-  padding:16px 28px;
-  display:flex;justify-content:space-between;align-items:center;
-  border-top:1px solid #1e2a1e;
-}
-.footer-l{font-family:'DM Mono',monospace;font-size:9px;color:#2a3a2a;letter-spacing:.1em;}
-.footer-r{font-size:10px;color:#2a3a2a;}
+  /* FOOTER */
+  .footer {
+    margin-top: 40px;
+    padding: 24px 16px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  .footer-gecko { font-size: 28px; margin-bottom: 8px; display: block; }
+  .footer-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  .footer-sub {
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+  .footer-divider {
+    margin: 12px auto;
+    width: 40px;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* UTILS */
+  .tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 5px;
+    letter-spacing: 0.5px;
+  }
+  .tag-blue { background: rgba(88,166,255,0.12); color: var(--accent); border: 1px solid rgba(88,166,255,0.25); }
+  .tag-green { background: rgba(63,185,80,0.12); color: var(--accent2); border: 1px solid rgba(63,185,80,0.25); }
+  .tag-red { background: rgba(248,81,73,0.12); color: var(--red); border: 1px solid rgba(248,81,73,0.25); }
+  .tag-purple { background: rgba(210,168,255,0.12); color: var(--accent4); border: 1px solid rgba(210,168,255,0.25); }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 20px 0;
+  }
+
+  .alert-banner {
+    background: rgba(248,81,73,0.08);
+    border: 1px solid rgba(248,81,73,0.25);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: #ffa198;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.6;
+  }
+  .alert-banner .alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  /* PROMO */
+  .promo-placeholder {
+    background: var(--card);
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+    padding: 20px 16px;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 12px;
+    margin-top: 24px;
+  }
+  .promo-placeholder .icon { font-size: 24px; margin-bottom: 6px; display: block; }
+
+.promo-banner{background:linear-gradient(160deg,#0a1f08,#1a3a15,#0e2a0a);border-bottom:3px solid #3d7a3a;position:relative;overflow:hidden}
+.promo-inner{padding:22px 24px 20px;position:relative;z-index:1}
+.promo-badge-row{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.promo-badge{background:#3d7a3a;color:#c8f0a0;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border-radius:20px}
+.promo-badge-line{flex:1;height:1px;background:rgba(255,255,255,.08)}
+.promo-copy{text-align:center;margin-bottom:18px}
+.promo-heart{font-size:28px;margin-bottom:8px;display:block;animation:heartbeat 1.8s ease infinite}
+@keyframes heartbeat{0%,100%{transform:scale(1)}30%{transform:scale(1.18)}70%{transform:scale(1.1)}}
+.promo-main-text{font-size:18px;font-weight:900;color:#fff;line-height:1.55;margin-bottom:6px}
+.promo-main-text em{color:#7ae050;font-style:normal}
+.promo-sub-text{font-size:13px;color:rgba(255,255,255,.65);line-height:1.7}
+.promo-sub-text strong{color:#a8e060}
+.promo-org-box{background:rgba(106,173,69,.12);border:1px solid rgba(106,173,69,.35);border-radius:8px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.promo-org-name{font-size:16px;font-weight:900;color:#fff;display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.promo-org-url{font-size:11px;color:#6aad45;text-decoration:none;border-bottom:1px solid rgba(106,173,69,.4)}
+.promo-qr-hint{text-align:center;flex-shrink:0}
+.promo-qr-emoji{font-size:36px}
+.promo-qr-label{font-size:9px;color:rgba(255,255,255,.3);display:block}
+.promo-img-wrap{border-radius:8px;overflow:hidden;border:1px solid rgba(106,173,69,.25)}
+.promo-img-wrap img{width:100%;display:block}
+
 </style>
 </head>
 <body>
-<div class="card">
 
-<!-- HEADER -->
-<div class="hd">
-  <div class="hd-stripe"></div>
-  <div class="hd-inner">
-    <div>
-      <div class="hd-eyebrow">🦎 Crested Gecko Community</div>
-      <div class="hd-title">아침 브리핑</div>
-      <div class="hd-sub">오늘도 게코와 함께 · 음력 1월 21일 · 임오일(壬午)</div>
-    </div>
-    <div class="hd-right">
-      <div class="hd-date-big">09</div>
-      <div class="hd-date-small">MAR 2026 · MON</div>
-    </div>
+<!-- ════════════════ HEADER ════════════════ -->
+<div class="header">
+  <span class="header-gecko">🦎</span>
+  <div class="header-badge">Morning Briefing</div>
+  <div class="header-title"><span>크레스티드 게코</span> 커뮤니티</div>
+  <div class="header-date">
+    <strong>09 / MAR 2026 · MON</strong> &nbsp;·&nbsp; 2026년 03월 09일 월요일
   </div>
 </div>
 
-<!-- ★ LITTLE LIVES 홍보 배너 -->
-<div class="promo-banner">
-  <div class="promo-inner">
-    <div class="promo-badge-row">
-      <span class="promo-badge">🌿 함께해요</span>
-      <div class="promo-badge-line"></div>
-      <span class="promo-badge">파충류 권익 보호</span>
+<!-- LITTLE LIVES -->
+<div class="promo-banner"><div class="promo-inner">
+  <div class="promo-badge-row"><span class="promo-badge">🌿 함께해요</span><div class="promo-badge-line"></div><span class="promo-badge">파충류 권익 보호</span></div>
+  <div class="promo-copy">
+    <span class="promo-heart">♥️</span>
+    <div class="promo-main-text">생명을 소중히 여기신다면<br><em>함께해 주시고 힘을 실어주세요</em></div>
+    <div class="promo-sub-text"><strong>집사님들이 관심을 가져주셔야!</strong><br>더 좋은 환경에서 키우실 수 있습니다! 🦎</div>
+  </div>
+  <div class="promo-org-box">
+    <div><div class="promo-org-name">사단법인 작은생명공존연합 <span>‼️</span></div>
+    <a class="promo-org-url" href="https://www.littlelives.or.kr/" target="_blank">🔗 www.littlelives.or.kr</a></div>
+    <div class="promo-qr-hint"><div class="promo-qr-emoji">🐊</div><span class="promo-qr-label">Little Lives</span></div>
+  </div>
+  <div class="promo-img-wrap"><img src="images/littlelives.png" alt="작은생명공존연합"></div>
+</div></div>
+<div class="container">
+  <div class="promo-placeholder">
+    <span class="icon">📢</span>
+    광고 · 공지 영역 (PROMO_PLACEHOLDER)
+  </div>
+
+  <!-- ════════════════ WEATHER ════════════════ -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🌤️</span> 오늘의 날씨</div>
+
+    <div class="alert-banner">
+      <span class="alert-icon">❄️</span>
+      <span>오늘 중부지방 중심 비 또는 눈, 당분간 아침 기온 낮겠음. 꽃샘추위 영향으로 전국 평년보다 낮은 기온 지속. 미세먼지 보통 수준.</span>
     </div>
-    <div class="promo-copy">
-      <span class="promo-heart">♥️</span>
-      <div class="promo-main-text">
-        생명을 소중히 여기신다면<br>
-        <em>함께해 주시고 힘을 실어주세요</em>
-      </div>
-      <div class="promo-sub-text">
-        <strong>집사님들이 관심을 가져주셔야!</strong><br>
-        더 좋은 환경에서 키우실 수 있습니다! 🦎
-      </div>
-    </div>
-    <div class="promo-org-box">
-      <div class="promo-org-left">
-        <div class="promo-org-name">
-          사단법인 작은생명공존연합
-          <span class="bang">‼️</span>
+
+    <div class="weather-cities">
+      <div class="city-card">
+        <div class="city-name">서울</div>
+        <span class="city-icon">🌧️</span>
+        <div class="city-temps">
+          <span class="city-high">9°</span>
+          <span class="city-low">-1°</span>
         </div>
-        <a class="promo-org-url" href="https://www.littlelives.or.kr/" target="_blank">
-          🔗 www.littlelives.or.kr
-        </a>
       </div>
-      <div class="promo-qr-hint">
-        <div class="promo-qr-emoji">🐊</div>
-        <span class="promo-qr-label">Little Lives</span>
+      <div class="city-card">
+        <div class="city-name">부산</div>
+        <span class="city-icon">⛅</span>
+        <div class="city-temps">
+          <span class="city-high">12°</span>
+          <span class="city-low">-2°</span>
+        </div>
+      </div>
+      <div class="city-card">
+        <div class="city-name">대구</div>
+        <span class="city-icon">⛅</span>
+        <div class="city-temps">
+          <span class="city-high">11°</span>
+          <span class="city-low">-1°</span>
+        </div>
+      </div>
+      <div class="city-card">
+        <div class="city-name">인천</div>
+        <span class="city-icon">🌧️</span>
+        <div class="city-temps">
+          <span class="city-high">8°</span>
+          <span class="city-low">0°</span>
+        </div>
+      </div>
+      <div class="city-card">
+        <div class="city-name">광주</div>
+        <span class="city-icon">⛅</span>
+        <div class="city-temps">
+          <span class="city-high">10°</span>
+          <span class="city-low">1°</span>
+        </div>
+      </div>
+      <div class="city-card">
+        <div class="city-name">대전</div>
+        <span class="city-icon">🌧️</span>
+        <div class="city-temps">
+          <span class="city-high">9°</span>
+          <span class="city-low">-1°</span>
+        </div>
+      </div>
+      <div class="city-card">
+        <div class="city-name">제주</div>
+        <span class="city-icon">☁️</span>
+        <div class="city-temps">
+          <span class="city-high">13°</span>
+          <span class="city-low">5°</span>
+        </div>
       </div>
     </div>
-    <div class="promo-img-wrap">
-      <img src="images/littlelives.png" alt="작은생명공존연합 야생생물법 변경안 안내">
-    </div>
-  </div>
-</div>
 
+    <div class="weekly-title">📅 주간 날씨 예보</div>
+    <div class="weekly-grid">
+      <div class="weekly-day today">
+        <div class="weekly-day-label">3/9(월)</div>
+        <span class="weekly-day-icon">🌧️</span>
+        <span class="weekly-day-high">9°</span>
+        <span class="weekly-day-low">-1°</span>
+      </div>
+      <div class="weekly-day">
+        <div class="weekly-day-label">3/10(화)</div>
+        <span class="weekly-day-icon">☀️</span>
+        <span class="weekly-day-high">12°</span>
+        <span class="weekly-day-low">-2°</span>
+      </div>
+      <div class="weekly-day">
+        <div class="weekly-day-label">3/11(수)</div>
+        <span class="weekly-day-icon">☁️</span>
+        <span class="weekly-day-high">11°</span>
+        <span class="weekly-day-low">1°</span>
+      </div>
+      <div class="weekly-day">
+        <div class="weekly-day-label">3/12(목)</div>
+        <span class="weekly-day-icon">☀️</span>
+        <span class="weekly-day-high">13°</span>
+        <span class="weekly-day-low">0°</span>
+      </div>
+      <div class="weekly-day">
+        <div class="weekly-day-label">3/13(금)</div>
+        <span class="weekly-day-icon">⛅</span>
+        <span class="weekly-day-high">14°</span>
+        <span class="weekly-day-low">2°</span>
+      </div>
+      <div class="weekly-day">
+        <div class="weekly-day-label">3/14(토)</div>
+        <span class="weekly-day-icon">⛅</span>
+        <span class="weekly-day-high">14°</span>
+        <span class="weekly-day-low">3°</span>
+      </div>
+      <div class="weekly-day">
+        <div class="weekly-day-label">3/15(일)</div>
+        <span class="weekly-day-icon">⛅</span>
+        <span class="weekly-day-high">15°</span>
+        <span class="weekly-day-low">3°</span>
+      </div>
+    </div>
 
-<!-- ══ WEATHER ══ -->
-<div class="weather-sec">
-  <div class="sec-hd">
-    <span class="sec-hd-label">Today's Weather</span>
-    <div class="sec-hd-line"></div>
-    <span class="sec-hd-tag tag-weather">☁ 꽃샘추위</span>
-  </div>
-  <div class="weather-overview">
-    <div class="weather-ov-icon">🌨</div>
-    <div>
-      <div class="weather-ov-title">봄은 아직 — 출근길 꽃샘추위, 중부 눈·비</div>
-      <div class="weather-ov-sub">아침 최저 -4~2°C · 낮 최고 6~12°C · 중부 경기북부·강원 오전 눈비 · 강원 산지 눈</div>
-    </div>
-  </div>
-  <div class="weather-grid">
-    <div class="weather-city-card">
-      <div class="wc-name">SEOUL</div>
-      <div class="wc-temps">
-        <span class="wc-hi">7°</span>
-        <span class="wc-lo">1°</span>
-      </div>
-      <div class="wc-icon">🌥</div>
-    </div>
-    <div class="weather-city-card">
-      <div class="wc-name">BUSAN</div>
-      <div class="wc-temps">
-        <span class="wc-hi">12°</span>
-        <span class="wc-lo">2°</span>
-      </div>
-      <div class="wc-icon">🌤</div>
-    </div>
-    <div class="weather-city-card">
-      <div class="wc-name">DAEGU</div>
-      <div class="wc-temps">
-        <span class="wc-hi">10°</span>
-        <span class="wc-lo">0°</span>
-      </div>
-      <div class="wc-icon">⛅</div>
-    </div>
-    <div class="weather-city-card">
-      <div class="wc-name">DAEJEON</div>
-      <div class="wc-temps">
-        <span class="wc-hi">8°</span>
-        <span class="wc-lo">-2°</span>
-      </div>
-      <div class="wc-icon">🌥</div>
-    </div>
-    <div class="weather-city-card">
-      <div class="wc-name">GWANGJU</div>
-      <div class="wc-temps">
-        <span class="wc-hi">9°</span>
-        <span class="wc-lo">-1°</span>
-      </div>
-      <div class="wc-icon">⛅</div>
-    </div>
-    <div class="weather-city-card">
-      <div class="wc-name">JEJU</div>
-      <div class="wc-temps">
-        <span class="wc-hi">9°</span>
-        <span class="wc-lo">4°</span>
-      </div>
-      <div class="wc-icon">🌦</div>
-    </div>
-  </div>
-  <div class="weather-week">
-    <div class="ww-title">Seoul Weekly Forecast</div>
-    <div class="ww-row">
-      <div class="ww-day">
-        <div class="ww-day-name">오늘</div>
-        <div class="ww-day-icon">🌥</div>
-        <div class="ww-day-hi">7°</div>
-        <div class="ww-day-lo">1°</div>
-      </div>
-      <div class="ww-day">
-        <div class="ww-day-name">화</div>
-        <div class="ww-day-icon">☀</div>
-        <div class="ww-day-hi">10°</div>
-        <div class="ww-day-lo">0°</div>
-      </div>
-      <div class="ww-day">
-        <div class="ww-day-name">수</div>
-        <div class="ww-day-icon">⛅</div>
-        <div class="ww-day-hi">11°</div>
-        <div class="ww-day-lo">2°</div>
-      </div>
-      <div class="ww-day">
-        <div class="ww-day-name">목</div>
-        <div class="ww-day-icon">🌤</div>
-        <div class="ww-day-hi">12°</div>
-        <div class="ww-day-lo">3°</div>
-      </div>
-      <div class="ww-day">
-        <div class="ww-day-name">금</div>
-        <div class="ww-day-icon">🌥</div>
-        <div class="ww-day-hi">11°</div>
-        <div class="ww-day-lo">2°</div>
-      </div>
-      <div class="ww-day">
-        <div class="ww-day-name">토</div>
-        <div class="ww-day-icon">⛅</div>
-        <div class="ww-day-hi">13°</div>
-        <div class="ww-day-lo">3°</div>
-      </div>
-      <div class="ww-day">
-        <div class="ww-day-name">일</div>
-        <div class="ww-day-icon">⛅</div>
-        <div class="ww-day-hi">14°</div>
-        <div class="ww-day-lo">4°</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══ 경제/주식 뉴스 ══ -->
-<div class="news-sec">
-  <div class="sec-hd">
-    <span class="sec-hd-label">Economy &amp; Market</span>
-    <div class="sec-hd-line"></div>
-    <span class="sec-hd-tag tag-econ">📉 오늘의 경제</span>
-  </div>
-  <div class="news-item">
-    <div class="news-num">01</div>
-    <div class="news-body">
-      <div class="news-title"><a href="https://www.mt.co.kr/stock/2026/03/09/2026030911085852370" target="_blank">코스피 서킷브레이커·코스닥 사이드카 발동…개인 4조 반발 매수</a></div>
-      <div class="news-summary">9일 코스피가 5.96% 급락해 서킷브레이커가 발동됐고, 코스닥도 사이드카 발동 속 4.54% 하락 마감했다. 중동발 에너지 위기가 직격탄 원인.</div>
-      <div class="news-source">▸ 머니투데이 · mt.co.kr</div>
-    </div>
-  </div>
-  <div class="news-item">
-    <div class="news-num">02</div>
-    <div class="news-body">
-      <div class="news-title"><a href="https://www.vietnam.vn/en/gia-dau-the-gioi-hom-nay-09-03-2026-tang-soc-gan-20-brent-vuot-111-usd-thung" target="_blank">국제유가 브렌트유 20% 폭등 — 배럴당 111달러 돌파</a></div>
-      <div class="news-summary">이란-미국 전쟁에 따른 호르무즈 해협 봉쇄 우려로 브렌트유가 하루 만에 약 20% 급등, 배럴당 111달러를 넘어섰다.</div>
-      <div class="news-source">▸ Vietnam.vn · vietnam.vn</div>
-    </div>
-  </div>
-  <div class="news-item">
-    <div class="news-num">03</div>
-    <div class="news-body">
-      <div class="news-title"><a href="https://www.new1cm.com/2026/03/2026-03-08_01058765893.html" target="_blank">한화그룹 시총, LG 제치고 재계 4위 등극…방산株 급등 효과</a></div>
-      <div class="news-summary">중동 사태 속 방산 투자 매력 부각으로 한화에어로스페이스·한화시스템 주가가 급등하며 한화그룹 시가총액이 LG그룹을 추월했다.</div>
-      <div class="news-source">▸ new1cm.com</div>
-    </div>
-  </div>
-  <div class="news-item">
-    <div class="news-num">04</div>
-    <div class="news-body">
-      <div class="news-title"><a href="https://www.new1cm.com/2026/03/2026-03-08_01058765893.html" target="_blank">5대 은행 마이너스통장 잔액 40.7조…3년 2개월 만에 최대</a></div>
-      <div class="news-summary">증시 급락에 저가매수 노린 빚투 자금이 몰리면서 5대 은행 마이너스통장 잔액이 3년 2개월 만에 최고치를 기록했다.</div>
-      <div class="news-source">▸ new1cm.com</div>
-    </div>
-  </div>
-</div>
-
-<!-- ══ 정치/사회 뉴스 ══ -->
-<div class="news-sec">
-  <div class="sec-hd">
-    <span class="sec-hd-label">Politics &amp; Society</span>
-    <div class="sec-hd-line"></div>
-    <span class="sec-hd-tag tag-poli">📰 오늘의 정치·사회</span>
-  </div>
-  <div class="news-item">
-    <div class="news-num">01</div>
-    <div class="news-body">
-      <div class="news-title"><a href="https://www.newspim.com/news/view/20260305001150" target="_blank">이혜훈 전 의원 자택 등 5곳 압수수색…부정청약 의혹 수사</a></div>
-      <div class="news-summary">서울경찰청 금융범죄수사대가 이재명 정부 초대 기획예산처 장관 후보자로 지명됐다 낙마한 이혜훈 전 의원 자택 등 5곳을 압수수색했다.</div>
-      <div class="news-source">▸ 뉴스핌 · newspim.com</div>
-    </div>
-  </div>
-  <div class="news-item">
-    <div class="news-num">02</div>
-    <div class="news-body">
-      <div class="news-title"><a href="https://www.cj-ilbo.com/news/articleView.html?idxno=1170802" target="_blank">이재명 대통령 "중동 사태 민생 영향 최소화…폭리 행위 엄정 대응"</a></div>
-      <div class="news-summary">수석보좌관회의에서 이 대통령은 글로벌 불확실성 확대에 따라 중동 상황이 에너지·금융 등 민생에 미칠 영향 최소화를 주문하고 기름값 바가지 등에 단호히 대응하라고 강조했다.</div>
-      <div class="news-source">▸ 청주일보 · cj-ilbo.com</div>
-    </div>
-  </div>
-  <div class="news-item">
-    <div class="news-num">03</div>
-    <div class="news-body">
-      <div class="news-title"><a href="https://www.cj-ilbo.com/news/articleView.html?idxno=1170802" target="_blank">윤석열 측, 내란 특검법 위헌 헌법소원 청구</a></div>
-      <div class="news-summary">윤석열 측이 내란 특검법 주요 조항이 위헌이라며 헌재에 헌법소원 심판을 청구했다. 앞서 1심 재판부의 위헌 신청 기각·각하에 직접 헌재에 낸 것이다.</div>
-      <div class="news-source">▸ 청주일보 · cj-ilbo.com</div>
-    </div>
-  </div>
-  <div class="news-item">
-    <div class="news-num">04</div>
-    <div class="news-body">
-      <div class="news-title"><a href="https://www.newscj.com/news/articleView.html?idxno=3382265" target="_blank">주한미군 전력 중동 차출…한반도 안보 공백 우려 고조</a></div>
-      <div class="news-summary">미-이란 전쟁 대응을 위한 주한미군 전력 일부 중동 차출 가능성이 제기되면서 한반도 안보 공백에 대한 우려가 커지고 있다.</div>
-      <div class="news-source">▸ 천지일보 · newscj.com</div>
-    </div>
-  </div>
-</div>
-
-<!-- ══ 띠별 운세 ══ -->
-<div class="fortune-sec">
-  <div class="sec-hd">
-    <span class="sec-hd-label" style="color:var(--purple)">띠별 운세</span>
-    <div class="sec-hd-line"></div>
-    <span class="sec-hd-tag tag-fortune">🔮 2026.03.09 임오일</span>
-  </div>
-  <div class="fortune-tabs">
-    <div class="ftab active" onclick="showFortune('rat')">🐭 쥐</div>
-    <div class="ftab" onclick="showFortune('ox')">🐮 소</div>
-    <div class="ftab" onclick="showFortune('tiger')">🐯 호랑이</div>
-    <div class="ftab" onclick="showFortune('rabbit')">🐰 토끼</div>
-    <div class="ftab" onclick="showFortune('dragon')">🐲 용</div>
-    <div class="ftab" onclick="showFortune('snake')">🐍 뱀</div>
-    <div class="ftab" onclick="showFortune('horse')">🐴 말</div>
-    <div class="ftab" onclick="showFortune('sheep')">🐑 양</div>
-    <div class="ftab" onclick="showFortune('monkey')">🐵 원숭이</div>
-    <div class="ftab" onclick="showFortune('rooster')">🐔 닭</div>
-    <div class="ftab" onclick="showFortune('dog')">🐶 개</div>
-    <div class="ftab" onclick="showFortune('pig')">🐷 돼지</div>
-  </div>
-
-  <!-- 쥐띠 -->
-  <div class="fortune-panel active" id="fortune-rat">
-    <div class="fortune-zodiac-header">
-      <div class="fortune-zodiac-icon">🐭</div>
-      <div>
-        <div class="fortune-zodiac-name">쥐띠</div>
-        <div class="fortune-zodiac-sub">한 걸음 내다보고 계획하면 안전한 날 · 내 페이스를 지키는 것이 우선</div>
-      </div>
-    </div>
-    <div class="fortune-year-list">
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">60년생</span>
-        <span class="fortune-year-text">부지런히 움직여야 하는 날입니다. 일찍 일어나는 새가 먹이를 얻습니다. 성공의 기운이 맴도니 욕심을 버리고 정진하세요.</span>
-      </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">72년생</span>
-        <span class="fortune-year-text">포기해야 할 것은 빨리 포기하세요. 실속없는 일에 힘만 쓰고 몸이 상하기 쉽습니다. 업무 경계가 흐려지면 일정이 무너집니다.</span>
-      </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">84년생</span>
-        <span class="fortune-year-text">빠른 결정과 신속한 행동이 필요한 하루입니다. 주저하거나 망설이면 일이 꼬일 수 있어요. 즉흥 약속은 하나만 남기고 정리하세요.</span>
-      </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">96년생</span>
-        <span class="fortune-year-text">잠시 쉬어가며 힘과 체력을 비축하세요. 오늘은 푹 쉬면서 기분 전환을 하는 것이 좋습니다. 연락은 다 받지 않아도 괜찮습니다.</span>
-      </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">08년생</span>
-        <span class="fortune-year-text">사업운 등이 크게 강하여 전부터 망설이던 것을 비로소 실천에 옮길 수 있는 시기입니다. 그동안 시도 못 했던 아이디어를 시험해 보세요.</span>
-      </div>
+    <button class="weather-detail-toggle" onclick="toggleDetail(this)">▾ 기상청 상세 예보 보기</button>
+    <div class="weather-detail" id="weatherDetail">
+      기상청 발표(3월9일 05:00): 중부지방 대체로 흐리다가 밤부터 맑아짐. 남부·제주 구름많다가 밤 맑아짐. 강원도 오전~밤 사이 비 또는 눈(강원산지 1~5cm). 경기동부·충북북부 낮 한때 비. 이번 예보기간 아침 기온 <strong style="color:var(--accent)">-2~7℃</strong>, 낮 기온 <strong style="color:var(--orange)">8~16℃</strong> 예상. 미세먼지 보통, 초미세먼지 보통.
     </div>
   </div>
 
-  <!-- 소띠 -->
-  <div class="fortune-panel" id="fortune-ox">
-    <div class="fortune-zodiac-header">
-      <div class="fortune-zodiac-icon">🐮</div>
-      <div>
-        <div class="fortune-zodiac-name">소띠</div>
-        <div class="fortune-zodiac-sub">갈등 해소나 분쟁 해결에 좋은 날 · 인내와 끈기를 발휘하세요</div>
+  <!-- ════════════════ ECONOMY NEWS ════════════════ -->
+  <div class="section">
+    <div class="section-title"><span class="icon">📈</span> 경제 뉴스</div>
+
+    <div class="news-card">
+      <div class="news-meta">
+        <span class="news-source">한국경제</span>
+        <span class="tag tag-red">급락</span>
       </div>
+      <div class="news-title">
+        <a href="https://www.hankyung.com" target="_blank">코스피, 유가 급등에 서킷브레이커 발동…5,251.87 마감</a>
+      </div>
+      <div class="news-summary">국제유가가 전 거래일 대비 25% 이상 폭등(WTI 배럴당 108달러 돌파)하며 코스피가 약 6% 급락, 서킷브레이커와 매도 사이드카가 발동됐다. 이란의 호르무즈 해협 봉쇄 여파로 외국인이 하루 7조7천억원 규모를 순매도했다.</div>
     </div>
-    <div class="fortune-year-list">
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">61년생</span>
-        <span class="fortune-year-text">아랫사람의 의견을 들어보는 것도 좋겠습니다. 오늘은 말보다 행동으로 경계를 보여주세요.</span>
+
+    <div class="news-card">
+      <div class="news-meta">
+        <span class="news-source">머니투데이</span>
+        <span class="tag tag-red">환율</span>
       </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">73년생</span>
-        <span class="fortune-year-text">생각지 않은 기쁨이 있는 날입니다. 요청이 많으면 우선순위를 먼저 제시하고 차분하게 처리하세요.</span>
+      <div class="news-title">
+        <a href="https://www.mt.co.kr/stock/2026/03/09/2026030908432277470" target="_blank">원·달러 환율 1492원 개장…2009년 금융위기 이후 최고</a>
       </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">85년생</span>
-        <span class="fortune-year-text">일이 잘 풀려나가는 날입니다. 내 시간을 지키면 마음이 안정됩니다. 긍정적인 에너지로 하루를 채우세요.</span>
+      <div class="news-summary">미국-이란 전쟁 여파로 원·달러 환율이 전 거래일 대비 17.4원 급등한 1492원에 개장했다. 이는 글로벌 금융위기였던 2009년 3월 이후 최고 수준이다.</div>
+    </div>
+
+    <div class="news-card">
+      <div class="news-meta">
+        <span class="news-source">한국경제</span>
+        <span class="tag tag-red">항공</span>
       </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">97년생</span>
-        <span class="fortune-year-text">문서 관계에 주의가 필요합니다. 거절은 짧게, 대안은 가능하면 하나만 제시하는 것이 좋습니다.</span>
+      <div class="news-title">
+        <a href="https://www.hankyung.com" target="_blank">항공주 일제히 급락…대한항공 -7.76%, 티웨이 -10.26%</a>
       </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">09년생</span>
-        <span class="fortune-year-text">쉽게 포기하지 말고 인내와 끈기를 발휘하세요. 오늘 노력은 반드시 좋은 결실로 이어집니다.</span>
+      <div class="news-summary">고유가·고환율 이중고로 대한항공, 아시아나, 제주항공, 진에어, 티웨이항공 등 모든 항공주가 급락했다. 유가 상승은 항공사 연료비 급증으로 직결된다.</div>
+    </div>
+
+    <div class="news-card">
+      <div class="news-meta">
+        <span class="news-source">한국경제</span>
+        <span class="tag tag-blue">국제</span>
       </div>
+      <div class="news-title">
+        <a href="https://www.hankyung.com" target="_blank">G7 일본·프랑스·캐나다, 희토류 확보 위해 미국 주도 무역 블록 대안 모색</a>
+      </div>
+      <div class="news-summary">G7 회원국인 일본, 프랑스, 캐나다가 핵심 광물 확보와 중국 의존도 감소를 위해 수입 할당제·광산 보조금·바이어 클럽 등 미국 주도 무역 블록의 대안을 공동 검토 중이라고 로이터가 보도했다.</div>
     </div>
   </div>
 
-  <!-- 호랑이띠 -->
-  <div class="fortune-panel" id="fortune-tiger">
-    <div class="fortune-zodiac-header">
-      <div class="fortune-zodiac-icon">🐯</div>
-      <div>
-        <div class="fortune-zodiac-name">호랑이띠</div>
-        <div class="fortune-zodiac-sub">범띠 운세지수 높음 · 새로운 도전과 기회가 예상되는 날</div>
+  <!-- ════════════════ POLITICS NEWS ════════════════ -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🏛️</span> 정치 · 사회 뉴스</div>
+
+    <div class="news-card">
+      <div class="news-meta">
+        <span class="news-source politics">경향신문</span>
+        <span class="tag tag-purple">정치</span>
       </div>
+      <div class="news-title">
+        <a href="https://www.khan.co.kr/article/202603091920001/" target="_blank">국민의힘, 의원 전원 명의로 '윤석열 정치 복귀 반대' 결의문 채택</a>
+      </div>
+      <div class="news-summary">국민의힘이 9일 긴급 의원총회에서 12·3 비상계엄에 대해 사과하고 윤석열 전 대통령의 정치 복귀를 반대하는 결의문을 채택했다. 오세훈 서울시장이 공천 신청을 않는 등 자중지란이 커진 가운데 6·3 지방선거를 앞두고 나온 결정이다.</div>
     </div>
-    <div class="fortune-year-list">
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">62년생</span>
-        <span class="fortune-year-text">불편한 요구는 웃으며 넘기지 말고 정리해야 합니다. 세게 밀기보다 선을 분명히 하는 것이 이기는 방법입니다.</span>
+
+    <div class="news-card">
+      <div class="news-meta">
+        <span class="news-source politics">충청일보</span>
+        <span class="tag tag-purple">법조</span>
       </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">74년생</span>
-        <span class="fortune-year-text">역할이 섞이면 책임이 커집니다. 업무를 명확히 분리하세요. 경계를 지키는 것이 오늘의 핵심입니다.</span>
+      <div class="news-title">
+        <a href="https://www.cj-ilbo.com/news/articleView.html?idxno=1170802" target="_blank">윤석열 측, 내란 특검법 위헌 소원 헌재에 청구</a>
       </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">86년생</span>
-        <span class="fortune-year-text">새로운 도전이 행운을 가져다주는 날입니다. 망설이지 말고 시도하세요. 관계에서도 규칙이 있으면 덜 지칩니다.</span>
+      <div class="news-summary">윤석열 측이 헌법재판소에 내란 특검법 주요 조항이 위헌이라며 헌법소원 심판을 청구했다. 앞서 1심 재판부가 위헌 신청을 기각하자 직접 헌재에 소원을 낸 것이다.</div>
+    </div>
+
+    <div class="news-card">
+      <div class="news-meta">
+        <span class="news-source politics">경향신문</span>
+        <span class="tag tag-red">노동</span>
       </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">98년생</span>
-        <span class="fortune-year-text">오늘은 '아니오'가 성장입니다. 불필요한 요구에 단호하게 거절하는 연습을 해보세요.</span>
+      <div class="news-title">
+        <a href="https://www.khan.co.kr/" target="_blank">삼성전자 노조, 총파업 찬반 투표 돌입…2024년 이후 2년 만</a>
       </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">10년생</span>
-        <span class="fortune-year-text">앞으로 나아가기만 하면 되는 하루입니다. 자신감을 갖고 긍정적인 마음으로 임하면 좋은 결과가 기다립니다.</span>
+      <div class="news-summary">삼성전자 노동조합 공동투쟁본부가 9일부터 18일까지 약 9만 명 조합원 대상 쟁의행위 찬반 투표에 돌입했다. 총파업이 현실화할 경우 창사 이래 두 번째 파업이 된다.</div>
+    </div>
+
+    <div class="news-card">
+      <div class="news-meta">
+        <span class="news-source politics">다음뉴스</span>
+        <span class="tag tag-purple">국방</span>
       </div>
+      <div class="news-title">
+        <a href="https://news.daum.net/politics" target="_blank">여야, 중동 사태 속 '민생 최우선' 한목소리…주한미군 차출 놓고는 공방</a>
+      </div>
+      <div class="news-summary">미국-이란 전쟁 격화로 국제 정세가 요동치는 가운데 여야 모두 민생 최우선을 강조했다. 그러나 중동 지역으로의 주한미군 전력 차출 가능성을 놓고는 공방이 이어졌다.</div>
     </div>
   </div>
 
-  <!-- 토끼띠 -->
-  <div class="fortune-panel" id="fortune-rabbit">
-    <div class="fortune-zodiac-header">
-      <div class="fortune-zodiac-icon">🐰</div>
-      <div>
-        <div class="fortune-zodiac-name">토끼띠</div>
-        <div class="fortune-zodiac-sub">하늘도 돕는 날 · 덕이 부와 명성으로 돌아옵니다</div>
-      </div>
-    </div>
-    <div class="fortune-year-list">
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">63년생</span>
-        <span class="fortune-year-text">관운이 좋으니 명예가 높아지는 날입니다. 가는 곳마다 이로운 일이 기다리고 있습니다. 부탁을 받으면 조건부터 확인하세요.</span>
-      </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">75년생</span>
-        <span class="fortune-year-text">승진을 하거나 지위가 오르는 하루입니다. 협업은 담당을 명확히 해야 편합니다. 자만하지 말고 더욱 열심히 노력하세요.</span>
-      </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">87년생</span>
-        <span class="fortune-year-text">사람들에게 아량과 덕을 베풀도록 하세요. 감정 소모가 큰 대화는 시간을 정해두는 것이 좋습니다.</span>
-      </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">99년생</span>
-        <span class="fortune-year-text">새로운 친구를 사귀기에 좋은 날입니다. 짝이 없는 분들은 좋은 인연을 만날 수 있어요. 우유부단보다 작은 결단이 낫습니다.</span>
-      </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">11년생</span>
-        <span class="fortune-year-text">와신상담의 자세가 필요한 하루입니다. 많은 사람의 신뢰를 얻으려면 명분 있는 행동으로 사람을 이끌어야 합니다.</span>
-      </div>
-    </div>
-  </div>
+  <!-- ════════════════ ZODIAC ════════════════ -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🔮</span> 띠별 오늘의 운세</div>
 
-  <!-- 용띠 -->
-  <div class="fortune-panel" id="fortune-dragon">
-    <div class="fortune-zodiac-header">
-      <div class="fortune-zodiac-icon">🐲</div>
-      <div>
-        <div class="fortune-zodiac-name">용띠</div>
-        <div class="fortune-zodiac-sub">카리스마가 빛나는 날 · 이성을 가진 중도유지가 핵심</div>
-      </div>
+    <div class="zodiac-tabs" id="zodiacTabs">
+      <button class="zodiac-tab active" data-panel="z-rat" onclick="switchZodiac(this,'z-rat')">🐭 쥐</button>
+      <button class="zodiac-tab" data-panel="z-ox" onclick="switchZodiac(this,'z-ox')">🐮 소</button>
+      <button class="zodiac-tab" data-panel="z-tiger" onclick="switchZodiac(this,'z-tiger')">🐯 호랑이</button>
+      <button class="zodiac-tab" data-panel="z-rabbit" onclick="switchZodiac(this,'z-rabbit')">🐰 토끼</button>
+      <button class="zodiac-tab" data-panel="z-dragon" onclick="switchZodiac(this,'z-dragon')">🐲 용</button>
+      <button class="zodiac-tab" data-panel="z-snake" onclick="switchZodiac(this,'z-snake')">🐍 뱀</button>
+      <button class="zodiac-tab" data-panel="z-horse" onclick="switchZodiac(this,'z-horse')">🐴 말</button>
+      <button class="zodiac-tab" data-panel="z-sheep" onclick="switchZodiac(this,'z-sheep')">🐑 양</button>
+      <button class="zodiac-tab" data-panel="z-monkey" onclick="switchZodiac(this,'z-monkey')">🐵 원숭이</button>
+      <button class="zodiac-tab" data-panel="z-rooster" onclick="switchZodiac(this,'z-rooster')">🐔 닭</button>
+      <button class="zodiac-tab" data-panel="z-dog" onclick="switchZodiac(this,'z-dog')">🐶 개</button>
     </div>
-    <div class="fortune-year-list">
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">64년생</span>
-        <span class="fortune-year-text">하는 일은 잘 되지만 가족들로 인해 마음이 심란할 수 있습니다. 요구가 많으면 선택지를 줄여 제시하세요.</span>
-      </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">76년생</span>
-        <span class="fortune-year-text">합법적인 방법으로 투자하고 매매해야 합니다. 책임은 나누는 순간 가벼워집니다. 사소한 감정으로 일이 커지지 않도록 주의하세요.</span>
-      </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">88년생</span>
-        <span class="fortune-year-text">오늘은 리더 톤으로 단호하게 말해도 됩니다. 예상치 못한 행운이 찾아오니 긍정적인 마음을 유지하세요.</span>
-      </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">00년생</span>
-        <span class="fortune-year-text">끌려다니지 말고 일정을 먼저 고정합니다. 손해라고 생각하지 마세요. 나중에 도움이 될 것입니다.</span>
-      </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">12년생</span>
-        <span class="fortune-year-text">용띠 특유의 카리스마가 주변을 환하게 밝히는 날입니다. 후배들의 조언 요청을 흔쾌히 받아들이세요.</span>
-      </div>
-    </div>
-  </div>
 
-  <!-- 뱀띠 -->
-  <div class="fortune-panel" id="fortune-snake">
-    <div class="fortune-zodiac-header">
-      <div class="fortune-zodiac-icon">🐍</div>
-      <div>
-        <div class="fortune-zodiac-name">뱀띠</div>
-        <div class="fortune-zodiac-sub">뱀띠 운세지수 높음 · 충분한 계획을 세우는 날</div>
+    <div class="card">
+      <!-- 쥐 -->
+      <div class="zodiac-panel active" id="z-rat">
+        <div class="zodiac-header">
+          <span class="zodiac-emoji">🐭</span>
+          <div>
+            <div class="zodiac-sign-name">쥐띠</div>
+            <div style="font-size:11px;color:var(--text-muted);">1960 · 1972 · 1984 · 1996 · 2008</div>
+          </div>
+        </div>
+        <div class="zodiac-summary">오늘은 판단력이 흐려질 수 있는 날. 중요한 결정은 서두르지 말고 주변 조언을 구하세요. 금전 거래는 신중히.</div>
+        <div class="zodiac-years">
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1960년생</span>
+            <span class="zodiac-year-text">경험을 믿고 차분히 임하면 좋은 결과. 건강 관리에 특히 신경 쓸 것.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1972년생</span>
+            <span class="zodiac-year-text">뜻하지 않은 지출 가능성. 지인과의 관계에서 오해 소지 주의.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1984년생</span>
+            <span class="zodiac-year-text">직장에서 새로운 기회가 생기나 섣불리 나서지 말 것. 관망이 필요한 시기.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1996년생</span>
+            <span class="zodiac-year-text">연애운 상승. 마음을 솔직히 표현하면 좋은 반응 기대.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">2008년생</span>
+            <span class="zodiac-year-text">학업에 집중하기 좋은 날. 체력 소모가 크니 수면 충분히.</span>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="fortune-year-list">
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">65년생</span>
-        <span class="fortune-year-text">애매한 말은 오해를 부르니 문장 하나로 확정하세요. 정보보다 경계가 마음을 지켜줍니다.</span>
-      </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">77년생</span>
-        <span class="fortune-year-text">듣기만 하는 자리라면 거리를 두는 게 낫습니다. 쉽게 생각하지 말고 충분한 계획을 세우세요.</span>
-      </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">89년생</span>
-        <span class="fortune-year-text">불편한 제안은 즉답하지 않아도 됩니다. 선을 분명히 하면 오히려 좋은 관계가 유지됩니다.</span>
-      </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">01년생</span>
-        <span class="fortune-year-text">내 시간을 지키는 것이 우선입니다. 뱀띠의 직관력이 빛나는 날이니 감을 믿고 행동하세요.</span>
-      </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">13년생</span>
-        <span class="fortune-year-text">긍정적인 변화와 기회가 예상되는 날입니다. 자신감을 갖고 새로운 도전을 시도해보세요.</span>
-      </div>
-    </div>
-  </div>
 
-  <!-- 말띠 -->
-  <div class="fortune-panel" id="fortune-horse">
-    <div class="fortune-zodiac-header">
-      <div class="fortune-zodiac-icon">🐴</div>
-      <div>
-        <div class="fortune-zodiac-name">말띠</div>
-        <div class="fortune-zodiac-sub">에너지는 높지만 약속을 늘리면 피곤한 날</div>
+      <!-- 소 -->
+      <div class="zodiac-panel" id="z-ox">
+        <div class="zodiac-header">
+          <span class="zodiac-emoji">🐮</span>
+          <div>
+            <div class="zodiac-sign-name">소띠</div>
+            <div style="font-size:11px;color:var(--text-muted);">1961 · 1973 · 1985 · 1997 · 2009</div>
+          </div>
+        </div>
+        <div class="zodiac-summary">꾸준함이 빛을 발하는 날. 새로운 도전보다는 기존 일을 마무리하는 데 집중하면 성과가 따릅니다.</div>
+        <div class="zodiac-years">
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1961년생</span>
+            <span class="zodiac-year-text">오랜 노력의 결실이 가까워짐. 건강은 무리하지 않는 것이 관건.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1973년생</span>
+            <span class="zodiac-year-text">재정적으로 안정적인 흐름. 투자보다는 저축이 현명.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1985년생</span>
+            <span class="zodiac-year-text">직장 내 신뢰가 높아지는 시기. 협력 관계를 잘 유지할 것.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1997년생</span>
+            <span class="zodiac-year-text">이성 관계에서 진지한 대화가 필요. 감정 표현에 솔직해질 것.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">2009년생</span>
+            <span class="zodiac-year-text">새로운 학습 환경에 적응 중. 조급해하지 않아도 된다.</span>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="fortune-year-list">
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">66년생</span>
-        <span class="fortune-year-text">오늘은 선을 긋는 게 오히려 친절입니다. 에너지가 높아도 약속을 늘리면 피곤해집니다.</span>
-      </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">78년생</span>
-        <span class="fortune-year-text">관계에서의 규칙이 마음을 편하게 합니다. 오늘 하루를 차분하게 정리하며 보내는 것이 최선입니다.</span>
-      </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">90년생</span>
-        <span class="fortune-year-text">선택지를 넓히지 말고 확정부터 하세요. 그동안 준비해온 것이 빛을 발하는 날입니다.</span>
-      </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">02년생</span>
-        <span class="fortune-year-text">즉흥은 한 번이면 충분합니다. 계획을 세우고 차분히 실행하면 오늘 하루가 보람 있게 마무리됩니다.</span>
-      </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">14년생</span>
-        <span class="fortune-year-text">오늘은 대인 관계에서 특히 운이 강한 날입니다. 밝은 표정으로 먼저 인사해보세요.</span>
-      </div>
-    </div>
-  </div>
 
-  <!-- 양띠 -->
-  <div class="fortune-panel" id="fortune-sheep">
-    <div class="fortune-zodiac-header">
-      <div class="fortune-zodiac-icon">🐑</div>
-      <div>
-        <div class="fortune-zodiac-name">양띠</div>
-        <div class="fortune-zodiac-sub">부탁을 다 받으면 내 리듬이 무너지는 날</div>
+      <!-- 호랑이 -->
+      <div class="zodiac-panel" id="z-tiger">
+        <div class="zodiac-header">
+          <span class="zodiac-emoji">🐯</span>
+          <div>
+            <div class="zodiac-sign-name">호랑이띠</div>
+            <div style="font-size:11px;color:var(--text-muted);">1962 · 1974 · 1986 · 1998 · 2010</div>
+          </div>
+        </div>
+        <div class="zodiac-summary">에너지가 넘치는 날. 추진력을 발휘하면 좋은 성과를 낼 수 있으나 충동적 행동은 주의하세요.</div>
+        <div class="zodiac-years">
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1962년생</span>
+            <span class="zodiac-year-text">오래된 인연이 도움을 줄 수 있음. 인맥을 적극 활용하세요.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1974년생</span>
+            <span class="zodiac-year-text">새로운 사업 아이디어가 떠오름. 구체적인 계획을 세워볼 시기.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1986년생</span>
+            <span class="zodiac-year-text">직장에서 리더십을 발휘할 기회. 팀원과의 소통을 강화하세요.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1998년생</span>
+            <span class="zodiac-year-text">연애 관계에서 활기찬 에너지 발산. 소통이 원활한 날.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">2010년생</span>
+            <span class="zodiac-year-text">학교생활에서 두각을 나타낼 수 있음. 자신감을 가질 것.</span>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="fortune-year-list">
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">67년생</span>
-        <span class="fortune-year-text">거절은 길게 말할수록 어려워집니다. 짧고 명확하게 의사를 전달하세요. 부탁을 다 받으면 내 리듬이 무너집니다.</span>
+
+      <!-- 토끼 -->
+      <div class="zodiac-panel" id="z-rabbit">
+        <div class="zodiac-header">
+          <span class="zodiac-emoji">🐰</span>
+          <div>
+            <div class="zodiac-sign-name">토끼띠</div>
+            <div style="font-size:11px;color:var(--text-muted);">1963 · 1975 · 1987 · 1999 · 2011</div>
+          </div>
+        </div>
+        <div class="zodiac-summary">섬세한 감각이 빛나는 날. 예술적·창의적 활동에서 성과가 나타나며, 대인 관계도 원만합니다.</div>
+        <div class="zodiac-years">
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1963년생</span>
+            <span class="zodiac-year-text">가족과의 화합을 도모하는 것이 좋음. 건강 검진을 권장.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1975년생</span>
+            <span class="zodiac-year-text">재물운 양호. 소소한 행운이 따르는 하루.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1987년생</span>
+            <span class="zodiac-year-text">창의적인 아이디어로 직장에서 인정받는 날. 발표 기회를 노려라.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1999년생</span>
+            <span class="zodiac-year-text">감성적인 하루. 연인과 특별한 시간을 보내기 좋음.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">2011년생</span>
+            <span class="zodiac-year-text">친구와의 유대가 깊어지는 날. 따뜻한 배려 한마디가 큰 힘이 됨.</span>
+          </div>
+        </div>
       </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">79년생</span>
-        <span class="fortune-year-text">공유 범위를 정하면 스트레스가 줄어듭니다. 주변 사람과 적당한 거리감을 유지하는 것이 좋습니다.</span>
+
+      <!-- 용 -->
+      <div class="zodiac-panel" id="z-dragon">
+        <div class="zodiac-header">
+          <span class="zodiac-emoji">🐲</span>
+          <div>
+            <div class="zodiac-sign-name">용띠</div>
+            <div style="font-size:11px;color:var(--text-muted);">1964 · 1976 · 1988 · 2000 · 2012</div>
+          </div>
+        </div>
+        <div class="zodiac-summary">기운이 강한 날. 도전적 과제에 착수하면 좋은 결과가 기대됩니다. 단 지나친 자신감은 금물.</div>
+        <div class="zodiac-years">
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1964년생</span>
+            <span class="zodiac-year-text">사회적 명성이 올라가는 시기. 공식적인 자리에서 빛을 발함.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1976년생</span>
+            <span class="zodiac-year-text">금전적 이익이 생길 수 있음. 하지만 보증 관련 일은 피할 것.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1988년생</span>
+            <span class="zodiac-year-text">직장에서 중요한 프로젝트를 맡을 수 있음. 책임감을 가지고 임하세요.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">2000년생</span>
+            <span class="zodiac-year-text">인간관계에서 긍정적인 에너지가 발산됨. 새로운 만남 기대.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">2012년생</span>
+            <span class="zodiac-year-text">활동적인 하루. 운동이나 야외 활동을 통해 에너지를 발산하세요.</span>
+          </div>
+        </div>
       </div>
-      <div class="fortune-year-item">
-        <span class="fortune-year-badge">91년생</span>
-        <span class="fortune-year-text">즉답 대신 확인 시간을 요청하세요.
-</body>
-</html>
+
+      <!-- 뱀 -->
+      <div class="zodiac-panel" id="z-snake">
+        <div class="zodiac-header">
+          <span class="zodiac-emoji">🐍</span>
+          <div>
+            <div class="zodiac-sign-name">뱀띠</div>
+            <div style="font-size:11px;color:var(--text-muted);">1965 · 1977 · 1989 · 2001 · 2013</div>
+          </div>
+        </div>
+        <div class="zodiac-summary">직관이 예리한 날. 숨겨진 정보를 포착하는 능력이 발휘됩니다. 다만 의심이 지나치면 인간관계에 해가 될 수 있습니다.</div>
+        <div class="zodiac-years">
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1965년생</span>
+            <span class="zodiac-year-text">지혜로운 판단이 중요한 상황이 생김. 충분한 자료 수집 후 결정하세요.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1977년생</span>
+            <span class="zodiac-year-text">재정 계획을 재점검할 필요. 불필요한 지출을 줄이는 것이 좋음.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1989년생</span>
+            <span class="zodiac-year-text">조용히 실력을 쌓는 것이 득. 겉으로 드러내기보다 내실을 다질 것.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">2001년생</span>
+            <span class="zodiac-year-text">친구의 조언에 귀 기울이면 좋을 날. 혼자 결정하지 말 것.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">2013년생</span>
+            <span class="zodiac-year-text">공부에 집중하기 좋은 날. 집중력이 높아지는 시간대를 활용하세요.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 말 -->
+      <div class="zodiac-panel" id="z-horse">
+        <div class="zodiac-header">
+          <span class="zodiac-emoji">🐴</span>
+          <div>
+            <div class="zodiac-sign-name">말띠</div>
+            <div style="font-size:11px;color:var(--text-muted);">1966 · 1978 · 1990 · 2002 · 2014</div>
+          </div>
+        </div>
+        <div class="zodiac-summary">활발한 기운이 넘치는 날. 새로운 도전을 즐기고, 외부 활동에서 행운이 따릅니다.</div>
+        <div class="zodiac-years">
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1966년생</span>
+            <span class="zodiac-year-text">여행이나 외출에서 좋은 인연을 만날 수 있음. 적극적으로 나서세요.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1978년생</span>
+            <span class="zodiac-year-text">사업 운이 상승. 오랫동안 추진하던 일에 진전이 생길 수 있음.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1990년생</span>
+            <span class="zodiac-year-text">직장에서 활기찬 하루. 팀워크가 잘 맞고 업무 효율이 높아짐.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">2002년생</span>
+            <span class="zodiac-year-text">활발한 소통으로 친구 관계가 돈독해짐. 긍정적인 영향을 주변에 전파.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">2014년생</span>
+            <span class="zodiac-year-text">다양한 활동을 통해 새로운 흥미를 발견할 수 있는 날.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 양 -->
+      <div class="zodiac-panel" id="z-sheep">
+        <div class="zodiac-header">
+          <span class="zodiac-emoji">🐑</span>
+          <div>
+            <div class="zodiac-sign-name">양띠</div>
+            <div style="font-size:11px;color:var(--text-muted);">1967 · 1979 · 1991 · 2003 · 2015</div>
+          </div>
+        </div>
+        <div class="zodiac-summary">온화하고 평화로운 기운. 사람들과의 조화 속에서 심리적 안정을 찾을 수 있는 날입니다.</div>
+        <div class="zodiac-years">
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1967년생</span>
+            <span class="zodiac-year-text">가족과 함께하는 시간이 마음에 편안함을 줌. 건강을 위해 충분한 휴식 필요.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1979년생</span>
+            <span class="zodiac-year-text">인맥에서 뜻밖의 도움이 생길 수 있음. 관계를 넓혀나갈 좋은 기회.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1991년생</span>
+            <span class="zodiac-year-text">직장에서 협력 관계가 원활함. 갈등이 있었다면 화해할 수 있는 날.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">2003년생</span>
+            <span class="zodiac-year-text">감수성이 풍부한 날. 예술 활동이나 취미에서 즐거움을 찾을 것.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">2015년생</span>
+            <span class="zodiac-year-text">친구들과 어울리는 시간이 에너지를 충전시켜 줌. 밖으로 나가볼 것.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 원숭이 -->
+      <div class="zodiac-panel" id="z-monkey">
+        <div class="zodiac-header">
+          <span class="zodiac-emoji">🐵</span>
+          <div>
+            <div class="zodiac-sign-name">원숭이띠</div>
+            <div style="font-size:11px;color:var(--text-muted);">1968 · 1980 · 1992 · 2004 · 2016</div>
+          </div>
+        </div>
+        <div class="zodiac-summary">재치와 임기응변이 돋보이는 날. 예상치 못한 상황에서도 빠른 대처로 성공을 이끌 수 있습니다.</div>
+        <div class="zodiac-years">
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1968년생</span>
+            <span class="zodiac-year-text">새로운 아이디어를 실행에 옮기기 좋은 날. 주변의 반응이 긍정적.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1980년생</span>
+            <span class="zodiac-year-text">금전적 판단이 예리함. 투자 관련 결정을 내리기에 좋은 시기.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">1992년생</span>
+            <span class="zodiac-year-text">직장에서 창의적인 해결책을 제시할 기회. 적극적으로 의견을 개진하세요.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">2004년생</span>
+            <span class="zodiac-year-text">친구들과의 즐거운 활동이 기다림. 새로운 취미 시도를 권장.</span>
+          </div>
+          <div class="zodiac-year-item">
+            <span class="zodiac-year-badge">2016년생</span>
+            <span class="zodiac-year-text">호기심이 왕성한 날. 다양한 것에 도전해보는 것이 좋음.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 닭 -->
+      <div class="zodiac-panel" id="z-rooster">
+        <div class="zodiac-header">
+          <span class="zodiac-emoji">🐔</span>
+          <div>
+            <div class="zodiac-sign-name">닭띠</div>
+            <div style="font-size:11px;color:var(--text-muted);">1969 · 1981 ·
+</body></html>
