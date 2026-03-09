@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """🦎 Crested Gecko Community - Daily Briefing Auto-Generator"""
 import os, re, json, time, datetime, subprocess
+from json_repair import repair_json
 from googleapiclient.discovery import build
 import anthropic
 
@@ -117,7 +118,6 @@ def collect_data(date_info):
         data = json.loads(raw_json)
     except json.JSONDecodeError as err:
         print(f"  ⚠️ JSON 오류({err}) — json_repair로 자동 수정 중...")
-        from json_repair import repair_json
         data = json.loads(repair_json(raw_json))
         print("  → 수정 완료")
 
