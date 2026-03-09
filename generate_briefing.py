@@ -110,6 +110,8 @@ def collect_data(date_info):
         from json_repair import repair_json
         data_a = json.loads(repair_json(raw_a[sa:ea]))
     print(f"  [A] 완료 — 뉴스 {len(data_a.get('economy_news',[]))+len(data_a.get('politics_news',[]))}건")
+    print("  ⏳ 65초 대기...")
+    time.sleep(65)
 
     # ── 1-B: 띠별 운세 ──
     prompt_b = f"""오늘 {date_info['date_ko']} 띠별 운세를 웹 검색해서 JSON으로만 반환. 설명 없이 JSON만.
@@ -134,6 +136,8 @@ def collect_data(date_info):
         from json_repair import repair_json
         data_b = json.loads(repair_json(raw_b[sb:eb]))
     print(f"  [B] 완료 — 운세 {len(data_b.get('zodiac',[]))}띠")
+    print("  ⏳ 65초 대기...")
+    time.sleep(65)
 
     # ── 1-C: 별자리 + 밈 ──
     prompt_c = f"""오늘 {date_info['date_ko']} 별자리 운세를 웹 검색해서 JSON으로만 반환. 설명 없이 JSON만.
