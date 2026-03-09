@@ -111,19 +111,15 @@ def collect_data(date_info):
         data_a = json.loads(repair_json(raw_a[sa:ea]))
     print(f"  [A] 완료 — 뉴스 {len(data_a.get('economy_news',[]))+len(data_a.get('politics_news',[]))}건")
 
-    # ── 1-B: 운세 + 별자리 + 밈 ──
-    prompt_b = f"""오늘 {date_info['date_ko']} 운세를 웹 검색해서 JSON으로만 반환. 설명 없이 JSON만.
+    # ── 1-B: 띠별 운세 ──
+    prompt_b = f"""오늘 {date_info['date_ko']} 띠별 운세를 웹 검색해서 JSON으로만 반환. 설명 없이 JSON만.
 키:
-- zodiac: 배열12(쥐🐭/소🐮/호랑이🐯/토끼🐰/용🐲/뱀🐍/말🐴/양🐑/원숭이🐵/닭🐔/개🐶/돼지🐷)
-  각각 sign/emoji/summary/years(배열5, year/text)
-  생년: 쥐60/72/84/96/08, 소61/73/85/97/09, 호랑이62/74/86/98/10, 토끼63/75/87/99/11,
-        용64/76/88/00/12, 뱀65/77/89/01/13, 말66/78/90/02/14, 양67/79/91/03/15,
-        원숭이68/80/92/04/16, 닭69/81/93/05/17, 개70/82/94/06/18, 돼지71/83/95/07/19
-- horoscope: 배열12(양자리♈3.21~4.19/황소자리♉4.20~5.20/쌍둥이자리♊5.21~6.21/게자리♋6.22~7.22/사자자리♌7.23~8.22/처녀자리♍8.23~9.22/천칭자리♎9.23~10.23/전갈자리♏10.24~11.21/사수자리♐11.22~12.21/염소자리♑12.22~1.19/물병자리♒1.20~2.18/물고기자리♓2.19~3.20)
-  각각 sign/emoji/date/text
-- meme_drips: 오늘 뉴스 기반 재미있는 드립 3개 배열"""
+- zodiac: 배열12, 각각 sign/emoji/summary/years(배열5, year/text)
+  쥐🐭(60/72/84/96/08), 소🐮(61/73/85/97/09), 호랑이🐯(62/74/86/98/10), 토끼🐰(63/75/87/99/11),
+  용🐲(64/76/88/00/12), 뱀🐍(65/77/89/01/13), 말🐴(66/78/90/02/14), 양🐑(67/79/91/03/15),
+  원숭이🐵(68/80/92/04/16), 닭🐔(69/81/93/05/17), 개🐶(70/82/94/06/18), 돼지🐷(71/83/95/07/19)"""
 
-    print("  [B] 운세·별자리·밈 수집 중...")
+    print("  [B] 띠별 운세 수집 중...")
     res_b = call_with_retry(lambda: client.messages.create(
         model="claude-sonnet-4-6", max_tokens=5000,
         tools=[{"type": "web_search_20250305", "name": "web_search"}],
@@ -137,9 +133,34 @@ def collect_data(date_info):
     except json.JSONDecodeError:
         from json_repair import repair_json
         data_b = json.loads(repair_json(raw_b[sb:eb]))
-    print(f"  [B] 완료 — 운세 {len(data_b.get('zodiac',[]))}띠, 별자리 {len(data_b.get('horoscope',[]))}개")
+    print(f"  [B] 완료 — 운세 {len(data_b.get('zodiac',[]))}띠")
 
-    return {**data_a, **data_b}
+    # ── 1-C: 별자리 + 밈 ──
+    prompt_c = f"""오늘 {date_info['date_ko']} 별자리 운세를 웹 검색해서 JSON으로만 반환. 설명 없이 JSON만.
+키:
+- horoscope: 배열12, 각각 sign/emoji/date/text
+  양자리♈(3.21~4.19), 황소자리♉(4.20~5.20), 쌍둥이자리♊(5.21~6.21), 게자리♋(6.22~7.22),
+  사자자리♌(7.23~8.22), 처녀자리♍(8.23~9.22), 천칭자리♎(9.23~10.23), 전갈자리♏(10.24~11.21),
+  사수자리♐(11.22~12.21), 염소자리♑(12.22~1.19), 물병자리♒(1.20~2.18), 물고기자리♓(2.19~3.20)
+- meme_drips: 오늘 뉴스 키워드 기반 재미있는 드립 3개 배열"""
+
+    print("  [C] 별자리·밈 수집 중...")
+    res_c = call_with_retry(lambda: client.messages.create(
+        model="claude-sonnet-4-6", max_tokens=3000,
+        tools=[{"type": "web_search_20250305", "name": "web_search"}],
+        messages=[{"role": "user", "content": prompt_c}]
+    ))
+    raw_c = "".join(b.text for b in res_c.content if hasattr(b, "text"))
+    raw_c = re.sub(r"```json\s*|```", "", raw_c).strip()
+    sc, ec = raw_c.find("{"), raw_c.rfind("}") + 1
+    try:
+        data_c = json.loads(raw_c[sc:ec])
+    except json.JSONDecodeError:
+        from json_repair import repair_json
+        data_c = json.loads(repair_json(raw_c[sc:ec]))
+    print(f"  [C] 완료 — 별자리 {len(data_c.get('horoscope',[]))}개, 밈 {len(data_c.get('meme_drips',[]))}개")
+
+    return {**data_a, **data_b, **data_c}
 
 
 def build_html(data, youtube, date_info):
@@ -230,11 +251,9 @@ def build_html(data, youtube, date_info):
             <a class="yt-link" href="{youtube['url']}" target="_blank">▶ YouTube에서 보기 — {youtube['title']}</a>
           </div>
         </div>"""
-        gif_active = ""
-        drip_active = ""
+        pass
     else:
-        gif_active = "active"
-        drip_active = ""
+        pass
 
     html = f"""<!DOCTYPE html>
 <html lang="ko">
@@ -424,14 +443,10 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 <div class="sec-hd"><span class="sec-hd-label">Meme Zone</span><div class="sec-hd-line"></div><span class="sec-tag tag-meme">오늘의 밈</span></div>
 <div class="mtabs">
   {yt_tab}
-  <button class="mtab {gif_active}" onclick="showMeme('gif')">📹 GIF</button>
-  <button class="mtab {drip_active}" onclick="showMeme('drip')">💬 드립</button>
+  <button class="mtab {'active' if not youtube else ''}" onclick="showMeme('drip')">💬 드립</button>
 </div>
 {yt_panel}
-<div class="mpanel {'active' if not youtube else ''}" id="mpanel-gif">
-  <div style="text-align:center;padding:20px;color:rgba(255,255,255,.3);font-size:13px">🦎 오늘의 게코 GIF</div>
-</div>
-<div class="mpanel" id="mpanel-drip">
+<div class="mpanel {'active' if not youtube else ''}" id="mpanel-drip">
   {drip_items}
 </div>
 
