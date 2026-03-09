@@ -1,4 +1,4 @@
-name: 🦎 Daily Gecko Briefing
+name: Daily Gecko Briefing
 on:
   schedule:
     - cron: '0 22 * * *'
@@ -10,18 +10,18 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: 📥 레포 체크아웃
+      - name: 레포 체크아웃
         uses: actions/checkout@v4
 
-      - name: 🐍 Python 설정
+      - name: Python 설정
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: 📦 패키지 설치
+      - name: 패키지 설치
         run: pip install requests google-api-python-client
 
-      - name: 🦎 브리핑 생성 및 푸시
+      - name: 브리핑 생성 및 푸시
         env:
           OPENWEATHER_API_KEY:  ${{ secrets.OPENWEATHER_API_KEY }}
           NAVER_CLIENT_ID:      ${{ secrets.NAVER_CLIENT_ID }}
@@ -29,5 +29,5 @@ jobs:
           GITHUB_TOKEN:         ${{ secrets.GITHUB_TOKEN }}
         run: python generate_briefing.py
 
-      - name: ✅ 완료 알림
-        run: echo "브리핑 생성 완료! URL: https://크레노트.com"
+      - name: 완료 알림
+        run: echo "브리핑 생성 완료!"
