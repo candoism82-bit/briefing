@@ -71,24 +71,42 @@ def get_youtube_shorts():
         return None
 
 
+def call_with_retry(fn, max_retries=3):
+    """RateLimitError 시 자동 대기 후 재시도"""
+    import anthropic as _ant
+    for attempt in range(max_retries):
+        try:
+            return fn()
+        except _ant.RateLimitError as e:
+            wait = 65 * (attempt + 1)
+            print(f"  ⏳ Rate limit — {wait}초 대기 후 재시도 ({attempt+1}/{max_retries})...")
+            time.sleep(wait)
+    raise RuntimeError("Rate limit 재시도 초과")
+
+
 def collect_data(date_info):
     """1차: 웹 검색으로 데이터 수집 → JSON 반환"""
     client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
-    prompt = (
-        f"오늘 {date_info['date_ko']} 한국 데이터를 웹 검색해서 아래 JSON 형식으로만 반환. 설명 없이 JSON만.\n"
-        '{"weather":{"overview":"","detail":"","cities":[{"name":"SEOUL","high":"","low":"","icon":"🌥"},{"name":"BUSAN","high":"","low":"","icon":"🌤"},{"name":"DAEGU","high":"","low":"","icon":"⛅"},{"name":"DAEJEON","high":"","low":"","icon":"🌥"},{"name":"GWANGJU","high":"","low":"","icon":"⛅"},{"name":"JEJU","high":"","low":"","icon":"🌦"}],"weekly":[{"day":"오늘","icon":"","high":"","low":""},{"day":"화","icon":"","high":"","low":""},{"day":"수","icon":"","high":"","low":""},{"day":"목","icon":"","high":"","low":""},{"day":"금","icon":"","high":"","low":""},{"day":"토","icon":"","high":"","low":""},{"day":"일","icon":"","high":"","low":""}]},'
-        '"economy_news":[{"title":"","summary":"","url":"","source":""},{"title":"","summary":"","url":"","source":""},{"title":"","summary":"","url":"","source":""},{"title":"","summary":"","url":"","source":""}],'
-        '"politics_news":[{"title":"","summary":"","url":"","source":""},{"title":"","summary":"","url":"","source":""},{"title":"","summary":"","url":"","source":""},{"title":"","summary":"","url":"","source":""}],'
-        '"zodiac":[{"sign":"쥐","emoji":"🐭","summary":"","years":[{"year":"60년생","text":""},{"year":"72년생","text":""},{"year":"84년생","text":""},{"year":"96년생","text":""},{"year":"08년생","text":""}]},{"sign":"소","emoji":"🐮","summary":"","years":[{"year":"61년생","text":""},{"year":"73년생","text":""},{"year":"85년생","text":""},{"year":"97년생","text":""},{"year":"09년생","text":""}]},{"sign":"호랑이","emoji":"🐯","summary":"","years":[{"year":"62년생","text":""},{"year":"74년생","text":""},{"year":"86년생","text":""},{"year":"98년생","text":""},{"year":"10년생","text":""}]},{"sign":"토끼","emoji":"🐰","summary":"","years":[{"year":"63년생","text":""},{"year":"75년생","text":""},{"year":"87년생","text":""},{"year":"99년생","text":""},{"year":"11년생","text":""}]},{"sign":"용","emoji":"🐲","summary":"","years":[{"year":"64년생","text":""},{"year":"76년생","text":""},{"year":"88년생","text":""},{"year":"00년생","text":""},{"year":"12년생","text":""}]},{"sign":"뱀","emoji":"🐍","summary":"","years":[{"year":"65년생","text":""},{"year":"77년생","text":""},{"year":"89년생","text":""},{"year":"01년생","text":""},{"year":"13년생","text":""}]},{"sign":"말","emoji":"🐴","summary":"","years":[{"year":"66년생","text":""},{"year":"78년생","text":""},{"year":"90년생","text":""},{"year":"02년생","text":""},{"year":"14년생","text":""}]},{"sign":"양","emoji":"🐑","summary":"","years":[{"year":"67년생","text":""},{"year":"79년생","text":""},{"year":"91년생","text":""},{"year":"03년생","text":""},{"year":"15년생","text":""}]},{"sign":"원숭이","emoji":"🐵","summary":"","years":[{"year":"68년생","text":""},{"year":"80년생","text":""},{"year":"92년생","text":""},{"year":"04년생","text":""},{"year":"16년생","text":""}]},{"sign":"닭","emoji":"🐔","summary":"","years":[{"year":"69년생","text":""},{"year":"81년생","text":""},{"year":"93년생","text":""},{"year":"05년생","text":""},{"year":"17년생","text":""}]},{"sign":"개","emoji":"🐶","summary":"","years":[{"year":"70년생","text":""},{"year":"82년생","text":""},{"year":"94년생","text":""},{"year":"06년생","text":""},{"year":"18년생","text":""}]},{"sign":"돼지","emoji":"🐷","summary":"","years":[{"year":"71년생","text":""},{"year":"83년생","text":""},{"year":"95년생","text":""},{"year":"07년생","text":""},{"year":"19년생","text":""}]}],'
-        '"horoscope":[{"sign":"양자리","emoji":"♈","date":"3.21~4.19","text":""},{"sign":"황소자리","emoji":"♉","date":"4.20~5.20","text":""},{"sign":"쌍둥이자리","emoji":"♊","date":"5.21~6.21","text":""},{"sign":"게자리","emoji":"♋","date":"6.22~7.22","text":""},{"sign":"사자자리","emoji":"♌","date":"7.23~8.22","text":""},{"sign":"처녀자리","emoji":"♍","date":"8.23~9.22","text":""},{"sign":"천칭자리","emoji":"♎","date":"9.23~10.23","text":""},{"sign":"전갈자리","emoji":"♏","date":"10.24~11.21","text":""},{"sign":"사수자리","emoji":"♐","date":"11.22~12.21","text":""},{"sign":"염소자리","emoji":"♑","date":"12.22~1.19","text":""},{"sign":"물병자리","emoji":"♒","date":"1.20~2.18","text":""},{"sign":"물고기자리","emoji":"♓","date":"2.19~3.20","text":""}],'
-        '"meme_drips":["","",""]}'
-    )
+
+    prompt = f"""오늘 {date_info['date_ko']} 한국 데이터를 웹 검색해서 JSON으로만 반환. 설명·마크다운 없이 JSON만 출력.
+
+반환할 JSON 키:
+- weather: overview(str), detail(str), cities(배열, name/high/low/icon), weekly(배열7개, day/icon/high/low)
+- economy_news: 배열4개, title/summary/url/source
+- politics_news: 배열4개, title/summary/url/source
+- zodiac: 배열12개(쥐🐭/소🐮/호랑이🐯/토끼🐰/용🐲/뱀🐍/말🐴/양🐑/원숭이🐵/닭🐔/개🐶/돼지🐷), 각각 sign/emoji/summary/years(배열5개, year/text)
+  - 쥐:60/72/84/96/08, 소:61/73/85/97/09, 호랑이:62/74/86/98/10, 토끼:63/75/87/99/11
+  - 용:64/76/88/00/12, 뱀:65/77/89/01/13, 말:66/78/90/02/14, 양:67/79/91/03/15
+  - 원숭이:68/80/92/04/16, 닭:69/81/93/05/17, 개:70/82/94/06/18, 돼지:71/83/95/07/19
+- horoscope: 배열12개(양자리♈/황소자리♉/쌍둥이자리♊/게자리♋/사자자리♌/처녀자리♍/천칭자리♎/전갈자리♏/사수자리♐/염소자리♑/물병자리♒/물고기자리♓), 각각 sign/emoji/date/text
+- meme_drips: 오늘 뉴스 기반 드립 3개 배열"""
+
     print("  [1차] 웹 검색 데이터 수집 중...")
-    res = client.messages.create(
+    res = call_with_retry(lambda: client.messages.create(
         model="claude-sonnet-4-6", max_tokens=6000,
         tools=[{"type": "web_search_20250305", "name": "web_search"}],
         messages=[{"role": "user", "content": prompt}]
-    )
+    ))
     raw = "".join(b.text for b in res.content if hasattr(b, "text"))
     raw = re.sub(r"```json\s*|```", "", raw).strip()
     s, e = raw.find("{"), raw.rfind("}") + 1
@@ -105,7 +123,6 @@ def collect_data(date_info):
 
     print(f"  [1차] 완료 — 뉴스 {len(data.get('economy_news',[]))+len(data.get('politics_news',[]))}건, 운세 {len(data.get('zodiac',[]))}띠")
     return data
-
 
 def build_html(data, youtube, date_info):
     """2차: 데이터 → HTML (웹 검색 없음, 65초 대기 후 호출)"""
@@ -135,12 +152,16 @@ def build_html(data, youtube, date_info):
 
     print("  [2차] HTML 생성 중 (스트리밍)...")
     html = ""
-    with client.messages.stream(
-        model="claude-sonnet-4-6", max_tokens=16000,
-        messages=[{"role": "user", "content": prompt}]
-    ) as stream:
-        for text in stream.text_stream:
-            html += text
+    def _stream_html():
+        nonlocal html
+        html = ""
+        with client.messages.stream(
+            model="claude-sonnet-4-6", max_tokens=16000,
+            messages=[{"role": "user", "content": prompt}]
+        ) as stream:
+            for text in stream.text_stream:
+                html += text
+    call_with_retry(_stream_html)
 
     # HTML 범위 추출
     if "<!DOCTYPE html>" in html:
