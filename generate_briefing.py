@@ -326,6 +326,16 @@ function showVid(i) {{
   document.querySelectorAll('.mtab').forEach((t,idx) => t.classList.toggle('active', idx===i));
   document.querySelectorAll('.mpanel').forEach((p,idx) => p.classList.toggle('active', idx===i));
 }}
+// 쿼리스트링 ?d=YYYYMMDD 를 읽어서 날짜 표시 (캐시 무력화용)
+(function() {{
+  const p = new URLSearchParams(location.search);
+  const d = p.get('d');
+  if (d && d.length === 8) {{
+    const y = d.slice(0,4), m = d.slice(4,6), day = d.slice(6,8);
+    const el = document.querySelector('.hd-date-big');
+    if (el) el.textContent = day;
+  }}
+}})();
 </script>
 </body>
 </html>"""
