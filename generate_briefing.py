@@ -143,84 +143,280 @@ def get_youtube_shorts():
 
 
 # ═══════════════════════════════════════
-# 2. Claude API로 HTML 생성
+# 2-A. 웹 검색으로 오늘 데이터 수집 (1차 호출)
+# ═══════════════════════════════════════
+def collect_daily_data(date_info):
+    """웹 검색으로 날씨·뉴스·운세를 JSON 텍스트로 수집"""
+    client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+
+    prompt = f"""
+오늘은 {date_info['date_ko']} ({date_info['day_ko']})입니다.
+웹 검색을 사용해 아래 데이터를 수집하고 JSON 형식으로만 반환하세요.
+설명·마크다운 없이 JSON만 출력하세요.
+
+{{
+  "weather": {{
+    "overview": "날씨 한줄 요약",
+    "detail": "아침 최저/최고 기온, 특보 등 상세",
+    "cities": [
+      {{"name":"SEOUL","high":"?°","low":"?°","icon":"🌥"}},
+      {{"name":"BUSAN","high":"?°","low":"?°","icon":"🌤"}},
+      {{"name":"DAEGU","high":"?°","low":"?°","icon":"⛅"}},
+      {{"name":"DAEJEON","high":"?°","low":"?°","icon":"🌥"}},
+      {{"name":"GWANGJU","high":"?°","low":"?°","icon":"⛅"}},
+      {{"name":"JEJU","high":"?°","low":"?°","icon":"🌦"}}
+    ],
+    "weekly": [
+      {{"day":"오늘","icon":"🌥","high":"?°","low":"?°"}},
+      {{"day":"화","icon":"☀","high":"?°","low":"?°"}},
+      {{"day":"수","icon":"⛅","high":"?°","low":"?°"}},
+      {{"day":"목","icon":"🌤","high":"?°","low":"?°"}},
+      {{"day":"금","icon":"🌥","high":"?°","low":"?°"}},
+      {{"day":"토","icon":"⛅","high":"?°","low":"?°"}},
+      {{"day":"일","icon":"⛅","high":"?°","low":"?°"}}
+    ]
+  }},
+  "economy_news": [
+    {{"title":"제목","summary":"한줄요약","url":"https://...","source":"출처명"}},
+    {{"title":"제목","summary":"한줄요약","url":"https://...","source":"출처명"}},
+    {{"title":"제목","summary":"한줄요약","url":"https://...","source":"출처명"}},
+    {{"title":"제목","summary":"한줄요약","url":"https://...","source":"출처명"}}
+  ],
+  "politics_news": [
+    {{"title":"제목","summary":"한줄요약","url":"https://...","source":"출처명"}},
+    {{"title":"제목","summary":"한줄요약","url":"https://...","source":"출처명"}},
+    {{"title":"제목","summary":"한줄요약","url":"https://...","source":"출처명"}},
+    {{"title":"제목","summary":"한줄요약","url":"https://...","source":"출처명"}}
+  ],
+  "zodiac": [
+    {{"sign":"쥐","emoji":"🐭","summary":"한줄요약",
+      "years":[
+        {{"year":"60년생","text":"운세 내용"}},
+        {{"year":"72년생","text":"운세 내용"}},
+        {{"year":"84년생","text":"운세 내용"}},
+        {{"year":"96년생","text":"운세 내용"}},
+        {{"year":"08년생","text":"운세 내용"}}
+      ]}},
+    {{"sign":"소","emoji":"🐮","summary":"한줄요약",
+      "years":[
+        {{"year":"61년생","text":"운세 내용"}},
+        {{"year":"73년생","text":"운세 내용"}},
+        {{"year":"85년생","text":"운세 내용"}},
+        {{"year":"97년생","text":"운세 내용"}},
+        {{"year":"09년생","text":"운세 내용"}}
+      ]}},
+    {{"sign":"호랑이","emoji":"🐯","summary":"한줄요약",
+      "years":[
+        {{"year":"62년생","text":"운세 내용"}},
+        {{"year":"74년생","text":"운세 내용"}},
+        {{"year":"86년생","text":"운세 내용"}},
+        {{"year":"98년생","text":"운세 내용"}},
+        {{"year":"10년생","text":"운세 내용"}}
+      ]}},
+    {{"sign":"토끼","emoji":"🐰","summary":"한줄요약",
+      "years":[
+        {{"year":"63년생","text":"운세 내용"}},
+        {{"year":"75년생","text":"운세 내용"}},
+        {{"year":"87년생","text":"운세 내용"}},
+        {{"year":"99년생","text":"운세 내용"}},
+        {{"year":"11년생","text":"운세 내용"}}
+      ]}},
+    {{"sign":"용","emoji":"🐲","summary":"한줄요약",
+      "years":[
+        {{"year":"64년생","text":"운세 내용"}},
+        {{"year":"76년생","text":"운세 내용"}},
+        {{"year":"88년생","text":"운세 내용"}},
+        {{"year":"00년생","text":"운세 내용"}},
+        {{"year":"12년생","text":"운세 내용"}}
+      ]}},
+    {{"sign":"뱀","emoji":"🐍","summary":"한줄요약",
+      "years":[
+        {{"year":"65년생","text":"운세 내용"}},
+        {{"year":"77년생","text":"운세 내용"}},
+        {{"year":"89년생","text":"운세 내용"}},
+        {{"year":"01년생","text":"운세 내용"}},
+        {{"year":"13년생","text":"운세 내용"}}
+      ]}},
+    {{"sign":"말","emoji":"🐴","summary":"한줄요약",
+      "years":[
+        {{"year":"66년생","text":"운세 내용"}},
+        {{"year":"78년생","text":"운세 내용"}},
+        {{"year":"90년생","text":"운세 내용"}},
+        {{"year":"02년생","text":"운세 내용"}},
+        {{"year":"14년생","text":"운세 내용"}}
+      ]}},
+    {{"sign":"양","emoji":"🐑","summary":"한줄요약",
+      "years":[
+        {{"year":"67년생","text":"운세 내용"}},
+        {{"year":"79년생","text":"운세 내용"}},
+        {{"year":"91년생","text":"운세 내용"}},
+        {{"year":"03년생","text":"운세 내용"}},
+        {{"year":"15년생","text":"운세 내용"}}
+      ]}},
+    {{"sign":"원숭이","emoji":"🐵","summary":"한줄요약",
+      "years":[
+        {{"year":"68년생","text":"운세 내용"}},
+        {{"year":"80년생","text":"운세 내용"}},
+        {{"year":"92년생","text":"운세 내용"}},
+        {{"year":"04년생","text":"운세 내용"}},
+        {{"year":"16년생","text":"운세 내용"}}
+      ]}},
+    {{"sign":"닭","emoji":"🐔","summary":"한줄요약",
+      "years":[
+        {{"year":"69년생","text":"운세 내용"}},
+        {{"year":"81년생","text":"운세 내용"}},
+        {{"year":"93년생","text":"운세 내용"}},
+        {{"year":"05년생","text":"운세 내용"}},
+        {{"year":"17년생","text":"운세 내용"}}
+      ]}},
+    {{"sign":"개","emoji":"🐶","summary":"한줄요약",
+      "years":[
+        {{"year":"70년생","text":"운세 내용"}},
+        {{"year":"82년생","text":"운세 내용"}},
+        {{"year":"94년생","text":"운세 내용"}},
+        {{"year":"06년생","text":"운세 내용"}},
+        {{"year":"18년생","text":"운세 내용"}}
+      ]}},
+    {{"sign":"돼지","emoji":"🐷","summary":"한줄요약",
+      "years":[
+        {{"year":"71년생","text":"운세 내용"}},
+        {{"year":"83년생","text":"운세 내용"}},
+        {{"year":"95년생","text":"운세 내용"}},
+        {{"year":"07년생","text":"운세 내용"}},
+        {{"year":"19년생","text":"운세 내용"}}
+      ]}}
+  ],
+  "horoscope": [
+    {{"sign":"양자리","emoji":"♈","date":"3.21~4.19","text":"운세"}},
+    {{"sign":"황소자리","emoji":"♉","date":"4.20~5.20","text":"운세"}},
+    {{"sign":"쌍둥이자리","emoji":"♊","date":"5.21~6.21","text":"운세"}},
+    {{"sign":"게자리","emoji":"♋","date":"6.22~7.22","text":"운세"}},
+    {{"sign":"사자자리","emoji":"♌","date":"7.23~8.22","text":"운세"}},
+    {{"sign":"처녀자리","emoji":"♍","date":"8.23~9.22","text":"운세"}},
+    {{"sign":"천칭자리","emoji":"♎","date":"9.23~10.23","text":"운세"}},
+    {{"sign":"전갈자리","emoji":"♏","date":"10.24~11.21","text":"운세"}},
+    {{"sign":"사수자리","emoji":"♐","date":"11.22~12.21","text":"운세"}},
+    {{"sign":"염소자리","emoji":"♑","date":"12.22~1.19","text":"운세"}},
+    {{"sign":"물병자리","emoji":"♒","date":"1.20~2.18","text":"운세"}},
+    {{"sign":"물고기자리","emoji":"♓","date":"2.19~3.20","text":"운세"}}
+  ],
+  "meme_drips": ["뉴스 기반 드립1", "뉴스 기반 드립2", "뉴스 기반 드립3"]
+}}
+"""
+
+    print("  [1차] 웹 검색으로 데이터 수집 중...")
+    response = client.messages.create(
+        model="claude-sonnet-4-6",
+        max_tokens=8000,
+        tools=[{"type": "web_search_20250305", "name": "web_search"}],
+        messages=[{"role": "user", "content": prompt}]
+    )
+
+    # 응답에서 JSON 텍스트 추출
+    raw = ""
+    for block in response.content:
+        if hasattr(block, "text"):
+            raw += block.text
+
+    # JSON 파싱
+    import json, re
+    # 마크다운 코드블록 제거
+    raw = re.sub(r"```json\s*", "", raw)
+    raw = re.sub(r"```\s*", "", raw)
+    raw = raw.strip()
+
+    # JSON 범위 추출
+    start = raw.find("{")
+    end   = raw.rfind("}") + 1
+    if start == -1 or end == 0:
+        raise ValueError("데이터 수집 실패 — JSON 없음")
+
+    data = json.loads(raw[start:end])
+    print(f"  [1차] 수집 완료 — 뉴스 {len(data.get('economy_news',[]))+len(data.get('politics_news',[]))}건, 운세 {len(data.get('zodiac',[]))}띠")
+    return data
+
+
+# ═══════════════════════════════════════
+# 2-B. 수집한 데이터로 HTML 생성 (2차 호출, 웹 검색 없음)
 # ═══════════════════════════════════════
 def generate_html(youtube_data, date_info):
-    """Claude API로 오늘 브리핑 HTML 생성 (뉴스·운세·날씨 웹 검색 포함)"""
+    """2단계: 데이터 수집 → HTML 생성 (토큰 분리로 잘림 방지)"""
+    import json
+
+    # 1차: 데이터 수집
+    daily_data = collect_daily_data(date_info)
 
     client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
     # 유튜브 섹션 지시
     if youtube_data:
-        youtube_instruction = f"""
-[유튜브 Shorts 정보]
+        youtube_instruction = f"""밈 존에 "📺 Shorts" 탭 추가 (맨 앞):
 - 제목: {youtube_data['title']}
 - 채널: {youtube_data['channel']}
-- embed URL: {youtube_data['embed_url']}
-- 바로가기 URL: {youtube_data['watch_url']}
-밈 존에 "📺 Shorts" 탭을 추가하고 위 영상을 iframe으로 임베드해주세요.
-탭 순서: 📺 Shorts → 📹 GIF → 💬 드립 → 🖼 짤
-"""
+- iframe src: {youtube_data['embed_url']}
+- 바로가기: {youtube_data['watch_url']}
+탭 순서: 📺 Shorts → 📹 GIF → 💬 드립 → 🖼 짤"""
     else:
-        youtube_instruction = "유튜브 영상 없음 — 밈 존은 GIF/드립/짤 탭만 유지"
+        youtube_instruction = "유튜브 영상 없음 — 기존 GIF/드립/짤 탭 유지"
 
-    # 템플릿 로드
-    template_html = ""
+    # 템플릿 CSS 로드
+    template_css = ""
     if os.path.exists("template.html"):
         with open("template.html", "r", encoding="utf-8") as f:
-            template_html = f.read()
-            # CSS 앞부분만 전달 (토큰 절약)
-            template_html = template_html[:8000]
+            content = f.read()
+            # <style> 태그 안의 CSS만 추출
+            import re
+            m = re.search(r"<style>(.*?)</style>", content, re.DOTALL)
+            if m:
+                template_css = m.group(1)[:6000]
 
     prompt = f"""
-오늘은 {date_info['date_ko']} ({date_info['day_ko']})입니다.
+아래 데이터로 크레스티드 게코 커뮤니티 아침 브리핑 HTML을 생성하세요.
+웹 검색 없이 제공된 데이터만 사용하세요.
 
-크레스티드 게코 커뮤니티 아침 브리핑 HTML을 생성해주세요.
-웹 검색으로 아래 데이터를 직접 수집해서 채워주세요.
+=== 날짜 ===
+날짜 숫자: {date_info['day_num']}
+날짜 텍스트: {date_info['date_en']}
+날짜 한국어: {date_info['date_ko']} ({date_info['day_ko']})
 
-=== 수집할 데이터 (웹 검색 필수) ===
-1. 오늘 전국 날씨 (서울/부산/대구/대전/광주/제주 최저·최고 기온, 날씨 개요, 서울 주간 예보)
-2. 오늘 경제/주식 뉴스 4건 (제목 + 한줄요약 + 출처URL)
-3. 오늘 정치/사회 뉴스 4건 (제목 + 한줄요약 + 출처URL)
-4. 오늘 띠별 운세 12띠 전체 (각 띠별로 생년별 운세 5개씩, 예: 72년/84년/96년/08년/20년)
-5. 오늘 별자리 운세 12개 전체
+=== 오늘 데이터 ===
+{json.dumps(daily_data, ensure_ascii=False, indent=2)}
 
 === 유튜브 ===
 {youtube_instruction}
 
 === HTML 생성 규칙 ===
-- 날짜 숫자 헤더: {date_info['day_num']}
-- 날짜 텍스트 헤더: {date_info['date_en']}
-- 캐시 방지 meta 태그 반드시 포함 (Cache-Control: no-cache, Pragma: no-cache, Expires: 0)
-- 헤더 블록(<!-- HEADER --> ~ </div>) 바로 다음 줄에 정확히 아래 텍스트 삽입:
-  <!-- PROMO_BANNER_PLACEHOLDER -->
-- 밈 드립 3개는 오늘 뉴스 키워드 기반으로 새로 작성
-- 아래 템플릿의 CSS 및 구조 유지
+1. 캐시 방지 meta 태그 포함 (Cache-Control: no-cache, Pragma: no-cache, Expires: 0)
+2. 헤더 블록 바로 다음 줄: <!-- PROMO_BANNER_PLACEHOLDER -->
+3. 섹션 순서: 헤더 → 프로모배너placeholder → 날씨 → 경제뉴스 → 정치뉴스 → 띠별운세 → 별자리운세 → 밈존 → 푸터
+4. 띠별 운세: 12띠 탭 전환형, 각 띠 클릭 시 생년별 5개 운세 표시
+5. 별자리 운세: 12개 그리드
+6. 밈 드립은 데이터의 meme_drips 사용
+7. 아래 CSS 스타일 유지
 
-=== CSS 템플릿 참고 ===
-{template_html}
+=== CSS (유지할 것) ===
+<style>
+{template_css}
+</style>
 
-완전한 HTML 파일만 출력하세요. <!DOCTYPE html>부터 </html>까지만, 마크다운 없이.
+완전한 HTML 파일만 출력. <!DOCTYPE html>부터 </html>까지. 마크다운 없이.
 """
 
-    print("  Claude API 호출 중 (웹 검색 포함)...")
+    print("  [2차] HTML 생성 중 (웹 검색 없음)...")
     response = client.messages.create(
         model="claude-sonnet-4-6",
-        max_tokens=16000,
-        tools=[{"type": "web_search_20250305", "name": "web_search"}],
+        max_tokens=32000,   # 웹 검색 없으므로 전부 HTML 생성에 사용 가능
         messages=[{"role": "user", "content": prompt}]
     )
 
-    # 응답에서 HTML 텍스트 추출
     html_content = ""
     for block in response.content:
         if hasattr(block, "text"):
             html_content += block.text
 
-    # HTML 범위만 추출
+    # HTML 범위 추출
     if "<!DOCTYPE html>" in html_content:
         start = html_content.index("<!DOCTYPE html>")
-        # </html> 없을 경우 대비 (웹 검색 블록이 섞인 경우)
         if "</html>" in html_content:
             end          = html_content.rindex("</html>") + 7
             html_content = html_content[start:end]
@@ -231,10 +427,9 @@ def generate_html(youtube_data, date_info):
             else:
                 html_content += "\n</html>"
     else:
-        # HTML이 전혀 없으면 재시도
-        print("  ⚠️ HTML 없음 — 응답 내용 확인:")
+        print("  ⚠️ HTML 없음:")
         print(html_content[:500])
-        raise ValueError("Claude API 응답에 HTML이 없습니다. 재시도 필요.")
+        raise ValueError("Claude API 응답에 HTML이 없습니다.")
 
     return html_content
 
