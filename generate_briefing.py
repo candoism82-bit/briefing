@@ -76,6 +76,35 @@ def collect_news_weather(date_info):
 # ───────────────────────────────────────
 # 3. HTML 직접 조립 (Claude API 추가 호출 없음)
 # ───────────────────────────────────────
+
+CITY_KO = {
+    "SEOUL":"서울","BUSAN":"부산","DAEGU":"대구",
+    "DAEJEON":"대전","GWANGJU":"광주","JEJU":"제주"
+}
+
+ICON_MAP = {
+    "sunny":"☀️","clear":"☀️","clear_day":"☀️",
+    "partly_cloudy":"⛅","partly_cloudy_day":"⛅","partly cloudy":"⛅",
+    "cloudy":"🌥","overcast":"🌥",
+    "rain":"🌧️","rainy":"🌧️","drizzle":"🌦",
+    "snow":"❄️","snowy":"❄️","sleet":"🌨",
+    "thunderstorm":"⛈️","thunder":"⛈️",
+    "foggy":"🌫️","fog":"🌫️","haze":"🌫️",
+    "windy":"💨",
+}
+
+def norm_icon(v):
+    if not v:
+        return "🌤"
+    v = str(v).strip()
+    # 이미 이모지면 그대로
+    if any(ord(c) > 127 for c in v):
+        return v
+    return ICON_MAP.get(v.lower(), "🌤")
+
+def norm_city(v):
+    return CITY_KO.get(str(v).upper(), v)
+
 def build_html(data, videos, date_info):
     w   = data.get("weather", {})
     eco = data.get("economy_news", [])
@@ -85,10 +114,10 @@ def build_html(data, videos, date_info):
     cities_html = ""
     for c in w.get("cities", []):
         cities_html += f"""<div class="city-card">
-          <div class="city-name">{c.get('name','')}</div>
+          <div class="city-name">{norm_city(c.get('name',''))}</div>
           <div class="city-high">{c.get('high','')}</div>
           <div class="city-low">{c.get('low','')}</div>
-          <div class="city-icon">{c.get('icon','🌤')}</div>
+          <div class="city-icon">{norm_icon(c.get('icon',''))}</div>
         </div>"""
 
     # 주간 예보
@@ -96,7 +125,7 @@ def build_html(data, videos, date_info):
     for d in w.get("weekly", []):
         weekly_html += f"""<div class="week-day">
           <div class="wd-label">{d.get('day','')}</div>
-          <div class="wd-icon">{d.get('icon','')}</div>
+          <div class="wd-icon">{norm_icon(d.get('icon',''))}</div>
           <div class="wd-high">{d.get('high','')}</div>
           <div class="wd-low">{d.get('low','')}</div>
         </div>"""
