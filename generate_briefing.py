@@ -372,11 +372,11 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 <!-- ZODIAC (이미지) -->
 <div class="sec-hd"><span class="sec-hd-label">Zodiac</span><div class="sec-hd-line"></div><span class="sec-tag tag-zod">띠별 · 별자리 운세</span></div>
 <div class="fortune-img">
-  <img src="images/zodiac.jpg" alt="띠별 운세"
+  <img src="images/zodiac.jpg?v={date_info['date_str'].replace('-','')}" alt="띠별 운세"
        onerror="this.parentElement.innerHTML='<div class=\\'fortune-empty\\'>🔮 오늘의 운세 이미지 준비 중<br><small>images/zodiac.jpg 업로드 해주세요</small></div>'">
 </div>
 <div class="fortune-img">
-  <img src="images/horoscope.jpg" alt="별자리 운세"
+  <img src="images/horoscope.jpg?v={date_info['date_str'].replace('-','')}" alt="별자리 운세"
        onerror="this.parentElement.innerHTML='<div class=\\'fortune-empty\\'>⭐ 별자리 운세 이미지 준비 중<br><small>images/horoscope.jpg 업로드 해주세요</small></div>'">
 </div>
 {yt_section}
