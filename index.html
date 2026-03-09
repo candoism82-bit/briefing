@@ -297,11 +297,15 @@ body{
    FORTUNE
 ════════════════ */
 .fortune-sec{padding:22px 28px;border-bottom:1px solid var(--border);background:#f8faf5}
-.zodiac-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:18px}
-.zodiac-item{background:#fff;border:1px solid var(--border);border-radius:5px;padding:9px 11px;display:flex;align-items:flex-start;gap:8px}
-.zodiac-emoji{font-size:18px;flex-shrink:0;margin-top:1px}
-.zodiac-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.06em;margin-bottom:2px}
-.zodiac-text{font-size:11.5px;color:var(--ink);font-weight:500;line-height:1.45}
+.zodiac-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
+.zodiac-item{background:#fff;border:1px solid var(--border);border-radius:7px;padding:10px 11px;display:flex;align-items:flex-start;gap:8px}
+.zodiac-emoji{font-size:22px;flex-shrink:0;margin-top:2px}
+.zodiac-right{flex:1;min-width:0}
+.zodiac-title{font-family:'Noto Serif KR',serif;font-size:12px;font-weight:700;color:var(--accent);margin-bottom:6px}
+.zodiac-year-row{display:flex;align-items:baseline;gap:5px;padding:3px 0;border-bottom:1px dashed #e8f0e0}
+.zodiac-year-row:last-child{border-bottom:none;padding-bottom:0}
+.zodiac-year{font-family:'DM Mono',monospace;font-size:10px;font-weight:700;color:var(--red);flex-shrink:0;min-width:26px}
+.zodiac-year-text{font-size:11px;color:var(--ink);line-height:1.4}
 .star-sec-label{font-family:'DM Mono',monospace;font-size:9.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px}
 .star-sec-label::after{content:'';flex:1;height:1px;background:var(--border)}
 .star-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
@@ -373,6 +377,22 @@ body{
 <body>
 <div class="card">
 
+<!-- HEADER -->
+<div class="hd">
+  <div class="hd-stripe"></div>
+  <div class="hd-inner">
+    <div>
+      <div class="hd-eyebrow">Crested Gecko Community</div>
+      <div class="hd-title"><span>🦎</span> 아침 브리핑</div>
+      <div class="hd-sub">날씨 · 경제 · 정치 · 운세 · 밈</div>
+    </div>
+    <div class="hd-right">
+      <div class="hd-date-big">09</div>
+      <div class="hd-date-small">MAR 2026 · MON</div>
+    </div>
+  </div>
+</div>
+
 <!-- ★ LITTLE LIVES 홍보 배너 -->
 <div class="promo-banner">
   <div class="promo-inner">
@@ -412,22 +432,6 @@ body{
 
     <div class="promo-img-wrap">
       <img src="images/littlelives.png" alt="작은생명공존연합 야생생물법 변경안 안내">
-    </div>
-  </div>
-</div>
-
-<!-- HEADER -->
-<div class="hd">
-  <div class="hd-stripe"></div>
-  <div class="hd-inner">
-    <div>
-      <div class="hd-eyebrow">Crested Gecko Community</div>
-      <div class="hd-title"><span>🦎</span> 아침 브리핑</div>
-      <div class="hd-sub">날씨 · 경제 · 정치 · 운세 · 밈</div>
-    </div>
-    <div class="hd-right">
-      <div class="hd-date-big">09</div>
-      <div class="hd-date-small">MAR 2026 · MON</div>
     </div>
   </div>
 </div>
@@ -533,18 +537,151 @@ body{
     <span class="sec-hd-tag tag-fortune">오늘의 운세 · ForceTeller</span>
   </div>
   <div class="zodiac-grid">
-    <div class="zodiac-item"><div class="zodiac-emoji">🐭</div><div><div class="zodiac-label">쥐띠 · 20년생</div><div class="zodiac-text">주변의 도움이 따르는 날</div></div></div>
-    <div class="zodiac-item"><div class="zodiac-emoji">🐮</div><div><div class="zodiac-label">소띠 · 09년생</div><div class="zodiac-text">적당한 휴식을 해야 하는 날</div></div></div>
-    <div class="zodiac-item"><div class="zodiac-emoji">🐯</div><div><div class="zodiac-label">호랑이띠 · 10년생</div><div class="zodiac-text">노력한 일의 성과를 얻는 날</div></div></div>
-    <div class="zodiac-item"><div class="zodiac-emoji">🐰</div><div><div class="zodiac-label">토끼띠 · 11년생</div><div class="zodiac-text">일찍 귀가하는 게 좋은 날</div></div></div>
-    <div class="zodiac-item"><div class="zodiac-emoji">🐲</div><div><div class="zodiac-label">용띠 · 12년생</div><div class="zodiac-text">생각하는 시간이 필요한 날</div></div></div>
-    <div class="zodiac-item"><div class="zodiac-emoji">🐍</div><div><div class="zodiac-label">뱀띠 · 13년생</div><div class="zodiac-text">솔직하게 대화해야 하는 날</div></div></div>
-    <div class="zodiac-item"><div class="zodiac-emoji">🐴</div><div><div class="zodiac-label">말띠 · 14년생</div><div class="zodiac-text">말하기 전에 다시 생각해야</div></div></div>
-    <div class="zodiac-item"><div class="zodiac-emoji">🐑</div><div><div class="zodiac-label">양띠 · 15년생</div><div class="zodiac-text">노력한 만큼 되돌아오는 날</div></div></div>
-    <div class="zodiac-item"><div class="zodiac-emoji">🐒</div><div><div class="zodiac-label">원숭이띠 · 16년생</div><div class="zodiac-text">상대방 입장에서 생각해야</div></div></div>
-    <div class="zodiac-item"><div class="zodiac-emoji">🐔</div><div><div class="zodiac-label">닭띠 · 17년생</div><div class="zodiac-text">데이트·소개팅하기 좋은 날</div></div></div>
-    <div class="zodiac-item"><div class="zodiac-emoji">🐶</div><div><div class="zodiac-label">개띠 · 18년생</div><div class="zodiac-text">계획 세우고 실행에 옮겨야</div></div></div>
-    <div class="zodiac-item"><div class="zodiac-emoji">🐷</div><div><div class="zodiac-label">돼지띠 · 19년생</div><div class="zodiac-text">나를 돌아보는 시간을 가져야</div></div></div>
+
+    <div class="zodiac-item">
+      <div class="zodiac-emoji">🐭</div>
+      <div class="zodiac-right">
+        <div class="zodiac-title">쥐띠</div>
+        <div class="zodiac-year-row"><span class="zodiac-year">72년</span><span class="zodiac-year-text">애정운과 학업운이 따르는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">84년</span><span class="zodiac-year-text">재정비하고 고백은 미뤄야</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">96년</span><span class="zodiac-year-text">욕심과 의심을 모두 버려야</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">08년</span><span class="zodiac-year-text">집에서 쉬며 건강을 챙겨야</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">20년</span><span class="zodiac-year-text">주변의 도움이 따르는 날</span></div>
+      </div>
+    </div>
+
+    <div class="zodiac-item">
+      <div class="zodiac-emoji">🐮</div>
+      <div class="zodiac-right">
+        <div class="zodiac-title">소띠</div>
+        <div class="zodiac-year-row"><span class="zodiac-year">61년</span><span class="zodiac-year-text">모든 일들이 잘 풀리는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">73년</span><span class="zodiac-year-text">힘을 합해 노력해야 하는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">85년</span><span class="zodiac-year-text">친구들과 즐겁게 보내는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">97년</span><span class="zodiac-year-text">노력한 만큼 대가를 얻는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">09년</span><span class="zodiac-year-text">적당한 휴식을 해야 하는 날</span></div>
+      </div>
+    </div>
+
+    <div class="zodiac-item">
+      <div class="zodiac-emoji">🐯</div>
+      <div class="zodiac-right">
+        <div class="zodiac-title">호랑이띠</div>
+        <div class="zodiac-year-row"><span class="zodiac-year">62년</span><span class="zodiac-year-text">새로운 시작이 생기는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">74년</span><span class="zodiac-year-text">의리와 믿음이 쌓이는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">86년</span><span class="zodiac-year-text">스스로에게 집중해야 하는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">98년</span><span class="zodiac-year-text">도움받으면 운이 좋아지는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">10년</span><span class="zodiac-year-text">노력한 일의 성과를 얻는 날</span></div>
+      </div>
+    </div>
+
+    <div class="zodiac-item">
+      <div class="zodiac-emoji">🐰</div>
+      <div class="zodiac-right">
+        <div class="zodiac-title">토끼띠</div>
+        <div class="zodiac-year-row"><span class="zodiac-year">63년</span><span class="zodiac-year-text">흐름이 좋으니 빨리 움직여야</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">75년</span><span class="zodiac-year-text">잠시 쉬며 건강을 회복해야</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">87년</span><span class="zodiac-year-text">컨디션과 능률이 오르는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">99년</span><span class="zodiac-year-text">평정을 유지하고 말을 아껴야</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">11년</span><span class="zodiac-year-text">일찍 귀가하는 게 좋은 날</span></div>
+      </div>
+    </div>
+
+    <div class="zodiac-item">
+      <div class="zodiac-emoji">🐲</div>
+      <div class="zodiac-right">
+        <div class="zodiac-title">용띠</div>
+        <div class="zodiac-year-row"><span class="zodiac-year">64년</span><span class="zodiac-year-text">일상에 좋은 변화가 있는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">76년</span><span class="zodiac-year-text">인간관계에 행운이 따르는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">88년</span><span class="zodiac-year-text">뭘 해도 좋은, 축하받는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">00년</span><span class="zodiac-year-text">모든 게 마음먹기에 달린 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">12년</span><span class="zodiac-year-text">생각하는 시간이 필요한 날</span></div>
+      </div>
+    </div>
+
+    <div class="zodiac-item">
+      <div class="zodiac-emoji">🐍</div>
+      <div class="zodiac-right">
+        <div class="zodiac-title">뱀띠</div>
+        <div class="zodiac-year-row"><span class="zodiac-year">65년</span><span class="zodiac-year-text">쉬면서 재충전해야 하는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">77년</span><span class="zodiac-year-text">쉬면서 마음의 평화를 찾아야</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">89년</span><span class="zodiac-year-text">애정관련 매력이 오르는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">01년</span><span class="zodiac-year-text">소원하던 일이 이루어지는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">13년</span><span class="zodiac-year-text">솔직하게 대화해야 하는 날</span></div>
+      </div>
+    </div>
+
+    <div class="zodiac-item">
+      <div class="zodiac-emoji">🐴</div>
+      <div class="zodiac-right">
+        <div class="zodiac-title">말띠</div>
+        <div class="zodiac-year-row"><span class="zodiac-year">66년</span><span class="zodiac-year-text">학업운은 좋으나 다툼은 조심</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">78년</span><span class="zodiac-year-text">금전적인 행운이 따르는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">90년</span><span class="zodiac-year-text">횡재수가 있어 복이 오는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">02년</span><span class="zodiac-year-text">잠시 머리를 식혀야 하는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">14년</span><span class="zodiac-year-text">말하기 전에 다시 생각해야</span></div>
+      </div>
+    </div>
+
+    <div class="zodiac-item">
+      <div class="zodiac-emoji">🐑</div>
+      <div class="zodiac-right">
+        <div class="zodiac-title">양띠</div>
+        <div class="zodiac-year-row"><span class="zodiac-year">67년</span><span class="zodiac-year-text">말을 아끼고 일에 집중해야</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">79년</span><span class="zodiac-year-text">연애운이 상승하여 기쁜 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">91년</span><span class="zodiac-year-text">밖에서 적극적으로 움직여야</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">03년</span><span class="zodiac-year-text">휴식을 취하고 건강을 챙겨야</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">15년</span><span class="zodiac-year-text">노력한 만큼 되돌아오는 날</span></div>
+      </div>
+    </div>
+
+    <div class="zodiac-item">
+      <div class="zodiac-emoji">🐒</div>
+      <div class="zodiac-right">
+        <div class="zodiac-title">원숭이띠</div>
+        <div class="zodiac-year-row"><span class="zodiac-year">68년</span><span class="zodiac-year-text">혼자 조용히 쉬어야 하는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">80년</span><span class="zodiac-year-text">바삐 움직이면 운을 얻는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">92년</span><span class="zodiac-year-text">혼자 시간을 보내야 좋은 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">04년</span><span class="zodiac-year-text">뜻밖의 행운이 따르는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">16년</span><span class="zodiac-year-text">상대방의 입장에서 생각해야</span></div>
+      </div>
+    </div>
+
+    <div class="zodiac-item">
+      <div class="zodiac-emoji">🐔</div>
+      <div class="zodiac-right">
+        <div class="zodiac-title">닭띠</div>
+        <div class="zodiac-year-row"><span class="zodiac-year">69년</span><span class="zodiac-year-text">애정운 따르나 건강도 중요</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">81년</span><span class="zodiac-year-text">스트레스를 풀며 기다려야</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">93년</span><span class="zodiac-year-text">생각한 대로 모두 풀리는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">05년</span><span class="zodiac-year-text">만남보단 내 본분에 집중해야</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">17년</span><span class="zodiac-year-text">데이트, 소개팅하기 좋은 날</span></div>
+      </div>
+    </div>
+
+    <div class="zodiac-item">
+      <div class="zodiac-emoji">🐶</div>
+      <div class="zodiac-right">
+        <div class="zodiac-title">개띠</div>
+        <div class="zodiac-year-row"><span class="zodiac-year">70년</span><span class="zodiac-year-text">노력한 만큼 대가를 얻는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">82년</span><span class="zodiac-year-text">맡은 일에 집중해야 하는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">94년</span><span class="zodiac-year-text">본업에 집중해야 하는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">06년</span><span class="zodiac-year-text">마음을 열고 활발히 움직여야</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">18년</span><span class="zodiac-year-text">계획을 세우고 실행에 옮겨야</span></div>
+      </div>
+    </div>
+
+    <div class="zodiac-item">
+      <div class="zodiac-emoji">🐷</div>
+      <div class="zodiac-right">
+        <div class="zodiac-title">돼지띠</div>
+        <div class="zodiac-year-row"><span class="zodiac-year">71년</span><span class="zodiac-year-text">행운의 여신이 미소 짓는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">83년</span><span class="zodiac-year-text">만남에 행운이 따르는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">95년</span><span class="zodiac-year-text">운이 점진적으로 상승하는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">07년</span><span class="zodiac-year-text">좋은 소식이 올 수 있는 날</span></div>
+        <div class="zodiac-year-row"><span class="zodiac-year">19년</span><span class="zodiac-year-text">나를 돌아보는 시간을 가져야</span></div>
+      </div>
+    </div>
+
   </div>
   <div class="star-sec-label">⭐ 별자리 운세</div>
   <div class="star-grid">
