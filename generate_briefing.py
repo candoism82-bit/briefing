@@ -215,7 +215,7 @@ def generate_html(youtube_data, date_info):
         with open("template.html", "r", encoding="utf-8") as f:
             content = f.read()
             import re as _re
-            m = _re.search(r"<style>(.*?)</style>", content, re.DOTALL)
+            m = _re.search(r"<style>(.*?)</style>", content, _re.DOTALL)
             if m:
                 template_css = m.group(1)[:3000]
 
