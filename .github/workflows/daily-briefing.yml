@@ -19,16 +19,15 @@ jobs:
           python-version: '3.11'
 
       - name: 📦 패키지 설치
-        run: pip install -r requirements.txt
+        run: pip install requests google-api-python-client
 
       - name: 🦎 브리핑 생성 및 푸시
         env:
-          YOUTUBE_API_KEY:   ${{ secrets.YOUTUBE_API_KEY }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          GITHUB_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
+          OPENWEATHER_API_KEY:  ${{ secrets.OPENWEATHER_API_KEY }}
+          NAVER_CLIENT_ID:      ${{ secrets.NAVER_CLIENT_ID }}
+          NAVER_CLIENT_SECRET:  ${{ secrets.NAVER_CLIENT_SECRET }}
+          GITHUB_TOKEN:         ${{ secrets.GITHUB_TOKEN }}
         run: python generate_briefing.py
 
       - name: ✅ 완료 알림
-        run: |
-          echo "브리핑 생성 완료!"
-          echo "URL: https://크레노트.com"
+        run: echo "브리핑 생성 완료! URL: https://크레노트.com"
