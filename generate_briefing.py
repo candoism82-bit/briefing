@@ -149,160 +149,10 @@ def collect_daily_data(date_info):
     """웹 검색으로 날씨·뉴스·운세를 JSON 텍스트로 수집"""
     client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
-    prompt = f"""
-오늘은 {date_info['date_ko']} ({date_info['day_ko']})입니다.
-웹 검색을 사용해 아래 데이터를 수집하고 JSON 형식으로만 반환하세요.
-설명·마크다운 없이 JSON만 출력하세요.
+    prompt = f"""오늘 {date_info['date_ko']} ({date_info['day_ko']}) 한국 데이터를 웹 검색해서 JSON으로만 반환. 설명 없이 JSON만.
 
-{{
-  "weather": {{
-    "overview": "날씨 한줄 요약",
-    "detail": "아침 최저/최고 기온, 특보 등 상세",
-    "cities": [
-      {{"name":"SEOUL","high":"?°","low":"?°","icon":"🌥"}},
-      {{"name":"BUSAN","high":"?°","low":"?°","icon":"🌤"}},
-      {{"name":"DAEGU","high":"?°","low":"?°","icon":"⛅"}},
-      {{"name":"DAEJEON","high":"?°","low":"?°","icon":"🌥"}},
-      {{"name":"GWANGJU","high":"?°","low":"?°","icon":"⛅"}},
-      {{"name":"JEJU","high":"?°","low":"?°","icon":"🌦"}}
-    ],
-    "weekly": [
-      {{"day":"오늘","icon":"🌥","high":"?°","low":"?°"}},
-      {{"day":"화","icon":"☀","high":"?°","low":"?°"}},
-      {{"day":"수","icon":"⛅","high":"?°","low":"?°"}},
-      {{"day":"목","icon":"🌤","high":"?°","low":"?°"}},
-      {{"day":"금","icon":"🌥","high":"?°","low":"?°"}},
-      {{"day":"토","icon":"⛅","high":"?°","low":"?°"}},
-      {{"day":"일","icon":"⛅","high":"?°","low":"?°"}}
-    ]
-  }},
-  "economy_news": [
-    {{"title":"제목","summary":"한줄요약","url":"https://...","source":"출처명"}},
-    {{"title":"제목","summary":"한줄요약","url":"https://...","source":"출처명"}},
-    {{"title":"제목","summary":"한줄요약","url":"https://...","source":"출처명"}},
-    {{"title":"제목","summary":"한줄요약","url":"https://...","source":"출처명"}}
-  ],
-  "politics_news": [
-    {{"title":"제목","summary":"한줄요약","url":"https://...","source":"출처명"}},
-    {{"title":"제목","summary":"한줄요약","url":"https://...","source":"출처명"}},
-    {{"title":"제목","summary":"한줄요약","url":"https://...","source":"출처명"}},
-    {{"title":"제목","summary":"한줄요약","url":"https://...","source":"출처명"}}
-  ],
-  "zodiac": [
-    {{"sign":"쥐","emoji":"🐭","summary":"한줄요약",
-      "years":[
-        {{"year":"60년생","text":"운세 내용"}},
-        {{"year":"72년생","text":"운세 내용"}},
-        {{"year":"84년생","text":"운세 내용"}},
-        {{"year":"96년생","text":"운세 내용"}},
-        {{"year":"08년생","text":"운세 내용"}}
-      ]}},
-    {{"sign":"소","emoji":"🐮","summary":"한줄요약",
-      "years":[
-        {{"year":"61년생","text":"운세 내용"}},
-        {{"year":"73년생","text":"운세 내용"}},
-        {{"year":"85년생","text":"운세 내용"}},
-        {{"year":"97년생","text":"운세 내용"}},
-        {{"year":"09년생","text":"운세 내용"}}
-      ]}},
-    {{"sign":"호랑이","emoji":"🐯","summary":"한줄요약",
-      "years":[
-        {{"year":"62년생","text":"운세 내용"}},
-        {{"year":"74년생","text":"운세 내용"}},
-        {{"year":"86년생","text":"운세 내용"}},
-        {{"year":"98년생","text":"운세 내용"}},
-        {{"year":"10년생","text":"운세 내용"}}
-      ]}},
-    {{"sign":"토끼","emoji":"🐰","summary":"한줄요약",
-      "years":[
-        {{"year":"63년생","text":"운세 내용"}},
-        {{"year":"75년생","text":"운세 내용"}},
-        {{"year":"87년생","text":"운세 내용"}},
-        {{"year":"99년생","text":"운세 내용"}},
-        {{"year":"11년생","text":"운세 내용"}}
-      ]}},
-    {{"sign":"용","emoji":"🐲","summary":"한줄요약",
-      "years":[
-        {{"year":"64년생","text":"운세 내용"}},
-        {{"year":"76년생","text":"운세 내용"}},
-        {{"year":"88년생","text":"운세 내용"}},
-        {{"year":"00년생","text":"운세 내용"}},
-        {{"year":"12년생","text":"운세 내용"}}
-      ]}},
-    {{"sign":"뱀","emoji":"🐍","summary":"한줄요약",
-      "years":[
-        {{"year":"65년생","text":"운세 내용"}},
-        {{"year":"77년생","text":"운세 내용"}},
-        {{"year":"89년생","text":"운세 내용"}},
-        {{"year":"01년생","text":"운세 내용"}},
-        {{"year":"13년생","text":"운세 내용"}}
-      ]}},
-    {{"sign":"말","emoji":"🐴","summary":"한줄요약",
-      "years":[
-        {{"year":"66년생","text":"운세 내용"}},
-        {{"year":"78년생","text":"운세 내용"}},
-        {{"year":"90년생","text":"운세 내용"}},
-        {{"year":"02년생","text":"운세 내용"}},
-        {{"year":"14년생","text":"운세 내용"}}
-      ]}},
-    {{"sign":"양","emoji":"🐑","summary":"한줄요약",
-      "years":[
-        {{"year":"67년생","text":"운세 내용"}},
-        {{"year":"79년생","text":"운세 내용"}},
-        {{"year":"91년생","text":"운세 내용"}},
-        {{"year":"03년생","text":"운세 내용"}},
-        {{"year":"15년생","text":"운세 내용"}}
-      ]}},
-    {{"sign":"원숭이","emoji":"🐵","summary":"한줄요약",
-      "years":[
-        {{"year":"68년생","text":"운세 내용"}},
-        {{"year":"80년생","text":"운세 내용"}},
-        {{"year":"92년생","text":"운세 내용"}},
-        {{"year":"04년생","text":"운세 내용"}},
-        {{"year":"16년생","text":"운세 내용"}}
-      ]}},
-    {{"sign":"닭","emoji":"🐔","summary":"한줄요약",
-      "years":[
-        {{"year":"69년생","text":"운세 내용"}},
-        {{"year":"81년생","text":"운세 내용"}},
-        {{"year":"93년생","text":"운세 내용"}},
-        {{"year":"05년생","text":"운세 내용"}},
-        {{"year":"17년생","text":"운세 내용"}}
-      ]}},
-    {{"sign":"개","emoji":"🐶","summary":"한줄요약",
-      "years":[
-        {{"year":"70년생","text":"운세 내용"}},
-        {{"year":"82년생","text":"운세 내용"}},
-        {{"year":"94년생","text":"운세 내용"}},
-        {{"year":"06년생","text":"운세 내용"}},
-        {{"year":"18년생","text":"운세 내용"}}
-      ]}},
-    {{"sign":"돼지","emoji":"🐷","summary":"한줄요약",
-      "years":[
-        {{"year":"71년생","text":"운세 내용"}},
-        {{"year":"83년생","text":"운세 내용"}},
-        {{"year":"95년생","text":"운세 내용"}},
-        {{"year":"07년생","text":"운세 내용"}},
-        {{"year":"19년생","text":"운세 내용"}}
-      ]}}
-  ],
-  "horoscope": [
-    {{"sign":"양자리","emoji":"♈","date":"3.21~4.19","text":"운세"}},
-    {{"sign":"황소자리","emoji":"♉","date":"4.20~5.20","text":"운세"}},
-    {{"sign":"쌍둥이자리","emoji":"♊","date":"5.21~6.21","text":"운세"}},
-    {{"sign":"게자리","emoji":"♋","date":"6.22~7.22","text":"운세"}},
-    {{"sign":"사자자리","emoji":"♌","date":"7.23~8.22","text":"운세"}},
-    {{"sign":"처녀자리","emoji":"♍","date":"8.23~9.22","text":"운세"}},
-    {{"sign":"천칭자리","emoji":"♎","date":"9.23~10.23","text":"운세"}},
-    {{"sign":"전갈자리","emoji":"♏","date":"10.24~11.21","text":"운세"}},
-    {{"sign":"사수자리","emoji":"♐","date":"11.22~12.21","text":"운세"}},
-    {{"sign":"염소자리","emoji":"♑","date":"12.22~1.19","text":"운세"}},
-    {{"sign":"물병자리","emoji":"♒","date":"1.20~2.18","text":"운세"}},
-    {{"sign":"물고기자리","emoji":"♓","date":"2.19~3.20","text":"운세"}}
-  ],
-  "meme_drips": ["뉴스 기반 드립1", "뉴스 기반 드립2", "뉴스 기반 드립3"]
-}}
-"""
+형식:
+{{"weather":{{"overview":"한줄요약","detail":"상세","cities":[{{"name":"SEOUL","high":"X°","low":"X°","icon":"🌥"}},{{"name":"BUSAN","high":"X°","low":"X°","icon":"🌤"}},{{"name":"DAEGU","high":"X°","low":"X°","icon":"⛅"}},{{"name":"DAEJEON","high":"X°","low":"X°","icon":"🌥"}},{{"name":"GWANGJU","high":"X°","low":"X°","icon":"⛅"}},{{"name":"JEJU","high":"X°","low":"X°","icon":"🌦"}}],"weekly":[{{"day":"오늘","icon":"🌥","high":"X°","low":"X°"}},{{"day":"화","icon":"☀","high":"X°","low":"X°"}},{{"day":"수","icon":"⛅","high":"X°","low":"X°"}},{{"day":"목","icon":"🌤","high":"X°","low":"X°"}},{{"day":"금","icon":"🌥","high":"X°","low":"X°"}},{{"day":"토","icon":"⛅","high":"X°","low":"X°"}},{{"day":"일","icon":"⛅","high":"X°","low":"X°"}}]}},"economy_news":[{{"title":"","summary":"","url":"","source":""}},{{"title":"","summary":"","url":"","source":""}},{{"title":"","summary":"","url":"","source":""}},{{"title":"","summary":"","url":"","source":""}}],"politics_news":[{{"title":"","summary":"","url":"","source":""}},{{"title":"","summary":"","url":"","source":""}},{{"title":"","summary":"","url":"","source":""}},{{"title":"","summary":"","url":"","source":""}}],"zodiac":[{{"sign":"쥐","emoji":"🐭","summary":"","years":[{{"year":"60년생","text":""}},{{"year":"72년생","text":""}},{{"year":"84년생","text":""}},{{"year":"96년생","text":""}},{{"year":"08년생","text":""}}]}},{{"sign":"소","emoji":"🐮","summary":"","years":[{{"year":"61년생","text":""}},{{"year":"73년생","text":""}},{{"year":"85년생","text":""}},{{"year":"97년생","text":""}},{{"year":"09년생","text":""}}]}},{{"sign":"호랑이","emoji":"🐯","summary":"","years":[{{"year":"62년생","text":""}},{{"year":"74년생","text":""}},{{"year":"86년생","text":""}},{{"year":"98년생","text":""}},{{"year":"10년생","text":""}}]}},{{"sign":"토끼","emoji":"🐰","summary":"","years":[{{"year":"63년생","text":""}},{{"year":"75년생","text":""}},{{"year":"87년생","text":""}},{{"year":"99년생","text":""}},{{"year":"11년생","text":""}}]}},{{"sign":"용","emoji":"🐲","summary":"","years":[{{"year":"64년생","text":""}},{{"year":"76년생","text":""}},{{"year":"88년생","text":""}},{{"year":"00년생","text":""}},{{"year":"12년생","text":""}}]}},{{"sign":"뱀","emoji":"🐍","summary":"","years":[{{"year":"65년생","text":""}},{{"year":"77년생","text":""}},{{"year":"89년생","text":""}},{{"year":"01년생","text":""}},{{"year":"13년생","text":""}}]}},{{"sign":"말","emoji":"🐴","summary":"","years":[{{"year":"66년생","text":""}},{{"year":"78년생","text":""}},{{"year":"90년생","text":""}},{{"year":"02년생","text":""}},{{"year":"14년생","text":""}}]}},{{"sign":"양","emoji":"🐑","summary":"","years":[{{"year":"67년생","text":""}},{{"year":"79년생","text":""}},{{"year":"91년생","text":""}},{{"year":"03년생","text":""}},{{"year":"15년생","text":""}}]}},{{"sign":"원숭이","emoji":"🐵","summary":"","years":[{{"year":"68년생","text":""}},{{"year":"80년생","text":""}},{{"year":"92년생","text":""}},{{"year":"04년생","text":""}},{{"year":"16년생","text":""}}]}},{{"sign":"닭","emoji":"🐔","summary":"","years":[{{"year":"69년생","text":""}},{{"year":"81년생","text":""}},{{"year":"93년생","text":""}},{{"year":"05년생","text":""}},{{"year":"17년생","text":""}}]}},{{"sign":"개","emoji":"🐶","summary":"","years":[{{"year":"70년생","text":""}},{{"year":"82년생","text":""}},{{"year":"94년생","text":""}},{{"year":"06년생","text":""}},{{"year":"18년생","text":""}}]}},{{"sign":"돼지","emoji":"🐷","summary":"","years":[{{"year":"71년생","text":""}},{{"year":"83년생","text":""}},{{"year":"95년생","text":""}},{{"year":"07년생","text":""}},{{"year":"19년생","text":""}}]}}],"horoscope":[{{"sign":"양자리","emoji":"♈","date":"3.21~4.19","text":""}},{{"sign":"황소자리","emoji":"♉","date":"4.20~5.20","text":""}},{{"sign":"쌍둥이자리","emoji":"♊","date":"5.21~6.21","text":""}},{{"sign":"게자리","emoji":"♋","date":"6.22~7.22","text":""}},{{"sign":"사자자리","emoji":"♌","date":"7.23~8.22","text":""}},{{"sign":"처녀자리","emoji":"♍","date":"8.23~9.22","text":""}},{{"sign":"천칭자리","emoji":"♎","date":"9.23~10.23","text":""}},{{"sign":"전갈자리","emoji":"♏","date":"10.24~11.21","text":""}},{{"sign":"사수자리","emoji":"♐","date":"11.22~12.21","text":""}},{{"sign":"염소자리","emoji":"♑","date":"12.22~1.19","text":""}},{{"sign":"물병자리","emoji":"♒","date":"1.20~2.18","text":""}},{{"sign":"물고기자리","emoji":"♓","date":"2.19~3.20","text":""}}],"meme_drips":["드립1","드립2","드립3"]}}"""
 
     print("  [1차] 웹 검색으로 데이터 수집 중...")
     response = client.messages.create(
@@ -359,16 +209,15 @@ def generate_html(youtube_data, date_info):
     else:
         youtube_instruction = "유튜브 영상 없음 — 기존 GIF/드립/짤 탭 유지"
 
-    # 템플릿 CSS 로드
+    # 템플릿 CSS 로드 (앞 3000자만)
     template_css = ""
     if os.path.exists("template.html"):
         with open("template.html", "r", encoding="utf-8") as f:
             content = f.read()
-            # <style> 태그 안의 CSS만 추출
-            import re
-            m = re.search(r"<style>(.*?)</style>", content, re.DOTALL)
+            import re as _re
+            m = _re.search(r"<style>(.*?)</style>", content, re.DOTALL)
             if m:
-                template_css = m.group(1)[:6000]
+                template_css = m.group(1)[:3000]
 
     prompt = f"""
 아래 데이터로 크레스티드 게코 커뮤니티 아침 브리핑 HTML을 생성하세요.
