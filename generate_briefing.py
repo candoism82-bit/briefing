@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """🦎 Crested Gecko Community - Daily Briefing Auto-Generator"""
 import os, re, json, time, datetime, subprocess
-from json_repair import repair_json
 from googleapiclient.discovery import build
 import anthropic
 
@@ -117,63 +116,331 @@ def collect_data(date_info):
     try:
         data = json.loads(raw_json)
     except json.JSONDecodeError as err:
-        print(f"  ⚠️ JSON 오류({err}) — json_repair로 자동 수정 중...")
-        data = json.loads(repair_json(raw_json))
+        print(f"  ⚠️ JSON 오류 — 자동 수정 중...")
+        # 흔한 오류 패턴 수정: 따옴표 안 개행, 후행 콤마 등
+        fixed = re.sub(r',\s*}', '}', raw_json)
+        fixed = re.sub(r',\s*]', ']', fixed)
+        fixed = re.sub(r'[-]', ' ', fixed)
+        data = json.loads(fixed)
         print("  → 수정 완료")
 
     print(f"  [1차] 완료 — 뉴스 {len(data.get('economy_news',[]))+len(data.get('politics_news',[]))}건, 운세 {len(data.get('zodiac',[]))}띠")
     return data
 
 def build_html(data, youtube, date_info):
-    """2차: 데이터 → HTML (웹 검색 없음, 65초 대기 후 호출)"""
-    client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+    """Claude API 없이 Python으로 직접 HTML 조립 — 절대 잘리지 않음"""
 
-    yt_block = ""
-    if youtube:
-        yt_block = f'밈 존 맨 앞에 "📺 Shorts" 탭 추가: iframe src="{youtube["embed"]}" / 링크={youtube["url"]} / 제목={youtube["title"]}'
+    w   = data.get("weather", {})
+    eco = data.get("economy_news", [])
+    pol = data.get("politics_news", [])
+    zod = data.get("zodiac", [])
+    hor = data.get("horoscope", [])
+    drips = data.get("meme_drips", ["드립 준비 중...","드립 준비 중...","드립 준비 중..."])
 
-    prompt = f"""
-아래 JSON 데이터로 크레스티드 게코 커뮤니티 아침 브리핑 HTML을 생성하세요.
+    # ── 날씨 도시 ──
+    cities_html = ""
+    for c in w.get("cities", []):
+        cities_html += f"""
+        <div class="city-card">
+          <div class="city-name">{c.get('name','')}</div>
+          <div class="city-high">{c.get('high','')}</div>
+          <div class="city-low">{c.get('low','')}</div>
+          <div class="city-icon">{c.get('icon','🌤')}</div>
+        </div>"""
 
-날짜: {date_info['day_num']} / {date_info['date_en']} / {date_info['date_ko']}
-유튜브: {yt_block or '없음'}
+    # ── 주간 예보 ──
+    weekly_html = ""
+    for d in w.get("weekly", []):
+        weekly_html += f"""
+        <div class="week-day">
+          <div class="wd-label">{d.get('day','')}</div>
+          <div class="wd-icon">{d.get('icon','')}</div>
+          <div class="wd-high">{d.get('high','')}</div>
+          <div class="wd-low">{d.get('low','')}</div>
+        </div>"""
 
-데이터:
-{json.dumps(data, ensure_ascii=False)}
-
-요구사항:
-- <meta http-equiv="Cache-Control" content="no-cache"> 포함
-- 헤더 바로 뒤 <!-- PROMO_PLACEHOLDER --> 삽입
-- 섹션순서: 헤더→프로모→날씨→경제뉴스→정치뉴스→띠별운세(탭형)→별자리운세→밈존→푸터
-- 다크 모바일 테마 (배경 #0d1117, 카드 #161b22)
-- 띠별운세: 탭 클릭시 생년별 운세 5개 표시
-- 완전한 HTML만 출력, <!DOCTYPE html>~</html>, 마크다운 없이
-"""
-
-    print("  [2차] HTML 생성 중 (스트리밍)...")
-    html = ""
-    def _stream_html():
-        nonlocal html
+    # ── 뉴스 ──
+    def news_items(items):
         html = ""
-        with client.messages.stream(
-            model="claude-sonnet-4-6", max_tokens=16000,
-            messages=[{"role": "user", "content": prompt}]
-        ) as stream:
-            for text in stream.text_stream:
-                html += text
-    call_with_retry(_stream_html)
+        for i, n in enumerate(items, 1):
+            html += f"""
+        <div class="news-item">
+          <span class="news-num">0{i}</span>
+          <div class="news-body">
+            <a class="news-title" href="{n.get('url','#')}" target="_blank">{n.get('title','')}</a>
+            <div class="news-summary">{n.get('summary','')}</div>
+            <div class="news-source">▸ {n.get('source','')}</div>
+          </div>
+        </div>"""
+        return html
 
-    # HTML 범위 추출
-    if "<!DOCTYPE html>" in html:
-        html = html[html.index("<!DOCTYPE html>"):]
-        if "</html>" in html:
-            html = html[:html.rindex("</html>") + 7]
-        elif "</body>" in html:
-            html += "\n</html>"
-        else:
-            html += "\n</body></html>"
+    # ── 띠별 운세 탭 ──
+    zod_tabs = ""
+    zod_panels = ""
+    for i, z in enumerate(zod):
+        active = "active" if i == 0 else ""
+        zod_tabs += f'<button class="ztab {active}" onclick="showZod({i})">{z.get("emoji","")}<br><span>{z.get("sign","")}</span></button>'
+        years_html = ""
+        for y in z.get("years", []):
+            years_html += f'<div class="zy-item"><span class="zy-year">{y.get("year","")}</span><span class="zy-text">{y.get("text","")}</span></div>'
+        zod_panels += f"""
+        <div class="zpanel {'active' if i==0 else ''}" id="zpanel-{i}">
+          <div class="zpanel-summary">{z.get('summary','')}</div>
+          {years_html}
+        </div>"""
+
+    # ── 별자리 ──
+    hor_html = ""
+    for h in hor:
+        hor_html += f"""
+        <div class="hor-card">
+          <div class="hor-emoji">{h.get('emoji','')}</div>
+          <div class="hor-sign">{h.get('sign','')}</div>
+          <div class="hor-date">{h.get('date','')}</div>
+          <div class="hor-text">{h.get('text','')}</div>
+        </div>"""
+
+    # ── 밈 존 ──
+    drip_items = "".join(f'<div class="drip-item">💬 {d}</div>' for d in drips)
+
+    # ── 유튜브 탭 ──
+    yt_tab = ""
+    yt_panel = ""
+    if youtube:
+        yt_tab = f'<button class="mtab active" onclick="showMeme(\'shorts\')">📺 Shorts</button>'
+        yt_panel = f"""
+        <div class="mpanel active" id="mpanel-shorts">
+          <div class="yt-wrap">
+            <iframe src="{youtube['embed']}" frameborder="0" allowfullscreen style="width:100%;aspect-ratio:9/16;border-radius:8px;"></iframe>
+            <a class="yt-link" href="{youtube['url']}" target="_blank">▶ YouTube에서 보기 — {youtube['title']}</a>
+          </div>
+        </div>"""
+        gif_active = ""
+        drip_active = ""
     else:
-        raise ValueError("HTML 없음")
+        gif_active = "active"
+        drip_active = ""
+
+    html = f"""<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>🦎 크레스티드 게코 커뮤니티 아침 브리핑 · {date_info['date_ko']}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Noto+Serif+KR:wght@700;900&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+*{{box-sizing:border-box;margin:0;padding:0}}
+body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;display:flex;justify-content:center;padding:16px}}
+.card{{width:100%;max-width:480px;border-radius:16px;overflow:hidden;background:#161b22;box-shadow:0 8px 32px rgba(0,0,0,.5)}}
+
+/* HEADER */
+.hd{{background:linear-gradient(135deg,#1a2332,#0d1f35);padding:24px;position:relative;overflow:hidden}}
+.hd::before{{content:'🦎';position:absolute;right:-10px;top:-10px;font-size:80px;opacity:.08}}
+.hd-eyebrow{{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;color:#58a6ff;text-transform:uppercase;margin-bottom:4px}}
+.hd-title{{font-family:'Noto Serif KR',serif;font-size:26px;font-weight:900;color:#fff;display:flex;align-items:center;gap:8px}}
+.hd-sub{{font-size:11px;color:rgba(255,255,255,.4);margin-top:4px;letter-spacing:.05em}}
+.hd-inner{{display:flex;justify-content:space-between;align-items:flex-start}}
+.hd-date-big{{font-family:'DM Mono',monospace;font-size:52px;font-weight:700;color:#58a6ff;line-height:1}}
+.hd-date-small{{font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,.4);text-align:right;letter-spacing:.08em}}
+
+/* PROMO */
+.promo-banner{{background:linear-gradient(160deg,#0a1f08,#1a3a15,#0e2a0a);border-bottom:3px solid #3d7a3a;position:relative;overflow:hidden}}
+.promo-inner{{padding:22px 24px 20px}}
+.promo-badge-row{{display:flex;align-items:center;gap:8px;margin-bottom:14px}}
+.promo-badge{{background:#3d7a3a;color:#c8f0a0;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border-radius:20px}}
+.promo-badge-line{{flex:1;height:1px;background:rgba(255,255,255,.08)}}
+.promo-copy{{text-align:center;margin-bottom:18px}}
+.promo-heart{{font-size:28px;display:block;margin-bottom:8px;animation:hb 1.8s ease infinite}}
+@keyframes hb{{0%,100%{{transform:scale(1)}}30%{{transform:scale(1.18)}}70%{{transform:scale(1.1)}}}}
+.promo-main-text{{font-size:18px;font-weight:900;color:#fff;line-height:1.55;margin-bottom:6px}}
+.promo-main-text em{{color:#7ae050;font-style:normal}}
+.promo-sub-text{{font-size:13px;color:rgba(255,255,255,.65);line-height:1.7}}
+.promo-sub-text strong{{color:#a8e060}}
+.promo-org-box{{background:rgba(106,173,69,.12);border:1px solid rgba(106,173,69,.35);border-radius:8px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px}}
+.promo-org-name{{font-size:16px;font-weight:900;color:#fff;display:flex;align-items:center;gap:6px;margin-bottom:4px}}
+.promo-org-url{{font-size:11px;color:#6aad45;text-decoration:none;border-bottom:1px solid rgba(106,173,69,.4)}}
+.promo-qr-emoji{{font-size:36px}}
+.promo-qr-label{{font-size:9px;color:rgba(255,255,255,.3);display:block;text-align:center}}
+.promo-img-wrap{{border-radius:8px;overflow:hidden;border:1px solid rgba(106,173,69,.25)}}
+.promo-img-wrap img{{width:100%;display:block}}
+
+/* SECTION HEADER */
+.sec-hd{{display:flex;align-items:center;gap:8px;padding:20px 20px 12px}}
+.sec-hd-label{{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;color:#58a6ff;text-transform:uppercase}}
+.sec-hd-line{{flex:1;height:1px;background:rgba(255,255,255,.08)}}
+.sec-tag{{font-size:9px;padding:2px 8px;border-radius:10px;letter-spacing:.06em}}
+.tag-weather{{background:rgba(88,166,255,.15);color:#58a6ff}}
+.tag-eco{{background:rgba(63,185,80,.15);color:#3fb950}}
+.tag-pol{{background:rgba(248,81,73,.15);color:#f85149}}
+.tag-zod{{background:rgba(210,153,34,.15);color:#d2a61a}}
+.tag-hor{{background:rgba(188,140,255,.15);color:#bc8cff}}
+.tag-meme{{background:rgba(255,166,87,.15);color:#ffa657}}
+
+/* WEATHER */
+.weather-ov{{display:flex;align-items:center;gap:12px;padding:0 20px 14px}}
+.weather-ov-icon{{font-size:36px}}
+.weather-ov-title{{font-size:15px;font-weight:700;color:#e6edf3;margin-bottom:3px}}
+.weather-ov-sub{{font-size:11px;color:rgba(255,255,255,.45);line-height:1.6}}
+.cities{{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 16px 16px}}
+.city-card{{background:#0d1117;border-radius:8px;padding:10px 8px;text-align:center;border:1px solid rgba(255,255,255,.06)}}
+.city-name{{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;color:#58a6ff;margin-bottom:4px}}
+.city-high{{font-size:16px;font-weight:700;color:#e6edf3}}
+.city-low{{font-size:11px;color:rgba(255,255,255,.4);margin-bottom:2px}}
+.city-icon{{font-size:18px}}
+.weekly{{display:flex;justify-content:space-between;padding:0 16px 20px;gap:4px}}
+.week-day{{flex:1;text-align:center;background:#0d1117;border-radius:6px;padding:8px 4px;border:1px solid rgba(255,255,255,.06)}}
+.wd-label{{font-size:10px;color:rgba(255,255,255,.5);margin-bottom:4px}}
+.wd-icon{{font-size:16px;margin-bottom:4px}}
+.wd-high{{font-size:12px;font-weight:700;color:#e6edf3}}
+.wd-low{{font-size:10px;color:rgba(255,255,255,.35)}}
+
+/* NEWS */
+.news-list{{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px}}
+.news-item{{display:flex;gap:10px;background:#0d1117;border-radius:8px;padding:12px;border:1px solid rgba(255,255,255,.06)}}
+.news-num{{font-family:'DM Mono',monospace;font-size:11px;color:#58a6ff;flex-shrink:0;padding-top:2px}}
+.news-title{{font-size:13px;font-weight:700;color:#e6edf3;text-decoration:none;display:block;margin-bottom:4px;line-height:1.5}}
+.news-title:hover{{color:#58a6ff}}
+.news-summary{{font-size:11px;color:rgba(255,255,255,.55);line-height:1.6;margin-bottom:4px}}
+.news-source{{font-size:10px;color:#3fb950}}
+
+/* ZODIAC */
+.ztabs{{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;padding:0 16px 12px}}
+.ztab{{background:#0d1117;border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:6px 2px;font-size:16px;color:rgba(255,255,255,.5);cursor:pointer;text-align:center;line-height:1.3;transition:.2s}}
+.ztab span{{font-size:8px;display:block;margin-top:2px}}
+.ztab.active{{background:rgba(210,153,34,.15);border-color:#d2a61a;color:#e6edf3}}
+.zpanels{{padding:0 16px 16px}}
+.zpanel{{display:none}}
+.zpanel.active{{display:block}}
+.zpanel-summary{{font-size:12px;color:#d2a61a;margin-bottom:10px;padding:8px 12px;background:rgba(210,153,34,.08);border-radius:6px;border-left:3px solid #d2a61a}}
+.zy-item{{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)}}
+.zy-year{{font-family:'DM Mono',monospace;font-size:10px;color:#58a6ff;flex-shrink:0;padding-top:2px;min-width:40px}}
+.zy-text{{font-size:12px;color:rgba(255,255,255,.75);line-height:1.6}}
+
+/* HOROSCOPE */
+.hor-grid{{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 16px 16px}}
+.hor-card{{background:#0d1117;border-radius:8px;padding:10px;border:1px solid rgba(255,255,255,.06)}}
+.hor-emoji{{font-size:20px;margin-bottom:3px}}
+.hor-sign{{font-size:11px;font-weight:700;color:#e6edf3;margin-bottom:1px}}
+.hor-date{{font-size:9px;color:rgba(255,255,255,.35);margin-bottom:4px}}
+.hor-text{{font-size:10px;color:rgba(255,255,255,.6);line-height:1.5}}
+
+/* MEME */
+.mtabs{{display:flex;gap:6px;padding:0 16px 12px;flex-wrap:wrap}}
+.mtab{{background:#0d1117;border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:5px 12px;font-size:11px;color:rgba(255,255,255,.5);cursor:pointer;transition:.2s}}
+.mtab.active{{background:rgba(255,166,87,.15);border-color:#ffa657;color:#ffa657}}
+.mpanel{{display:none;padding:0 16px 16px}}
+.mpanel.active{{display:block}}
+.drip-item{{background:#0d1117;border-radius:8px;padding:12px;margin-bottom:8px;font-size:13px;color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.06);line-height:1.6}}
+.yt-wrap iframe{{width:100%;aspect-ratio:9/16;border-radius:8px}}
+.yt-link{{display:block;margin-top:8px;font-size:11px;color:#58a6ff;text-decoration:none}}
+
+/* FOOTER */
+.footer{{padding:20px;text-align:center;border-top:1px solid rgba(255,255,255,.06);font-size:10px;color:rgba(255,255,255,.25);line-height:1.8}}
+</style>
+</head>
+<body>
+<div class="card">
+
+<!-- HEADER -->
+<div class="hd">
+  <div class="hd-inner">
+    <div>
+      <div class="hd-eyebrow">Crested Gecko Community</div>
+      <div class="hd-title">🦎 아침 브리핑</div>
+      <div class="hd-sub">날씨 · 경제 · 정치 · 운세 · 밈</div>
+    </div>
+    <div>
+      <div class="hd-date-big">{date_info['day_num']}</div>
+      <div class="hd-date-small">{date_info['date_en']}</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROMO -->
+<div class="promo-banner"><div class="promo-inner">
+  <div class="promo-badge-row"><span class="promo-badge">🌿 함께해요</span><div class="promo-badge-line"></div><span class="promo-badge">파충류 권익 보호</span></div>
+  <div class="promo-copy">
+    <span class="promo-heart">♥️</span>
+    <div class="promo-main-text">생명을 소중히 여기신다면<br><em>함께해 주시고 힘을 실어주세요</em></div>
+    <div class="promo-sub-text"><strong>집사님들이 관심을 가져주셔야!</strong><br>더 좋은 환경에서 키우실 수 있습니다! 🦎</div>
+  </div>
+  <div class="promo-org-box">
+    <div><div class="promo-org-name">사단법인 작은생명공존연합 <span>‼️</span></div>
+    <a class="promo-org-url" href="https://www.littlelives.or.kr/" target="_blank">🔗 www.littlelives.or.kr</a></div>
+    <div><div class="promo-qr-emoji">🐊</div><span class="promo-qr-label">Little Lives</span></div>
+  </div>
+  <div class="promo-img-wrap"><img src="images/littlelives.png" alt="작은생명공존연합"></div>
+</div></div>
+
+<!-- WEATHER -->
+<div class="sec-hd"><span class="sec-hd-label">Weather</span><div class="sec-hd-line"></div><span class="sec-tag tag-weather">전국 날씨</span></div>
+<div class="weather-ov">
+  <div class="weather-ov-icon">🌤</div>
+  <div>
+    <div class="weather-ov-title">{w.get('overview','')}</div>
+    <div class="weather-ov-sub">{w.get('detail','')}</div>
+  </div>
+</div>
+<div class="cities">{cities_html}</div>
+<div class="weekly">{weekly_html}</div>
+
+<!-- ECONOMY NEWS -->
+<div class="sec-hd"><span class="sec-hd-label">Economy</span><div class="sec-hd-line"></div><span class="sec-tag tag-eco">경제·주식</span></div>
+<div class="news-list">{news_items(eco)}</div>
+
+<!-- POLITICS NEWS -->
+<div class="sec-hd"><span class="sec-hd-label">Politics</span><div class="sec-hd-line"></div><span class="sec-tag tag-pol">정치·사회</span></div>
+<div class="news-list">{news_items(pol)}</div>
+
+<!-- ZODIAC -->
+<div class="sec-hd"><span class="sec-hd-label">Zodiac</span><div class="sec-hd-line"></div><span class="sec-tag tag-zod">띠별 운세</span></div>
+<div class="ztabs">{zod_tabs}</div>
+<div class="zpanels">{zod_panels}</div>
+
+<!-- HOROSCOPE -->
+<div class="sec-hd"><span class="sec-hd-label">Horoscope</span><div class="sec-hd-line"></div><span class="sec-tag tag-hor">별자리 운세</span></div>
+<div class="hor-grid">{hor_html}</div>
+
+<!-- MEME -->
+<div class="sec-hd"><span class="sec-hd-label">Meme Zone</span><div class="sec-hd-line"></div><span class="sec-tag tag-meme">오늘의 밈</span></div>
+<div class="mtabs">
+  {yt_tab}
+  <button class="mtab {gif_active}" onclick="showMeme('gif')">📹 GIF</button>
+  <button class="mtab {drip_active}" onclick="showMeme('drip')">💬 드립</button>
+</div>
+{yt_panel}
+<div class="mpanel {'active' if not youtube else ''}" id="mpanel-gif">
+  <div style="text-align:center;padding:20px;color:rgba(255,255,255,.3);font-size:13px">🦎 오늘의 게코 GIF</div>
+</div>
+<div class="mpanel" id="mpanel-drip">
+  {drip_items}
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  🦎 Crested Gecko Community · {date_info['date_ko']}<br>
+  매일 아침 자동 생성 · 크레스티드 게코 집사들의 하루 시작
+</div>
+
+</div>
+<script>
+function showZod(i){{
+  document.querySelectorAll('.ztab').forEach((t,idx)=>t.classList.toggle('active',idx===i));
+  document.querySelectorAll('.zpanel').forEach((p,idx)=>p.classList.toggle('active',idx===i));
+}}
+function showMeme(id){{
+  document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.mpanel').forEach(p=>p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('mpanel-'+id).classList.add('active');
+}}
+</script>
+</body>
+</html>"""
     return html
 
 
@@ -243,16 +510,9 @@ def main():
     # 1차: 데이터 수집
     data = collect_data(date_info)
 
-    # ★ 핵심: 65초 대기 (rate limit 초기화)
-    print("  ⏳ rate limit 대기 중 (65초)...")
-    time.sleep(65)
-
-    # 2차: HTML 생성
+    # Python으로 직접 HTML 조립 (API 호출 없음)
     html = build_html(data, youtube, date_info)
     print(f"  → HTML 생성 완료 ({len(html):,} bytes)")
-
-    print("\n💚 [3/4] 프로모 배너 삽입 중...")
-    html = inject_promo(html)
 
     print("\n📤 [4/4] GitHub 푸시 중...")
     push(html, date_info["date_str"])
