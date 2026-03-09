@@ -116,12 +116,9 @@ def collect_data(date_info):
     try:
         data = json.loads(raw_json)
     except json.JSONDecodeError as err:
-        print(f"  ⚠️ JSON 오류 — 자동 수정 중...")
-        # 흔한 오류 패턴 수정: 따옴표 안 개행, 후행 콤마 등
-        fixed = re.sub(r',\s*}', '}', raw_json)
-        fixed = re.sub(r',\s*]', ']', fixed)
-        fixed = re.sub(r'[-]', ' ', fixed)
-        data = json.loads(fixed)
+        print(f"  ⚠️ JSON 오류 — json_repair로 수정 중...")
+        from json_repair import repair_json
+        data = json.loads(repair_json(raw_json))
         print("  → 수정 완료")
 
     print(f"  [1차] 완료 — 뉴스 {len(data.get('economy_news',[]))+len(data.get('politics_news',[]))}건, 운세 {len(data.get('zodiac',[]))}띠")
