@@ -5,18 +5,16 @@
 """
 
 import os
+import subprocess
 import datetime
 from googleapiclient.discovery import build
 import anthropic
-from github import Github
 
 # ═══════════════════════════════════════
 # 환경변수에서 API 키 로드
 # ═══════════════════════════════════════
 YOUTUBE_API_KEY   = os.environ["YOUTUBE_API_KEY"]
 ANTHROPIC_API_KEY = os.environ["ANTHROPIC_API_KEY"]
-GITHUB_TOKEN      = os.environ["GITHUB_TOKEN"]   # GitHub Actions에서 자동 제공
-GITHUB_REPO       = "candoisr/briefing"           # ← 본인 레포
 
 # ═══════════════════════════════════════
 # 고정 프로모 배너 CSS
@@ -304,26 +302,28 @@ def inject_promo_banner(html_content):
 # 4. GitHub에 index.html 푸시
 # ═══════════════════════════════════════
 def push_to_github(html_content, date_str):
-    """GitHub 레포에 index.html 업데이트"""
-    g    = Github(GITHUB_TOKEN)
-    repo = g.get_repo(GITHUB_REPO)
+    """index.html 파일에 쓰고 git으로 커밋·푸시"""
+    # index.html 파일에 직접 쓰기 (GitHub Actions에서 레포가 이미 체크아웃됨)
+    with open("index.html", "w", encoding="utf-8") as f:
+        f.write(html_content)
+    print("  → index.html 파일 저장 완료")
 
-    try:
-        current = repo.get_contents("index.html")
-        repo.update_file(
-            path="index.html",
-            message=f"🦎 Daily briefing - {date_str}",
-            content=html_content,
-            sha=current.sha,
-        )
-        print("  → index.html 업데이트 완료")
-    except Exception:
-        repo.create_file(
-            path="index.html",
-            message=f"🦎 Daily briefing - {date_str}",
-            content=html_content,
-        )
-        print("  → index.html 신규 생성 완료")
+    # git 설정
+    subprocess.run(["git", "config", "user.email", "actions@github.com"], check=True)
+    subprocess.run(["git", "config", "user.name",  "GitHub Actions"],      check=True)
+
+    # 변경사항 커밋 & 푸시
+    subprocess.run(["git", "add", "index.html"], check=True)
+
+    # 변경사항이 없으면 커밋 스킵
+    result = subprocess.run(["git", "diff", "--cached", "--quiet"])
+    if result.returncode == 0:
+        print("  → 변경사항 없음, 커밋 스킵")
+        return
+
+    subprocess.run(["git", "commit", "-m", f"🦎 Daily briefing - {date_str}"], check=True)
+    subprocess.run(["git", "push"],                                              check=True)
+    print("  → git push 완료")
 
 
 # ═══════════════════════════════════════
