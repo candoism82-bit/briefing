@@ -1,133 +1,197 @@
 #!/usr/bin/env python3
-"""🦎 Crested Gecko Community - Daily Briefing Auto-Generator"""
-import os, re, json, datetime, subprocess
-from googleapiclient.discovery import build
-import anthropic
+"""🦎 Crested Gecko Community - Daily Briefing (Claude API 없음)"""
+import os, re, json, datetime, subprocess, requests
 
-YOUTUBE_API_KEY   = os.environ["YOUTUBE_API_KEY"]
-ANTHROPIC_API_KEY = os.environ["ANTHROPIC_API_KEY"]
-
-# ───────────────────────────────────────
-# 1. YouTube Shorts 3개 검색
-# ───────────────────────────────────────
-def get_youtube_shorts():
-    try:
-        yt = build("youtube", "v3", developerKey=YOUTUBE_API_KEY)
-        week_ago = (datetime.datetime.utcnow() - datetime.timedelta(days=7)).strftime("%Y-%m-%dT%H:%M:%SZ")
-        res = yt.search().list(
-            q="crested gecko", part="snippet", type="video",
-            videoDuration="short", order="viewCount",
-            publishedAfter=week_ago, maxResults=3
-        ).execute()
-        if not res.get("items"):
-            res = yt.search().list(
-                q="crested gecko", part="snippet", type="video",
-                videoDuration="short", order="viewCount", maxResults=3
-            ).execute()
-        videos = []
-        for item in res.get("items", [])[:3]:
-            vid = item["id"]["videoId"]
-            videos.append({
-                "title":   item["snippet"]["title"],
-                "channel": item["snippet"]["channelTitle"],
-                "embed":   f"https://www.youtube.com/embed/{vid}?autoplay=0",
-                "url":     f"https://www.youtube.com/shorts/{vid}",
-            })
-        print(f"  → YouTube {len(videos)}개 수집")
-        return videos
-    except Exception as e:
-        print(f"  ⚠️ YouTube 오류: {e}")
-        return []
-
+OPENWEATHER_KEY    = os.environ["OPENWEATHER_API_KEY"]
+NAVER_CLIENT_ID    = os.environ["NAVER_CLIENT_ID"]
+NAVER_CLIENT_SECRET= os.environ["NAVER_CLIENT_SECRET"]
 
 # ───────────────────────────────────────
-# 2. 날씨 + 뉴스만 Claude 웹검색 (1회)
+# 날씨 아이콘 / 도시명 변환
 # ───────────────────────────────────────
-def collect_news_weather(date_info):
-    client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
-    prompt = f"""오늘 {date_info['date_ko']} 한국 데이터를 웹 검색해서 JSON으로만 반환. 설명 없이 JSON만.
-키:
-- weather: overview(str), detail(str), cities(배열6, name/high/low/icon), weekly(배열7, day/icon/high/low)
-  cities name: SEOUL/BUSAN/DAEGU/DAEJEON/GWANGJU/JEJU
-- economy_news: 배열4, title/summary/url/source
-- politics_news: 배열4, title/summary/url/source"""
-
-    print("  날씨·뉴스 웹검색 중...")
-    res = client.messages.create(
-        model="claude-sonnet-4-6", max_tokens=4000,
-        tools=[{"type": "web_search_20250305", "name": "web_search"}],
-        messages=[{"role": "user", "content": prompt}]
-    )
-    raw = "".join(b.text for b in res.content if hasattr(b, "text"))
-    raw = re.sub(r"```json\s*|```", "", raw).strip()
-    s, e = raw.find("{"), raw.rfind("}") + 1
-    try:
-        data = json.loads(raw[s:e])
-    except json.JSONDecodeError:
-        try:
-            from json_repair import repair_json
-            data = json.loads(repair_json(raw[s:e]))
-        except Exception:
-            data = {"weather": {}, "economy_news": [], "politics_news": []}
-    print(f"  → 뉴스 {len(data.get('economy_news',[]))+len(data.get('politics_news',[]))}건 수집")
-    return data
-
-
-# ───────────────────────────────────────
-# 3. HTML 직접 조립 (Claude API 추가 호출 없음)
-# ───────────────────────────────────────
-
 CITY_KO = {
-    "SEOUL":"서울","BUSAN":"부산","DAEGU":"대구",
-    "DAEJEON":"대전","GWANGJU":"광주","JEJU":"제주"
+    "Seoul":"서울","Busan":"부산","Daegu":"대구",
+    "Daejeon":"대전","Gwangju":"광주","Jeju":"제주"
 }
-
-ICON_MAP = {
-    "sunny":"☀️","clear":"☀️","clear_day":"☀️",
-    "partly_cloudy":"⛅","partly_cloudy_day":"⛅","partly cloudy":"⛅",
-    "cloudy":"🌥","overcast":"🌥",
-    "rain":"🌧️","rainy":"🌧️","drizzle":"🌦",
-    "snow":"❄️","snowy":"❄️","sleet":"🌨",
-    "thunderstorm":"⛈️","thunder":"⛈️",
-    "foggy":"🌫️","fog":"🌫️","haze":"🌫️",
-    "windy":"💨",
+OWM_ICON = {
+    "01d":"☀️","01n":"🌙","02d":"⛅","02n":"⛅",
+    "03d":"🌥","03n":"🌥","04d":"☁️","04n":"☁️",
+    "09d":"🌧️","09n":"🌧️","10d":"🌦","10n":"🌦",
+    "11d":"⛈️","11n":"⛈️","13d":"❄️","13n":"❄️",
+    "50d":"🌫️","50n":"🌫️",
 }
+DAYS_KO = ["월","화","수","목","금","토","일"]
 
-def norm_icon(v):
-    if not v:
-        return "🌤"
-    v = str(v).strip()
-    # 이미 이모지면 그대로
-    if any(ord(c) > 127 for c in v):
-        return v
-    return ICON_MAP.get(v.lower(), "🌤")
+# ───────────────────────────────────────
+# 1. OpenWeatherMap 날씨
+# ───────────────────────────────────────
+CITIES = [
+    ("Seoul","KR"),("Busan","KR"),("Daegu","KR"),
+    ("Daejeon","KR"),("Gwangju","KR"),("Jeju","KR"),
+]
 
-def norm_city(v):
-    return CITY_KO.get(str(v).upper(), v)
+def get_weather():
+    print("  날씨 수집 중...")
+    cities_data = []
+    for city, country in CITIES:
+        try:
+            r = requests.get(
+                "https://api.openweathermap.org/data/2.5/weather",
+                params={"q": f"{city},{country}", "appid": OPENWEATHER_KEY,
+                        "units": "metric", "lang": "kr"},
+                timeout=10
+            ).json()
+            icon = OWM_ICON.get(r["weather"][0]["icon"], "🌤")
+            cities_data.append({
+                "name": CITY_KO.get(city, city),
+                "high": f"{round(r['main']['temp_max'])}°",
+                "low":  f"{round(r['main']['temp_min'])}°",
+                "icon": icon,
+            })
+        except Exception as e:
+            print(f"  ⚠️ {city} 날씨 오류: {e}")
 
-def build_html(data, videos, date_info):
-    w   = data.get("weather", {})
-    eco = data.get("economy_news", [])
-    pol = data.get("politics_news", [])
+    # 서울 주간 예보 (forecast API)
+    weekly = []
+    try:
+        r = requests.get(
+            "https://api.openweathermap.org/data/2.5/forecast",
+            params={"q": "Seoul,KR", "appid": OPENWEATHER_KEY,
+                    "units": "metric", "lang": "kr", "cnt": 40},
+            timeout=10
+        ).json()
+        # 날짜별 최고/최저 집계
+        day_map = {}
+        for item in r["list"]:
+            dt   = datetime.datetime.fromtimestamp(item["dt"])
+            key  = dt.strftime("%m/%d")
+            day  = DAYS_KO[dt.weekday()]
+            icon = OWM_ICON.get(item["weather"][0]["icon"], "🌤")
+            if key not in day_map:
+                day_map[key] = {"day": f"{key}({day})", "icon": icon,
+                                "high": item["main"]["temp_max"],
+                                "low":  item["main"]["temp_min"]}
+            else:
+                day_map[key]["high"] = max(day_map[key]["high"], item["main"]["temp_max"])
+                day_map[key]["low"]  = min(day_map[key]["low"],  item["main"]["temp_min"])
+        for k, v in list(day_map.items())[:7]:
+            weekly.append({
+                "day":  v["day"],
+                "icon": v["icon"],
+                "high": f"{round(v['high'])}°",
+                "low":  f"{round(v['low'])}°",
+            })
+    except Exception as e:
+        print(f"  ⚠️ 주간예보 오류: {e}")
+
+    # 오늘 서울 날씨 요약
+    overview = f"서울 현재 {cities_data[0]['low']}~{cities_data[0]['high']}" if cities_data else "날씨 준비 중"
+    print(f"  → 도시 {len(cities_data)}개, 주간예보 {len(weekly)}일")
+    return {"overview": overview, "detail": "OpenWeatherMap 제공", "cities": cities_data, "weekly": weekly}
+
+
+# ───────────────────────────────────────
+# 2. 네이버 뉴스 검색
+# ───────────────────────────────────────
+def naver_news(query, display=4):
+    headers = {
+        "X-Naver-Client-Id":     NAVER_CLIENT_ID,
+        "X-Naver-Client-Secret": NAVER_CLIENT_SECRET,
+    }
+    r = requests.get(
+        "https://openapi.naver.com/v1/search/news.json",
+        params={"query": query, "display": display, "sort": "date"},
+        headers=headers, timeout=10
+    ).json()
+    items = []
+    for item in r.get("items", []):
+        title   = re.sub(r"<[^>]+>", "", item["title"])
+        desc    = re.sub(r"<[^>]+>", "", item["description"])
+        source  = re.sub(r"https?://(www\.)?", "", item["originallink"]).split("/")[0]
+        items.append({
+            "title":   title,
+            "summary": desc,
+            "url":     item["originallink"] or item["link"],
+            "source":  source,
+        })
+    return items
+
+def get_news():
+    print("  뉴스 수집 중...")
+    try:
+        eco = naver_news("주식 경제 코스피", 4)
+        pol = naver_news("정치 사회 뉴스", 4)
+        print(f"  → 경제 {len(eco)}건, 정치 {len(pol)}건")
+        return eco, pol
+    except Exception as e:
+        print(f"  ⚠️ 뉴스 오류: {e}")
+        return [], []
+
+
+# ───────────────────────────────────────
+# 3. video_contents.txt 읽기
+# ───────────────────────────────────────
+def get_videos():
+    videos = []
+    try:
+        with open("video_contents.txt", "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith("#"):
+                    continue
+                parts = [p.strip() for p in line.split("|")]
+                url   = parts[0] if len(parts) > 0 else ""
+                title = parts[1] if len(parts) > 1 else "게코 영상"
+                if not url:
+                    continue
+                # YouTube Shorts → embed URL 변환
+                vid = ""
+                m = re.search(r"shorts/([A-Za-z0-9_-]+)", url)
+                if m:
+                    vid = m.group(1)
+                else:
+                    m = re.search(r"[?&]v=([A-Za-z0-9_-]+)", url)
+                    if m:
+                        vid = m.group(1)
+                    else:
+                        m = re.search(r"youtu\.be/([A-Za-z0-9_-]+)", url)
+                        if m:
+                            vid = m.group(1)
+                if vid:
+                    videos.append({
+                        "title":   title,
+                        "embed":   f"https://www.youtube.com/embed/{vid}",
+                        "url":     url,
+                    })
+        print(f"  → 영상 {len(videos)}개 로드")
+    except FileNotFoundError:
+        print("  ⚠️ video_contents.txt 없음 — 영상 섹션 생략")
+    return videos
+
+
+# ───────────────────────────────────────
+# 4. HTML 조립
+# ───────────────────────────────────────
+def build_html(weather, eco, pol, videos, date_info):
 
     # 도시 날씨
     cities_html = ""
-    for c in w.get("cities", []):
+    for c in weather.get("cities", []):
         cities_html += f"""<div class="city-card">
-          <div class="city-name">{norm_city(c.get('name',''))}</div>
-          <div class="city-high">{c.get('high','')}</div>
-          <div class="city-low">{c.get('low','')}</div>
-          <div class="city-icon">{norm_icon(c.get('icon',''))}</div>
+          <div class="city-name">{c['name']}</div>
+          <div class="city-high">{c['high']}</div>
+          <div class="city-low">{c['low']}</div>
+          <div class="city-icon">{c['icon']}</div>
         </div>"""
 
-    # 주간 예보
+    # 주간예보
     weekly_html = ""
-    for d in w.get("weekly", []):
+    for d in weather.get("weekly", []):
         weekly_html += f"""<div class="week-day">
-          <div class="wd-label">{d.get('day','')}</div>
-          <div class="wd-icon">{norm_icon(d.get('icon',''))}</div>
-          <div class="wd-high">{d.get('high','')}</div>
-          <div class="wd-low">{d.get('low','')}</div>
+          <div class="wd-label">{d['day']}</div>
+          <div class="wd-icon">{d['icon']}</div>
+          <div class="wd-high">{d['high']}</div>
+          <div class="wd-low">{d['low']}</div>
         </div>"""
 
     # 뉴스
@@ -137,9 +201,9 @@ def build_html(data, videos, date_info):
             html += f"""<div class="news-item">
           <span class="news-num">0{i}</span>
           <div class="news-body">
-            <a class="news-title" href="{n.get('url','#')}" target="_blank">{n.get('title','')}</a>
-            <div class="news-summary">{n.get('summary','')}</div>
-            <div class="news-source">▸ {n.get('source','')}</div>
+            <a class="news-title" href="{n['url']}" target="_blank">{n['title']}</a>
+            <div class="news-summary">{n['summary']}</div>
+            <div class="news-source">▸ {n['source']}</div>
           </div>
         </div>"""
         return html
@@ -149,13 +213,20 @@ def build_html(data, videos, date_info):
     yt_panels = ""
     for i, v in enumerate(videos):
         active = "active" if i == 0 else ""
-        label = f"Shorts {i+1}"
-        yt_tabs += f'<button class="mtab {active}" onclick="showVid({i})">📺 {label}</button>'
+        yt_tabs   += f'<button class="mtab {active}" onclick="showVid({i})">📺 Shorts {i+1}</button>'
         yt_panels += f"""<div class="mpanel {active}" id="vpanel-{i}">
           <iframe src="{v['embed']}" frameborder="0" allowfullscreen
             style="width:100%;aspect-ratio:9/16;border-radius:8px;display:block;"></iframe>
-          <a class="yt-link" href="{v['url']}" target="_blank">▶ {v['title']} — {v['channel']}</a>
+          <a class="yt-link" href="{v['url']}" target="_blank">▶ {v['title']}</a>
         </div>"""
+
+    yt_section = ""
+    if videos:
+        yt_section = f"""
+<!-- YOUTUBE -->
+<div class="sec-hd"><span class="sec-hd-label">YouTube</span><div class="sec-hd-line"></div><span class="sec-tag tag-yt">🦎 게코 Shorts</span></div>
+<div class="mtabs">{yt_tabs}</div>
+{yt_panels}"""
 
     return f"""<!DOCTYPE html>
 <html lang="ko">
@@ -217,9 +288,9 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 .city-high{{font-size:16px;font-weight:700;color:#e6edf3}}
 .city-low{{font-size:11px;color:rgba(255,255,255,.4);margin-bottom:2px}}
 .city-icon{{font-size:18px}}
-.weekly{{display:flex;justify-content:space-between;padding:0 16px 20px;gap:4px}}
-.week-day{{flex:1;text-align:center;background:#0d1117;border-radius:6px;padding:8px 4px;border:1px solid rgba(255,255,255,.06)}}
-.wd-label{{font-size:10px;color:rgba(255,255,255,.5);margin-bottom:4px}}
+.weekly{{display:flex;justify-content:space-between;padding:0 16px 20px;gap:4px;overflow-x:auto}}
+.week-day{{flex:1;min-width:44px;text-align:center;background:#0d1117;border-radius:6px;padding:8px 4px;border:1px solid rgba(255,255,255,.06)}}
+.wd-label{{font-size:9px;color:rgba(255,255,255,.5);margin-bottom:4px}}
 .wd-icon{{font-size:16px;margin-bottom:4px}}
 .wd-high{{font-size:12px;font-weight:700;color:#e6edf3}}
 .wd-low{{font-size:10px;color:rgba(255,255,255,.35)}}
@@ -283,8 +354,8 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 <div class="weather-ov">
   <div class="weather-ov-icon">🌤</div>
   <div>
-    <div class="weather-ov-title">{w.get('overview','날씨 정보 준비 중')}</div>
-    <div class="weather-ov-sub">{w.get('detail','')}</div>
+    <div class="weather-ov-title">{weather.get('overview','')}</div>
+    <div class="weather-ov-sub">{weather.get('detail','')}</div>
   </div>
 </div>
 <div class="cities">{cities_html}</div>
@@ -302,22 +373,18 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 <div class="sec-hd"><span class="sec-hd-label">Zodiac</span><div class="sec-hd-line"></div><span class="sec-tag tag-zod">띠별 · 별자리 운세</span></div>
 <div class="fortune-img">
   <img src="images/zodiac.jpg" alt="띠별 운세"
-       onerror="this.parentElement.innerHTML='<div class=\\'fortune-empty\\'>🔮 오늘의 운세 이미지 준비 중<br><small>images/zodiac.jpg</small></div>'">
+       onerror="this.parentElement.innerHTML='<div class=\\'fortune-empty\\'>🔮 오늘의 운세 이미지 준비 중<br><small>images/zodiac.jpg 업로드 해주세요</small></div>'">
 </div>
 <div class="fortune-img">
   <img src="images/horoscope.jpg" alt="별자리 운세"
-       onerror="this.parentElement.innerHTML='<div class=\\'fortune-empty\\'>⭐ 별자리 운세 이미지 준비 중<br><small>images/horoscope.jpg</small></div>'">
+       onerror="this.parentElement.innerHTML='<div class=\\'fortune-empty\\'>⭐ 별자리 운세 이미지 준비 중<br><small>images/horoscope.jpg 업로드 해주세요</small></div>'">
 </div>
-
-<!-- YOUTUBE -->
-<div class="sec-hd"><span class="sec-hd-label">YouTube</span><div class="sec-hd-line"></div><span class="sec-tag tag-yt">🦎 게코 Shorts</span></div>
-<div class="mtabs">{yt_tabs}</div>
-{yt_panels}
+{yt_section}
 
 <!-- FOOTER -->
 <div class="footer">
   🦎 Crested Gecko Community · {date_info['date_ko']}<br>
-  매일 아침 자동 생성 · 크레스티드 게코 집사들의 하루 시작
+  날씨 제공: OpenWeatherMap · 뉴스 제공: 네이버 검색
 </div>
 
 </div>
@@ -326,14 +393,11 @@ function showVid(i) {{
   document.querySelectorAll('.mtab').forEach((t,idx) => t.classList.toggle('active', idx===i));
   document.querySelectorAll('.mpanel').forEach((p,idx) => p.classList.toggle('active', idx===i));
 }}
-// 쿼리스트링 ?d=YYYYMMDD 를 읽어서 날짜 표시 (캐시 무력화용)
 (function() {{
-  const p = new URLSearchParams(location.search);
-  const d = p.get('d');
+  const d = new URLSearchParams(location.search).get('d');
   if (d && d.length === 8) {{
-    const y = d.slice(0,4), m = d.slice(4,6), day = d.slice(6,8);
     const el = document.querySelector('.hd-date-big');
-    if (el) el.textContent = day;
+    if (el) el.textContent = d.slice(6,8);
   }}
 }})();
 </script>
@@ -342,7 +406,7 @@ function showVid(i) {{
 
 
 # ───────────────────────────────────────
-# 4. GitHub 푸시
+# 5. GitHub 푸시
 # ───────────────────────────────────────
 def push(html, date_str):
     with open("index.html", "w", encoding="utf-8") as f:
@@ -363,11 +427,10 @@ def push(html, date_str):
 # Main
 # ───────────────────────────────────────
 def main():
-    kst     = datetime.timezone(datetime.timedelta(hours=9))
-    now     = datetime.datetime.now(kst)
-    days_ko = ["월요일","화요일","수요일","목요일","금요일","토요일","일요일"]
-    days_en = ["MON","TUE","WED","THU","FRI","SAT","SUN"]
-    months  = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]
+    kst    = datetime.timezone(datetime.timedelta(hours=9))
+    now    = datetime.datetime.now(kst)
+    months = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]
+    days_en= ["MON","TUE","WED","THU","FRI","SAT","SUN"]
 
     date_info = {
         "date_ko":  now.strftime("%Y년 %m월 %d일"),
@@ -379,18 +442,22 @@ def main():
     print(f"\n🦎 브리핑 생성 시작: {date_info['date_ko']}")
     print("=" * 50)
 
-    print("\n📺 [1/3] YouTube Shorts 검색 중...")
-    videos = get_youtube_shorts()
+    print("\n☁️  [1/4] 날씨 수집...")
+    weather = get_weather()
 
-    print("\n🔍 [2/3] 날씨·뉴스 수집 중...")
-    data = collect_news_weather(date_info)
+    print("\n📰 [2/4] 뉴스 수집...")
+    eco, pol = get_news()
 
-    print("\n🏗️  [3/3] HTML 조립 및 푸시 중...")
-    html = build_html(data, videos, date_info)
+    print("\n📺 [3/4] 영상 로드...")
+    videos = get_videos()
+
+    print("\n🏗️  [4/4] HTML 조립 및 푸시...")
+    html = build_html(weather, eco, pol, videos, date_info)
     push(html, date_info["date_str"])
 
     print("\n" + "=" * 50)
-    print(f"🎉 완료! https://크레노트.com?d={now.strftime('%Y%m%d')}")
+    print(f"🎉 완료! Claude API 비용: $0")
+    print(f"   URL: https://크레노트.com?d={now.strftime('%Y%m%d')}")
 
 if __name__ == "__main__":
     main()
