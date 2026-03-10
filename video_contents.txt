@@ -2,6 +2,6 @@
 # 형식: YouTube URL | 제목
 # 줄 앞에 #을 붙이면 주석으로 무시됩니다
 
-https://youtube.com/shorts/5d59Oqt9J1c?si=abxRRQjV1VUIrULB | 어...?
-https://youtube.com/shorts/uZ7pTwkHtDo?si=ccxgelUeNx1YvPZQ | 뽀뽀해주는 미친도마뱀
-https://youtube.com/shorts/Lyb74tLGcKE?si=a4Aw47Y8kKI5psDV | 집사한테 대드는 도마뱀
+https://youtube.com/shorts/FO56gXlL5YU?si=EPD5pVkoAivMwqWu | 내가 꼬리 만지지 말랬지?
+https://youtube.com/shorts/BuyyfPfCkv8?si=O9xEnV4yeJKcPGss | 도마뱀이 예의바르면 생기는 일
+https://youtube.com/shorts/ej5mxu5Omgg?si=NcwrcMMbCdUmCF7b | 자기가 롭이어 토끼인 줄 모르면 생기는 일
