@@ -210,6 +210,22 @@ def get_videos():
 # ───────────────────────────────────────
 def build_html(weather, eco, pol, videos, date_info):
 
+    # 서울 미세먼지 변수 미리 계산
+    _spm = weather.get("seoul_pm", {})
+    s_pm10      = _spm.get("pm10", "—")
+    s_pm25      = _spm.get("pm25", "—")
+    s_pm10_g    = _spm.get("pm10_grade", "")
+    s_pm25_g    = _spm.get("pm25_grade", "")
+    s_pm10_lbl  = s_pm10_g.split()[-1] if s_pm10_g else ""
+    s_pm25_lbl  = s_pm25_g.split()[-1] if s_pm25_g else ""
+    def _dust_color(g):
+        if g.startswith("😊"): return "#4fc3f7"
+        if g.startswith("🙂"): return "#81c784"
+        if g.startswith("😷"): return "#ffb74d"
+        return "#e57373"
+    s_pm10_col  = _dust_color(s_pm10_g) if s_pm10_g else "#aaa"
+    s_pm25_col  = _dust_color(s_pm25_g) if s_pm25_g else "#aaa"
+
     # 도시 날씨
     cities_html = ""
     for c in weather.get("cities", []):
@@ -394,13 +410,13 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
     <div class="ov-dust-title">서울 대기질</div>
     <div class="ov-dust-row">
       <span class="ov-dust-lbl">미세</span>
-      <span class="ov-dust-val">{weather.get('seoul_pm',{{}}).get('pm10','—')}㎍</span>
-      <span class="ov-dust-grade" style="color:{{'#4fc3f7' if weather.get('seoul_pm',{{}}).get('pm10_grade','').startswith('😊') else '#81c784' if weather.get('seoul_pm',{{}}).get('pm10_grade','').startswith('🙂') else '#ffb74d' if weather.get('seoul_pm',{{}}).get('pm10_grade','').startswith('😷') else '#e57373'}}">{weather.get('seoul_pm',{{}}).get('pm10_grade','').split()[-1] if weather.get('seoul_pm',{{}}).get('pm10_grade') else ''}</span>
+      <span class="ov-dust-val">{s_pm10}㎍</span>
+      <span class="ov-dust-grade" style="color:{s_pm10_col}">{s_pm10_lbl}</span>
     </div>
     <div class="ov-dust-row">
       <span class="ov-dust-lbl">초미세</span>
-      <span class="ov-dust-val">{weather.get('seoul_pm',{{}}).get('pm25','—')}㎍</span>
-      <span class="ov-dust-grade" style="color:{{'#4fc3f7' if weather.get('seoul_pm',{{}}).get('pm25_grade','').startswith('😊') else '#81c784' if weather.get('seoul_pm',{{}}).get('pm25_grade','').startswith('🙂') else '#ffb74d' if weather.get('seoul_pm',{{}}).get('pm25_grade','').startswith('😷') else '#e57373'}}">{weather.get('seoul_pm',{{}}).get('pm25_grade','').split()[-1] if weather.get('seoul_pm',{{}}).get('pm25_grade') else ''}</span>
+      <span class="ov-dust-val">{s_pm25}㎍</span>
+      <span class="ov-dust-grade" style="color:{s_pm25_col}">{s_pm25_lbl}</span>
     </div>
   </div>
 </div>
