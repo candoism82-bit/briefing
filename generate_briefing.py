@@ -26,14 +26,31 @@ DAYS_KO = ["월","화","수","목","금","토","일"]
 # 1. OpenWeatherMap 날씨
 # ───────────────────────────────────────
 CITIES = [
-    ("Seoul","KR"),("Busan","KR"),("Daegu","KR"),
-    ("Daejeon","KR"),("Gwangju","KR"),("Jeju","KR"),
+    ("Seoul",   "KR", 37.5665, 126.9780),
+    ("Busan",   "KR", 35.1796, 129.0756),
+    ("Daegu",   "KR", 35.8714, 128.6014),
+    ("Daejeon", "KR", 36.3504, 127.3845),
+    ("Gwangju", "KR", 35.1595, 126.8526),
+    ("Jeju",    "KR", 33.4996, 126.5312),
 ]
+
+# 미세먼지 등급
+def dust_grade(pm, thresholds, labels):
+    for t, l in zip(thresholds, labels):
+        if pm <= t:
+            return l
+    return labels[-1]
+
+def pm10_grade(v):
+    return dust_grade(v, [30,80,150], ["😊 좋음","🙂 보통","😷 나쁨","🚨 매우나쁨"])
+
+def pm25_grade(v):
+    return dust_grade(v, [15,35,75], ["😊 좋음","🙂 보통","😷 나쁨","🚨 매우나쁨"])
 
 def get_weather():
     print("  날씨 수집 중...")
     cities_data = []
-    for city, country in CITIES:
+    for city, country, lat, lon in CITIES:
         try:
             r = requests.get(
                 "https://api.openweathermap.org/data/2.5/weather",
@@ -42,11 +59,24 @@ def get_weather():
                 timeout=10
             ).json()
             icon = OWM_ICON.get(r["weather"][0]["icon"], "🌤")
+            # 미세먼지
+            ar = requests.get(
+                "http://api.openweathermap.org/data/2.5/air_pollution",
+                params={"lat": lat, "lon": lon, "appid": OPENWEATHER_KEY},
+                timeout=10
+            ).json()
+            comp = ar["list"][0]["components"]
+            pm10 = round(comp.get("pm10", 0))
+            pm25 = round(comp.get("pm2_5", 0))
             cities_data.append({
                 "name": CITY_KO.get(city, city),
                 "high": f"{round(r['main']['temp_max'])}°",
                 "low":  f"{round(r['main']['temp_min'])}°",
                 "icon": icon,
+                "pm10": pm10,
+                "pm25": pm25,
+                "pm10_grade": pm10_grade(pm10),
+                "pm25_grade": pm25_grade(pm25),
             })
         except Exception as e:
             print(f"  ⚠️ {city} 날씨 오류: {e}")
@@ -177,11 +207,15 @@ def build_html(weather, eco, pol, videos, date_info):
     # 도시 날씨
     cities_html = ""
     for c in weather.get("cities", []):
+        pm10_g = c.get('pm10_grade','')
+        pm25_g = c.get('pm25_grade','')
         cities_html += f"""<div class="city-card">
           <div class="city-name">{c['name']}</div>
+          <div class="city-icon">{c['icon']}</div>
           <div class="city-high">{c['high']}</div>
           <div class="city-low">{c['low']}</div>
-          <div class="city-icon">{c['icon']}</div>
+          <div class="city-dust"><span class="dust-label">미세</span><span class="dust-val">{c.get('pm10','—')}㎍</span><span class="dust-grade">{pm10_g.split()[1] if pm10_g else ''}</span></div>
+          <div class="city-dust"><span class="dust-label">초미세</span><span class="dust-val">{c.get('pm25','—')}㎍</span><span class="dust-grade">{pm25_g.split()[1] if pm25_g else ''}</span></div>
         </div>"""
 
     # 주간예보
@@ -224,7 +258,7 @@ def build_html(weather, eco, pol, videos, date_info):
     if videos:
         yt_section = f"""
 <!-- YOUTUBE -->
-<div class="sec-hd"><span class="sec-hd-label">YouTube</span><div class="sec-hd-line"></div><span class="sec-tag tag-yt">🦎 게코 Shorts</span></div>
+<div class="sec-hd"><span class="sec-hd-label">YouTube</span><div class="sec-hd-line"></div><span class="sec-tag tag-yt">🎬 오늘의 Shorts</span></div>
 <div class="mtabs">{yt_tabs}</div>
 {yt_panels}"""
 
@@ -288,6 +322,10 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 .city-high{{font-size:16px;font-weight:700;color:#e6edf3}}
 .city-low{{font-size:11px;color:rgba(255,255,255,.4);margin-bottom:2px}}
 .city-icon{{font-size:18px}}
+.city-dust{{display:flex;align-items:center;gap:3px;margin-top:3px;font-size:9px;line-height:1.3}}
+.dust-label{{color:rgba(255,255,255,.35);min-width:26px}}
+.dust-val{{color:rgba(255,255,255,.7);font-family:'DM Mono',monospace}}
+.dust-grade{{color:#58a6ff;font-size:8px}}
 .weekly{{display:flex;justify-content:space-between;padding:0 16px 20px;gap:4px;overflow-x:auto}}
 .week-day{{flex:1;min-width:44px;text-align:center;background:#0d1117;border-radius:6px;padding:8px 4px;border:1px solid rgba(255,255,255,.06)}}
 .wd-label{{font-size:9px;color:rgba(255,255,255,.5);margin-bottom:4px}}
@@ -331,6 +369,39 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
   </div>
 </div>
 
+<!-- WEATHER -->
+<div class="sec-hd"><span class="sec-hd-label">Weather</span><div class="sec-hd-line"></div><span class="sec-tag tag-weather">전국 날씨</span></div>
+<div class="weather-ov">
+  <div class="weather-ov-icon">🌤</div>
+  <div>
+    <div class="weather-ov-title">{weather.get('overview','')}</div>
+    <div class="weather-ov-sub">{weather.get('detail','')}</div>
+  </div>
+</div>
+<div class="cities">{cities_html}</div>
+<div class="weekly">{weekly_html}</div>
+
+{yt_section}
+
+<!-- ZODIAC (이미지) -->
+<div class="sec-hd"><span class="sec-hd-label">Zodiac</span><div class="sec-hd-line"></div><span class="sec-tag tag-zod">띠별 · 별자리 운세</span></div>
+<div class="fortune-img">
+  <img src="images/zodiac.jpg?v={date_info['date_str'].replace('-','')}" alt="띠별 운세"
+       onerror="this.parentElement.innerHTML='<div class=\\'fortune-empty\\'>🔮 오늘의 운세 이미지 준비 중<br><small>images/zodiac.jpg 업로드 해주세요</small></div>'">
+</div>
+<div class="fortune-img">
+  <img src="images/horoscope.jpg?v={date_info['date_str'].replace('-','')}" alt="별자리 운세"
+       onerror="this.parentElement.innerHTML='<div class=\\'fortune-empty\\'>⭐ 별자리 운세 이미지 준비 중<br><small>images/horoscope.jpg 업로드 해주세요</small></div>'">
+</div>
+
+<!-- ECONOMY NEWS -->
+<div class="sec-hd"><span class="sec-hd-label">Economy</span><div class="sec-hd-line"></div><span class="sec-tag tag-eco">경제·주식</span></div>
+<div class="news-list">{news_items(eco)}</div>
+
+<!-- POLITICS NEWS -->
+<div class="sec-hd"><span class="sec-hd-label">Politics</span><div class="sec-hd-line"></div><span class="sec-tag tag-pol">정치·사회</span></div>
+<div class="news-list">{news_items(pol)}</div>
+
 <!-- PROMO -->
 <div class="promo-banner"><div class="promo-inner">
   <div class="promo-badge-row"><span class="promo-badge">🌿 함께해요</span><div class="promo-badge-line"></div><span class="promo-badge">파충류 권익 보호</span></div>
@@ -348,38 +419,6 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
   </div>
   <div class="promo-img-wrap"><img src="images/littlelives.png" alt="작은생명공존연합"></div>
 </div></div>
-
-<!-- WEATHER -->
-<div class="sec-hd"><span class="sec-hd-label">Weather</span><div class="sec-hd-line"></div><span class="sec-tag tag-weather">전국 날씨</span></div>
-<div class="weather-ov">
-  <div class="weather-ov-icon">🌤</div>
-  <div>
-    <div class="weather-ov-title">{weather.get('overview','')}</div>
-    <div class="weather-ov-sub">{weather.get('detail','')}</div>
-  </div>
-</div>
-<div class="cities">{cities_html}</div>
-<div class="weekly">{weekly_html}</div>
-
-<!-- ECONOMY NEWS -->
-<div class="sec-hd"><span class="sec-hd-label">Economy</span><div class="sec-hd-line"></div><span class="sec-tag tag-eco">경제·주식</span></div>
-<div class="news-list">{news_items(eco)}</div>
-
-<!-- POLITICS NEWS -->
-<div class="sec-hd"><span class="sec-hd-label">Politics</span><div class="sec-hd-line"></div><span class="sec-tag tag-pol">정치·사회</span></div>
-<div class="news-list">{news_items(pol)}</div>
-
-<!-- ZODIAC (이미지) -->
-<div class="sec-hd"><span class="sec-hd-label">Zodiac</span><div class="sec-hd-line"></div><span class="sec-tag tag-zod">띠별 · 별자리 운세</span></div>
-<div class="fortune-img">
-  <img src="images/zodiac.jpg?v={date_info['date_str'].replace('-','')}" alt="띠별 운세"
-       onerror="this.parentElement.innerHTML='<div class=\\'fortune-empty\\'>🔮 오늘의 운세 이미지 준비 중<br><small>images/zodiac.jpg 업로드 해주세요</small></div>'">
-</div>
-<div class="fortune-img">
-  <img src="images/horoscope.jpg?v={date_info['date_str'].replace('-','')}" alt="별자리 운세"
-       onerror="this.parentElement.innerHTML='<div class=\\'fortune-empty\\'>⭐ 별자리 운세 이미지 준비 중<br><small>images/horoscope.jpg 업로드 해주세요</small></div>'">
-</div>
-{yt_section}
 
 <!-- FOOTER -->
 <div class="footer">
