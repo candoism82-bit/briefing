@@ -116,8 +116,14 @@ def get_weather():
 
     # 오늘 서울 날씨 요약
     overview = f"서울 현재 {cities_data[0]['low']}~{cities_data[0]['high']}" if cities_data else "날씨 준비 중"
+    seoul_pm = {
+        "pm10":       cities_data[0].get("pm10",  0) if cities_data else 0,
+        "pm25":       cities_data[0].get("pm25",  0) if cities_data else 0,
+        "pm10_grade": cities_data[0].get("pm10_grade", "") if cities_data else "",
+        "pm25_grade": cities_data[0].get("pm25_grade", "") if cities_data else "",
+    }
     print(f"  → 도시 {len(cities_data)}개, 주간예보 {len(weekly)}일")
-    return {"overview": overview, "detail": "OpenWeatherMap 제공", "cities": cities_data, "weekly": weekly}
+    return {"overview": overview, "detail": "OpenWeatherMap 제공", "cities": cities_data, "weekly": weekly, "seoul_pm": seoul_pm}
 
 
 # ───────────────────────────────────────
@@ -316,6 +322,13 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 .weather-ov-icon{{font-size:36px}}
 .weather-ov-title{{font-size:15px;font-weight:700;color:#e6edf3;margin-bottom:3px}}
 .weather-ov-sub{{font-size:11px;color:rgba(255,255,255,.45);line-height:1.6}}
+.ov-dust-box{{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 12px;min-width:110px}}
+.ov-dust-title{{font-size:10px;color:rgba(255,255,255,.4);margin-bottom:5px;text-align:center;letter-spacing:.5px}}
+.ov-dust-row{{display:flex;align-items:center;gap:4px;margin-bottom:3px;font-size:11px}}
+.ov-dust-row:last-child{{margin-bottom:0}}
+.ov-dust-lbl{{color:rgba(255,255,255,.4);min-width:30px;font-size:10px}}
+.ov-dust-val{{color:rgba(255,255,255,.75);font-family:'DM Mono',monospace;font-size:11px}}
+.ov-dust-grade{{font-size:10px;font-weight:700;margin-left:2px}}
 .cities{{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 16px 16px}}
 .city-card{{background:#0d1117;border-radius:8px;padding:10px 8px;text-align:center;border:1px solid rgba(255,255,255,.06)}}
 .city-name{{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;color:#58a6ff;margin-bottom:4px}}
@@ -373,9 +386,22 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 <div class="sec-hd"><span class="sec-hd-label">Weather</span><div class="sec-hd-line"></div><span class="sec-tag tag-weather">전국 날씨</span></div>
 <div class="weather-ov">
   <div class="weather-ov-icon">🌤</div>
-  <div>
+  <div style="flex:1">
     <div class="weather-ov-title">{weather.get('overview','')}</div>
     <div class="weather-ov-sub">{weather.get('detail','')}</div>
+  </div>
+  <div class="ov-dust-box">
+    <div class="ov-dust-title">서울 대기질</div>
+    <div class="ov-dust-row">
+      <span class="ov-dust-lbl">미세</span>
+      <span class="ov-dust-val">{weather.get('seoul_pm',{{}}).get('pm10','—')}㎍</span>
+      <span class="ov-dust-grade" style="color:{{'#4fc3f7' if weather.get('seoul_pm',{{}}).get('pm10_grade','').startswith('😊') else '#81c784' if weather.get('seoul_pm',{{}}).get('pm10_grade','').startswith('🙂') else '#ffb74d' if weather.get('seoul_pm',{{}}).get('pm10_grade','').startswith('😷') else '#e57373'}}">{weather.get('seoul_pm',{{}}).get('pm10_grade','').split()[-1] if weather.get('seoul_pm',{{}}).get('pm10_grade') else ''}</span>
+    </div>
+    <div class="ov-dust-row">
+      <span class="ov-dust-lbl">초미세</span>
+      <span class="ov-dust-val">{weather.get('seoul_pm',{{}}).get('pm25','—')}㎍</span>
+      <span class="ov-dust-grade" style="color:{{'#4fc3f7' if weather.get('seoul_pm',{{}}).get('pm25_grade','').startswith('😊') else '#81c784' if weather.get('seoul_pm',{{}}).get('pm25_grade','').startswith('🙂') else '#ffb74d' if weather.get('seoul_pm',{{}}).get('pm25_grade','').startswith('😷') else '#e57373'}}">{weather.get('seoul_pm',{{}}).get('pm25_grade','').split()[-1] if weather.get('seoul_pm',{{}}).get('pm25_grade') else ''}</span>
+    </div>
   </div>
 </div>
 <div class="cities">{cities_html}</div>
