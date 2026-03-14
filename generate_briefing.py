@@ -382,6 +382,14 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 .footer-credit img{{width:32px;height:32px;border-radius:50%;object-fit:cover}}
 .footer-credit span{{font-size:12px;color:rgba(255,255,255,.5)}}
 </style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CX33EQ71Y2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){{dataLayer.push(arguments);}}
+  gtag('js', new Date());
+  gtag('config', 'G-CX33EQ71Y2');
+</script>
 </head>
 <body>
 <div class="card">
