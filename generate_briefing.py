@@ -292,6 +292,11 @@ def build_html(weather, eco, pol, videos, date_info):
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
+<meta property="og:type" content="website">
+<meta property="og:title" content="크레오늘 아침 브리핑 · {date_info['date_ko']}">
+<meta property="og:description" content="날씨 · 미세먼지 · 경제 · 정치 · 운세 · 유튜브 한 번에!">
+<meta property="og:image" content="https://크레오늘.com/images/og_banner.png">
+<meta property="og:url" content="https://크레오늘.com">
 <title>크레오늘 · CreOnel 아침 브리핑 · {date_info['date_ko']}</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Noto+Serif+KR:wght@900&family=DM+Mono&display=swap" rel="stylesheet">
 <style>
