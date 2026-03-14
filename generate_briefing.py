@@ -378,6 +378,9 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 .mpanel.active{{display:block}}
 .yt-link{{display:block;margin-top:8px;font-size:11px;color:#58a6ff;text-decoration:none;line-height:1.5}}
 .footer{{padding:20px;text-align:center;border-top:1px solid rgba(255,255,255,.06);font-size:10px;color:rgba(255,255,255,.25);line-height:1.8}}
+.footer-credit{{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;opacity:.5}}
+.footer-credit img{{width:22px;height:22px;border-radius:50%;object-fit:cover}}
+.footer-credit span{{font-size:10px;color:rgba(255,255,255,.4)}}
 </style>
 </head>
 <body>
@@ -466,6 +469,10 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 <div class="footer">
   🦎 Crested Gecko Community · {date_info['date_ko']}<br>
   날씨 제공: OpenWeatherMap · 뉴스 제공: 네이버 검색
+  <div class="footer-credit">
+    <img src="images/kkug_cre.png" alt="kkug.cre">
+    <span>Designed by @kkug.cre</span>
+  </div>
 </div>
 
 </div>
