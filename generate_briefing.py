@@ -292,16 +292,16 @@ def build_html(weather, eco, pol, videos, date_info):
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>🦎 크레스티드 게코 커뮤니티 아침 브리핑 · {date_info['date_ko']}</title>
+<title>크레오늘 · CreOnel 아침 브리핑 · {date_info['date_ko']}</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Noto+Serif+KR:wght@900&family=DM+Mono&display=swap" rel="stylesheet">
 <style>
 *{{box-sizing:border-box;margin:0;padding:0}}
 body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;display:flex;justify-content:center;padding:16px}}
 .card{{width:100%;max-width:480px;border-radius:16px;overflow:hidden;background:#161b22;box-shadow:0 8px 32px rgba(0,0,0,.5)}}
 .hd{{background:linear-gradient(135deg,#1a2332,#0d1f35);padding:24px;position:relative;overflow:hidden}}
-.hd::before{{content:'🦎';position:absolute;right:-10px;top:-10px;font-size:80px;opacity:.08}}
-.hd-eyebrow{{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;color:#58a6ff;text-transform:uppercase;margin-bottom:4px}}
-.hd-title{{font-family:'Noto Serif KR',serif;font-size:26px;font-weight:900;color:#fff}}
+.hd-logo{{width:52px;height:52px;object-fit:contain;border-radius:10px}}
+.hd-eyebrow{{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;color:#7ec8a0;text-transform:uppercase;margin-bottom:2px}}
+.hd-title{{font-family:'Noto Serif KR',serif;font-size:24px;font-weight:900;color:#fff;line-height:1.2}}
 .hd-sub{{font-size:11px;color:rgba(255,255,255,.4);margin-top:4px}}
 .hd-inner{{display:flex;justify-content:space-between;align-items:flex-start}}
 .hd-date-big{{font-family:'DM Mono',monospace;font-size:52px;font-weight:700;color:#58a6ff;line-height:1}}
@@ -389,10 +389,13 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 <!-- HEADER -->
 <div class="hd">
   <div class="hd-inner">
-    <div>
-      <div class="hd-eyebrow">Crested Gecko Community</div>
-      <div class="hd-title">🦎 아침 브리핑</div>
-      <div class="hd-sub">날씨 · 경제 · 정치 · 운세 · 유튜브</div>
+    <div style="display:flex;align-items:center;gap:14px">
+      <img class="hd-logo" src="images/cretoday_logo.png" alt="크레오늘">
+      <div>
+        <div class="hd-eyebrow">CreOnel · 크레오늘</div>
+        <div class="hd-title">아침 브리핑</div>
+        <div class="hd-sub">날씨 · 경제 · 정치 · 운세 · 유튜브</div>
+      </div>
     </div>
     <div>
       <div class="hd-date-big">{date_info['day_num']}</div>
