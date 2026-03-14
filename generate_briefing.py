@@ -538,7 +538,7 @@ def main():
 
     print("\n" + "=" * 50)
     print(f"🎉 완료! Claude API 비용: $0")
-    print(f"   URL: https://크레노트.com?d={now.strftime('%Y%m%d')}")
+    print(f"   URL: https://크레오늘.com?d={now.strftime('%Y%m%d')}")
 
 if __name__ == "__main__":
     main()
