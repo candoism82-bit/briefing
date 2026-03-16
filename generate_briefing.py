@@ -166,66 +166,72 @@ def get_news():
 
 
 # ───────────────────────────────────────
-# 3. YouTube 인기 Shorts TOP 3 (자동)
+# 3. YouTube 인기 Shorts TOP 3 (카테고리별 검색)
 # ───────────────────────────────────────
-import re as _re, xml.etree.ElementTree as _ET
+import re as _re
 
 def _parse_duration(iso):
-    """ISO 8601 duration → 초"""
     m = _re.match(r'PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?', iso)
     if not m: return 9999
-    h = int(m.group(1) or 0)
-    mn = int(m.group(2) or 0)
-    s = int(m.group(3) or 0)
-    return h*3600 + mn*60 + s
+    return int(m.group(1) or 0)*3600 + int(m.group(2) or 0)*60 + int(m.group(3) or 0)
 
 def get_videos():
     videos = []
     if not YOUTUBE_API_KEY:
         print("  ⚠️ YOUTUBE_API_KEY 없음 — 영상 섹션 생략")
         return videos
+
+    # 검색 키워드 (카테고리별 1개씩 가져옴)
+    QUERIES = [
+        "크레스티드게코 shorts",
+        "동물 귀여운 shorts",
+        "웃긴영상 shorts",
+    ]
+
     try:
-        print("  ▶ YouTube 인기 Shorts 조회 중...")
-        # 한국 인기 동영상 최대 50개 조회
-        r = requests.get(
-            "https://www.googleapis.com/youtube/v3/videos",
-            params={
-                "part":       "snippet,contentDetails",
-                "chart":      "mostPopular",
-                "regionCode": "KR",
-                "maxResults": 50,
-                "key":        YOUTUBE_API_KEY,
-            },
-            timeout=15
-        ).json()
+        print("  ▶ YouTube Shorts 검색 중...")
+        seen = set()
+        for query in QUERIES:
+            # 검색 API로 최신 인기 Shorts 탐색
+            sr = requests.get(
+                "https://www.googleapis.com/youtube/v3/search",
+                params={
+                    "part":        "snippet",
+                    "q":           query,
+                    "type":        "video",
+                    "videoDuration": "short",   # 4분 이하
+                    "regionCode":  "KR",
+                    "relevanceLanguage": "ko",
+                    "order":       "viewCount",
+                    "maxResults":  5,
+                    "key":         YOUTUBE_API_KEY,
+                },
+                timeout=15
+            ).json()
 
-        for item in r.get("items", []):
-            vid      = item["id"]
-            title    = item["snippet"]["title"]
-            duration = _parse_duration(item["contentDetails"]["duration"])
-            # Shorts = 60초 이하
-            if duration <= 60:
-                videos.append({
-                    "title": title,
-                    "embed": f"https://www.youtube.com/embed/{vid}",
-                    "url":   f"https://www.youtube.com/shorts/{vid}",
-                })
-            if len(videos) >= 3:
-                break
-
-        # Shorts 3개 못찾으면 일반 인기영상으로 채움
-        if len(videos) < 3:
-            for item in r.get("items", []):
-                vid   = item["id"]
+            for item in sr.get("items", []):
+                vid   = item["id"].get("videoId", "")
                 title = item["snippet"]["title"]
-                if not any(v["embed"].endswith(vid) for v in videos):
+                if not vid or vid in seen:
+                    continue
+                # contentDetails로 실제 duration 확인 (60초 이하 = Shorts)
+                dr = requests.get(
+                    "https://www.googleapis.com/youtube/v3/videos",
+                    params={"part": "contentDetails", "id": vid, "key": YOUTUBE_API_KEY},
+                    timeout=10
+                ).json()
+                items_d = dr.get("items", [])
+                if not items_d:
+                    continue
+                duration = _parse_duration(items_d[0]["contentDetails"]["duration"])
+                if duration <= 60:
+                    seen.add(vid)
                     videos.append({
                         "title": title,
                         "embed": f"https://www.youtube.com/embed/{vid}",
-                        "url":   f"https://www.youtube.com/watch?v={vid}",
+                        "url":   f"https://www.youtube.com/shorts/{vid}",
                     })
-                if len(videos) >= 3:
-                    break
+                    break  # 카테고리당 1개만
 
         print(f"  → 영상 {len(videos)}개 로드")
     except Exception as e:
