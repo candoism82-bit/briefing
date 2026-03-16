@@ -183,9 +183,9 @@ def get_videos():
 
     # 검색 키워드 (카테고리별 1개씩 가져옴)
     QUERIES = [
-        "크레스티드게코 shorts",
-        "동물 귀여운 shorts",
-        "웃긴영상 shorts",
+        "크레스티드게코 shorts -동요 -어린이 -kids",
+        "동물 귀여운 shorts -동요 -어린이 -kids",
+        "웃긴영상 shorts -동요 -어린이 -kids",
     ]
 
     try:
@@ -199,20 +199,28 @@ def get_videos():
                     "part":        "snippet",
                     "q":           query,
                     "type":        "video",
-                    "videoDuration": "short",   # 4분 이하
+                    "videoDuration": "short",
                     "regionCode":  "KR",
                     "relevanceLanguage": "ko",
                     "order":       "viewCount",
+                    "safeSearch":  "moderate",
                     "maxResults":  5,
                     "key":         YOUTUBE_API_KEY,
                 },
                 timeout=15
             ).json()
 
+            # 제목에 어린이/동요 관련 키워드 있으면 제외
+            EXCLUDE_WORDS = ["동요", "어린이", "kids", "유아", "아기", "nursery",
+                             "children", "동화", "뽀로로", "핑크퐁", "baby shark"]
+
             for item in sr.get("items", []):
                 vid   = item["id"].get("videoId", "")
                 title = item["snippet"]["title"]
                 if not vid or vid in seen:
+                    continue
+                # 제목 필터링
+                if any(w.lower() in title.lower() for w in EXCLUDE_WORDS):
                     continue
                 # contentDetails로 실제 duration 확인 (60초 이하 = Shorts)
                 dr = requests.get(
