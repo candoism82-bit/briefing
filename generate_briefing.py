@@ -5,6 +5,7 @@ import os, re, json, datetime, subprocess, requests
 OPENWEATHER_KEY    = os.environ["OPENWEATHER_API_KEY"]
 NAVER_CLIENT_ID    = os.environ["NAVER_CLIENT_ID"]
 NAVER_CLIENT_SECRET= os.environ["NAVER_CLIENT_SECRET"]
+YOUTUBE_API_KEY    = os.environ.get("YOUTUBE_API_KEY", "")
 
 # ───────────────────────────────────────
 # 날씨 아이콘 / 도시명 변환
@@ -165,43 +166,70 @@ def get_news():
 
 
 # ───────────────────────────────────────
-# 3. video_contents.txt 읽기
+# 3. YouTube 인기 Shorts TOP 3 (자동)
 # ───────────────────────────────────────
+import re as _re, xml.etree.ElementTree as _ET
+
+def _parse_duration(iso):
+    """ISO 8601 duration → 초"""
+    m = _re.match(r'PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?', iso)
+    if not m: return 9999
+    h = int(m.group(1) or 0)
+    mn = int(m.group(2) or 0)
+    s = int(m.group(3) or 0)
+    return h*3600 + mn*60 + s
+
 def get_videos():
     videos = []
+    if not YOUTUBE_API_KEY:
+        print("  ⚠️ YOUTUBE_API_KEY 없음 — 영상 섹션 생략")
+        return videos
     try:
-        with open("video_contents.txt", "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if not line or line.startswith("#"):
-                    continue
-                parts = [p.strip() for p in line.split("|")]
-                url   = parts[0] if len(parts) > 0 else ""
-                title = parts[1] if len(parts) > 1 else "게코 영상"
-                if not url:
-                    continue
-                # YouTube Shorts → embed URL 변환
-                vid = ""
-                m = re.search(r"shorts/([A-Za-z0-9_-]+)", url)
-                if m:
-                    vid = m.group(1)
-                else:
-                    m = re.search(r"[?&]v=([A-Za-z0-9_-]+)", url)
-                    if m:
-                        vid = m.group(1)
-                    else:
-                        m = re.search(r"youtu\.be/([A-Za-z0-9_-]+)", url)
-                        if m:
-                            vid = m.group(1)
-                if vid:
+        print("  ▶ YouTube 인기 Shorts 조회 중...")
+        # 한국 인기 동영상 최대 50개 조회
+        r = requests.get(
+            "https://www.googleapis.com/youtube/v3/videos",
+            params={
+                "part":       "snippet,contentDetails",
+                "chart":      "mostPopular",
+                "regionCode": "KR",
+                "maxResults": 50,
+                "key":        YOUTUBE_API_KEY,
+            },
+            timeout=15
+        ).json()
+
+        for item in r.get("items", []):
+            vid      = item["id"]
+            title    = item["snippet"]["title"]
+            duration = _parse_duration(item["contentDetails"]["duration"])
+            # Shorts = 60초 이하
+            if duration <= 60:
+                videos.append({
+                    "title": title,
+                    "embed": f"https://www.youtube.com/embed/{vid}",
+                    "url":   f"https://www.youtube.com/shorts/{vid}",
+                })
+            if len(videos) >= 3:
+                break
+
+        # Shorts 3개 못찾으면 일반 인기영상으로 채움
+        if len(videos) < 3:
+            for item in r.get("items", []):
+                vid   = item["id"]
+                title = item["snippet"]["title"]
+                if not any(v["embed"].endswith(vid) for v in videos):
                     videos.append({
-                        "title":   title,
-                        "embed":   f"https://www.youtube.com/embed/{vid}",
-                        "url":     url,
+                        "title": title,
+                        "embed": f"https://www.youtube.com/embed/{vid}",
+                        "url":   f"https://www.youtube.com/watch?v={vid}",
                     })
+                if len(videos) >= 3:
+                    break
+
         print(f"  → 영상 {len(videos)}개 로드")
-    except FileNotFoundError:
-        print("  ⚠️ video_contents.txt 없음 — 영상 섹션 생략")
+    except Exception as e:
+        print(f"  ⚠️ YouTube API 오류: {e}")
     return videos
 
 
