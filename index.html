@@ -35,7 +35,7 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 .adpanel{display:none;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;overflow:hidden}
 .adpanel.active{display:block}
 .adpanel a{display:block;text-decoration:none;color:inherit}
-.adpanel img{width:100%;display:block;max-height:200px;object-fit:cover}
+.adpanel img{width:100%;display:block;object-fit:contain}
 .adpanel-text{padding:12px 14px;font-size:12px;color:rgba(255,255,255,.7);line-height:1.8;white-space:pre-line}
 .adpanel-link{display:inline-block;margin:0 14px 12px;font-size:11px;color:#58a6ff}
 .sec-hd{display:flex;align-items:center;gap:8px;padding:20px 20px 12px}
@@ -130,33 +130,40 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 <div class="weather-ov">
   <div class="weather-ov-icon">🌤</div>
   <div style="flex:1">
-    <div class="weather-ov-title">서울 현재 12°~12°</div>
+    <div class="weather-ov-title">서울 현재 14°~15°</div>
     <div class="weather-ov-sub">OpenWeatherMap 제공</div>
   </div>
   <div class="ov-dust-box">
     <div class="ov-dust-title">서울 대기질</div>
     <div class="ov-dust-row">
       <span class="ov-dust-lbl">미세</span>
-      <span class="ov-dust-val">6㎍</span>
-      <span class="ov-dust-grade" style="color:#4fc3f7">좋음</span>
+      <span class="ov-dust-val">79㎍</span>
+      <span class="ov-dust-grade" style="color:#81c784">보통</span>
     </div>
     <div class="ov-dust-row">
       <span class="ov-dust-lbl">초미세</span>
-      <span class="ov-dust-val">5㎍</span>
-      <span class="ov-dust-grade" style="color:#4fc3f7">좋음</span>
+      <span class="ov-dust-val">70㎍</span>
+      <span class="ov-dust-grade" style="color:#ffb74d">나쁨</span>
     </div>
   </div>
 </div>
 <div class="cities"><div class="city-card">
+          <div class="city-name">서울</div>
+          <div class="city-icon">🌫️</div>
+          <div class="city-high">15°</div>
+          <div class="city-low">14°</div>
+          <div class="city-dust"><span class="dust-label">미세</span><span class="dust-val">79㎍</span><span class="dust-grade">보통</span></div>
+          <div class="city-dust"><span class="dust-label">초미세</span><span class="dust-val">70㎍</span><span class="dust-grade">나쁨</span></div>
+        </div><div class="city-card">
           <div class="city-name">부산</div>
           <div class="city-icon">⛅</div>
-          <div class="city-high">12°</div>
-          <div class="city-low">12°</div>
+          <div class="city-high">14°</div>
+          <div class="city-low">14°</div>
           <div class="city-dust"><span class="dust-label">미세</span><span class="dust-val">6㎍</span><span class="dust-grade">좋음</span></div>
           <div class="city-dust"><span class="dust-label">초미세</span><span class="dust-val">5㎍</span><span class="dust-grade">좋음</span></div>
         </div><div class="city-card">
           <div class="city-name">대구</div>
-          <div class="city-icon">☀️</div>
+          <div class="city-icon">⛅</div>
           <div class="city-high">17°</div>
           <div class="city-low">17°</div>
           <div class="city-dust"><span class="dust-label">미세</span><span class="dust-val">10㎍</span><span class="dust-grade">좋음</span></div>
@@ -177,7 +184,7 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
           <div class="city-dust"><span class="dust-label">초미세</span><span class="dust-val">49㎍</span><span class="dust-grade">나쁨</span></div>
         </div><div class="city-card">
           <div class="city-name">제주</div>
-          <div class="city-icon">🌥</div>
+          <div class="city-icon">☁️</div>
           <div class="city-high">14°</div>
           <div class="city-low">14°</div>
           <div class="city-dust"><span class="dust-label">미세</span><span class="dust-val">22㎍</span><span class="dust-grade">좋음</span></div>
@@ -186,7 +193,7 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 <div class="weekly"><div class="week-day">
           <div class="wd-label">03/17(화)</div>
           <div class="wd-icon">☀️</div>
-          <div class="wd-high">13°</div>
+          <div class="wd-high">14°</div>
           <div class="wd-low">7°</div>
         </div><div class="week-day">
           <div class="wd-label">03/18(수)</div>
@@ -249,30 +256,30 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 <div class="news-list"><div class="news-item">
           <span class="news-num">01</span>
           <div class="news-body">
+            <a class="news-title" href="https://biz.sbs.co.kr/article_hub/20000297991?division=NAVER" target="_blank">[이슈체크] '롤러코스피' 장세 속 투자처는…역시나 '기승전-반도체'인...</a>
+            <div class="news-summary">■ 경제현장 오늘 '이슈체크' - 채상욱 커넥티드그라운드 대표 작년부터 코스피가 엄청난 상승세를 보이면서 투자가 제2의 직업인 양 주식에 몰입하는 투자자들이 적지 않습니다. 일부 대학생들은 학자금 대출로 주식... </div>
+            <div class="news-source">▸ biz.sbs.co.kr</div>
+          </div>
+        </div><div class="news-item">
+          <span class="news-num">02</span>
+          <div class="news-body">
             <a class="news-title" href="https://weekly.cnbnews.com/news/article.html?no=208983" target="_blank">미래에셋자산운용, ‘TIGER ETF’ 테마형 순자산 25조원 돌파…1년 만에...</a>
             <div class="news-summary">사진=미래에셋자산운용 미래에셋자산운용의 ‘TIGER ETF’가 국내 주식 테마형 ETF 시장에서 순자산... 6%를 기록해 코스피 상승률(116.25%) 대비 64.35%p 높은 성과를 나타냈다. 미래에셋자산운용 관계자는 “TIGER... </div>
             <div class="news-source">▸ weekly.cnbnews.com</div>
           </div>
         </div><div class="news-item">
-          <span class="news-num">02</span>
+          <span class="news-num">03</span>
           <div class="news-body">
             <a class="news-title" href="https://www.ajunews.com/view/20260317145818600" target="_blank">3월 IPO 성적표…코스닥은 '따블' 가는데 코스피는 '잠잠'</a>
             <div class="news-summary">아주경제=고혜영 기자 kohy0321@ajunews.com 3월 공모주 시장이 회복세를 보이는 가운데 코스닥과 유가증권시장간의 온도 차는 확연하다. 코스피의 새내기 상장사들은 주춤한 가운데, 코스닥 상장사들은 훨훨 날고 있다.... </div>
             <div class="news-source">▸ ajunews.com</div>
           </div>
         </div><div class="news-item">
-          <span class="news-num">03</span>
+          <span class="news-num">04</span>
           <div class="news-body">
             <a class="news-title" href="https://www.meconomynews.com/news/articleView.html?idxno=128937" target="_blank">대형 증권사 신용공여 확대 속 키움증권 집중도 높아... 개인 '빚투 창구...</a>
             <div class="news-summary">당국, 신용 리스크 예의주시 [시장경제=전지윤 기자] 키움증권 본사가 위치한 서울 여의도 TP타워 머릿돌.... 코스피 지수는 지난 한 해 동안 75.63%(2,399.49포인트(p)→4,214.17p) 상승했다. 올해 들어서도 지난 16일(코스피... </div>
             <div class="news-source">▸ meconomynews.com</div>
-          </div>
-        </div><div class="news-item">
-          <span class="news-num">04</span>
-          <div class="news-body">
-            <a class="news-title" href="http://www.hansbiz.co.kr/news/articleView.html?idxno=824904" target="_blank">게임업계, 상법개정안 대응 본격화</a>
-            <div class="news-summary">제미나이 생성 이미지 | 서울=한스경제 석주원 기자 | 정부와 여당이 주도적으로 추진해 온 기업 지배구조... 반면 국내 게임사의 주가는 코스피 불장 속에서도 상승장에 편승하지 못한 소외주로 꼽히는 만큼 이번... </div>
-            <div class="news-source">▸ hansbiz.co.kr</div>
           </div>
         </div></div>
 
@@ -281,30 +288,30 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 <div class="news-list"><div class="news-item">
           <span class="news-num">01</span>
           <div class="news-body">
+            <a class="news-title" href="https://www.nocutnews.co.kr/news/6486416?utm_source=naver&utm_medium=article&utm_campaign=20260317044454" target="_blank">12.3 그날 계엄 해제에 실패했다면…정보라 신작 '처단'</a>
+            <div class="news-summary">공식 기록이나 뉴스 기사만으로는 다 담을 수 없는 공포, 상처, 그리고 그 밤을 견뎌야 했던 사람들의 감정을 문학으로 복원하겠다는 뜻이다. '처단'이 주목하는 것은 계엄이라는 거대한 정치 사건 자체보다, 그 몇 시간... </div>
+            <div class="news-source">▸ nocutnews.co.kr</div>
+          </div>
+        </div><div class="news-item">
+          <span class="news-num">02</span>
+          <div class="news-body">
             <a class="news-title" href="https://news.sbs.co.kr/news/endPage.do?news_id=N1008480652&plink=ORI&cooper=NAVER" target="_blank">[인터뷰] 홍익표 &quot;권한과 책임은 비례…뉴미디어, 영향력 만큼 책임의식...</a>
             <div class="news-summary">언론사하고 정치권력이나 여당이 충돌하고 싸우는 모습은 바람직하지 않다고 생각합니다. 어떠한 형태든 언론의 자유와 그다음에 언론 활동에 언론 활동을 자유로운 언론 활동을 보호하는 것은 민주주의 사회의... </div>
             <div class="news-source">▸ news.sbs.co.kr</div>
           </div>
         </div><div class="news-item">
-          <span class="news-num">02</span>
+          <span class="news-num">03</span>
           <div class="news-body">
             <a class="news-title" href="http://www.mdilbo.com/detail/0kIA7d/753914" target="_blank">[무잇슈] 李대통령 “분산 없다” 발언 속 특별시장 후보들 공기관 이전...</a>
             <div class="news-summary">정치·경제·문화·사회 등 광주 전남 지역에서 화제 된 주요 뉴스를 클리핑하여 제공합니다. ◆요약 및 포인트는? 기사링크: https://www.mdilbo.com/detail/0kIA7d/753881 ▶ 민주당이 전남광주통합특별시장 예비경선... </div>
             <div class="news-source">▸ mdilbo.com</div>
           </div>
         </div><div class="news-item">
-          <span class="news-num">03</span>
+          <span class="news-num">04</span>
           <div class="news-body">
             <a class="news-title" href="https://www.businesspost.co.kr/BP?command=article_view&num=433139" target="_blank">한은 총재 이창용 임기만료 한 달 앞으로, '3고' 위기 속 차기 인선 안갯...</a>
             <div class="news-summary">&lt;연합뉴스&gt; 이에 국제금융시장 경험을 갖춘 인물부터 이재명 정부의 성장 기조와 호흡을 맞출 수 있는... 국제결제은행이 현지시각 16일 이사회를 열고 엘렌 레이 런던비즈니스스쿨 교수를 후임으로 임명하면서 신... </div>
             <div class="news-source">▸ businesspost.co.kr</div>
-          </div>
-        </div><div class="news-item">
-          <span class="news-num">04</span>
-          <div class="news-body">
-            <a class="news-title" href="https://nownews.seoul.co.kr/news/newsView.php?id=20260317601015&wlog_tag3=naver" target="_blank">“여성 100명 몰카 찍고도 ‘무죄급 판결’”…머스크까지 분노, ‘추방...</a>
-            <div class="news-summary">17일(현지시간) 데일리메일 호주판과 뉴스닷컴 등 현지 언론에 따르면 베트남 국적 유학생 바오 푹 까오(23)는 여성 화장실에서 몰래 촬영한 혐의로 유죄를 인정했다. 법원은 징역형 대신 사회교정명령을 선고했다. 정식... </div>
-            <div class="news-source">▸ nownews.seoul.co.kr</div>
           </div>
         </div></div>
 
