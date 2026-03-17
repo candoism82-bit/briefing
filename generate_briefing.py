@@ -248,9 +248,33 @@ def get_videos():
 
 
 # ───────────────────────────────────────
-# 4. HTML 조립
+# 4. ads_contents.txt 읽기
 # ───────────────────────────────────────
-def build_html(weather, eco, pol, videos, date_info):
+def get_ads():
+    ads = []
+    try:
+        with open("ads_contents.txt", "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith("#"):
+                    continue
+                parts = [p.strip() for p in line.split("|")]
+                if len(parts) < 2:
+                    continue
+                text  = parts[0] if len(parts) > 0 else ""
+                url   = parts[1] if len(parts) > 1 else "#"
+                image = parts[2] if len(parts) > 2 else ""
+                if text:
+                    ads.append({"text": text.replace("\\n", "\n"), "url": url, "image": image})
+        print(f"  → 광고 {len(ads)}개 로드")
+    except FileNotFoundError:
+        print("  ⚠️ ads_contents.txt 없음 — 광고 섹션 생략")
+    return ads
+
+
+# 5. HTML 조립
+# ───────────────────────────────────────
+def build_html(weather, eco, pol, videos, ads, date_info):
 
     # 서울 미세먼지 변수 미리 계산
     _spm = weather.get("seoul_pm", {})
@@ -267,6 +291,28 @@ def build_html(weather, eco, pol, videos, date_info):
         return "#e57373"
     s_pm10_col  = _dust_color(s_pm10_g) if s_pm10_g else "#aaa"
     s_pm25_col  = _dust_color(s_pm25_g) if s_pm25_g else "#aaa"
+
+    # 광고 탭 섹션 생성
+    ads_section = ""
+    if ads:
+        tabs = ""
+        panels = ""
+        for i, ad in enumerate(ads):
+            active = "active" if i == 0 else ""
+            tabs += f'<div class="adtab {active}" onclick="showAd({i})">{i+1}</div>'
+            img_html = f'<img src="{ad["image"]}" alt="">' if ad["image"] else ""
+            link_html = f'<a class="adpanel-link" href="{ad["url"]}" target="_blank">🔗 {ad["url"]}</a>' if ad["url"] and ad["url"] != "#" else ""
+            panels += f'''<div class="adpanel {active}">
+  <a href="{ad['url']}" target="_blank">{img_html}</a>
+  <div class="adpanel-text">{ad['text']}</div>
+  {link_html}
+</div>'''
+        ads_section = f'''<!-- ADS -->
+<div class="sec-hd"><span class="sec-hd-label">Community</span><div class="sec-hd-line"></div><span class="sec-tag tag-yt">📌 커뮤니티 소식</span></div>
+<div class="ads-wrap">
+  <div class="ads-tabs">{tabs}</div>
+  {panels}
+</div>'''
 
     # 도시 날씨
     cities_html = ""
@@ -355,25 +401,17 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 .hd-inner{{display:flex;justify-content:space-between;align-items:flex-start}}
 .hd-date-big{{font-family:'DM Mono',monospace;font-size:52px;font-weight:700;color:#58a6ff;line-height:1}}
 .hd-date-small{{font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,.4);text-align:right;letter-spacing:.08em}}
-.promo-banner{{background:linear-gradient(160deg,#0a1f08,#1a3a15,#0e2a0a);border-bottom:3px solid #3d7a3a}}
-.promo-inner{{padding:22px 24px 20px}}
-.promo-badge-row{{display:flex;align-items:center;gap:8px;margin-bottom:14px}}
-.promo-badge{{background:#3d7a3a;color:#c8f0a0;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border-radius:20px}}
-.promo-badge-line{{flex:1;height:1px;background:rgba(255,255,255,.08)}}
-.promo-copy{{text-align:center;margin-bottom:18px}}
-.promo-heart{{font-size:28px;display:block;margin-bottom:8px;animation:hb 1.8s ease infinite}}
-@keyframes hb{{0%,100%{{transform:scale(1)}}30%{{transform:scale(1.18)}}70%{{transform:scale(1.1)}}}}
-.promo-main-text{{font-size:18px;font-weight:900;color:#fff;line-height:1.55;margin-bottom:6px}}
-.promo-main-text em{{color:#7ae050;font-style:normal}}
-.promo-sub-text{{font-size:13px;color:rgba(255,255,255,.65);line-height:1.7}}
-.promo-sub-text strong{{color:#a8e060}}
-.promo-org-box{{background:rgba(106,173,69,.12);border:1px solid rgba(106,173,69,.35);border-radius:8px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px}}
-.promo-org-name{{font-size:16px;font-weight:900;color:#fff;display:flex;align-items:center;gap:6px;margin-bottom:4px}}
-.promo-org-url{{font-size:11px;color:#6aad45;text-decoration:none;border-bottom:1px solid rgba(106,173,69,.4)}}
-.promo-qr-emoji{{font-size:36px}}
-.promo-qr-label{{font-size:9px;color:rgba(255,255,255,.3);display:block;text-align:center}}
-.promo-img-wrap{{border-radius:8px;overflow:hidden;border:1px solid rgba(106,173,69,.25)}}
-.promo-img-wrap img{{width:100%;display:block}}
+.ads-wrap{{padding:0 16px 16px}}
+.ads-tabs{{display:flex;gap:6px;margin-bottom:10px;overflow-x:auto;scrollbar-width:none}}
+.ads-tabs::-webkit-scrollbar{{display:none}}
+.adtab{{flex-shrink:0;padding:5px 12px;border-radius:20px;font-size:11px;background:rgba(255,255,255,.07);color:rgba(255,255,255,.5);cursor:pointer;border:1px solid rgba(255,255,255,.1);transition:.2s}}
+.adtab.active{{background:#3d7a3a;color:#c8f0a0;border-color:#3d7a3a}}
+.adpanel{{display:none;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;overflow:hidden}}
+.adpanel.active{{display:block}}
+.adpanel a{{display:block;text-decoration:none;color:inherit}}
+.adpanel img{{width:100%;display:block;max-height:200px;object-fit:cover}}
+.adpanel-text{{padding:12px 14px;font-size:12px;color:rgba(255,255,255,.7);line-height:1.8;white-space:pre-line}}
+.adpanel-link{{display:inline-block;margin:0 14px 12px;font-size:11px;color:#58a6ff}}
 .sec-hd{{display:flex;align-items:center;gap:8px;padding:20px 20px 12px}}
 .sec-hd-label{{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;color:#58a6ff;text-transform:uppercase}}
 .sec-hd-line{{flex:1;height:1px;background:rgba(255,255,255,.08)}}
@@ -507,23 +545,7 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 <div class="sec-hd"><span class="sec-hd-label">Politics</span><div class="sec-hd-line"></div><span class="sec-tag tag-pol">정치·사회</span></div>
 <div class="news-list">{news_items(pol)}</div>
 
-<!-- PROMO -->
-<div class="promo-banner"><div class="promo-inner">
-  <div class="promo-badge-row"><span class="promo-badge">🌿 함께해요</span><div class="promo-badge-line"></div><span class="promo-badge">파충류 권익 보호</span></div>
-  <div class="promo-copy">
-    <span class="promo-heart">♥️</span>
-    <div class="promo-main-text">생명을 소중히 여기신다면<br><em>함께해 주시고 힘을 실어주세요</em></div>
-    <div class="promo-sub-text"><strong>집사님들이 관심을 가져주셔야!</strong><br>더 좋은 환경에서 키우실 수 있습니다! 🦎</div>
-  </div>
-  <div class="promo-org-box">
-    <div>
-      <div class="promo-org-name">사단법인 작은생명공존연합 <span>‼️</span></div>
-      <a class="promo-org-url" href="https://www.littlelives.or.kr/" target="_blank">🔗 www.littlelives.or.kr</a>
-    </div>
-    <div><div class="promo-qr-emoji">🐊</div><span class="promo-qr-label">Little Lives</span></div>
-  </div>
-  <div class="promo-img-wrap"><img src="images/littlelives.png" alt="작은생명공존연합"></div>
-</div></div>
+{ads_section}
 
 <!-- FOOTER -->
 <div class="footer">
@@ -540,6 +562,10 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 function showVid(i) {{
   document.querySelectorAll('.mtab').forEach((t,idx) => t.classList.toggle('active', idx===i));
   document.querySelectorAll('.mpanel').forEach((p,idx) => p.classList.toggle('active', idx===i));
+}}
+function showAd(i) {{
+  document.querySelectorAll('.adtab').forEach((t,idx) => t.classList.toggle('active', idx===i));
+  document.querySelectorAll('.adpanel').forEach((p,idx) => p.classList.toggle('active', idx===i));
 }}
 (function() {{
   const d = new URLSearchParams(location.search).get('d');
@@ -596,11 +622,12 @@ def main():
     print("\n📰 [2/4] 뉴스 수집...")
     eco, pol = get_news()
 
-    print("\n📺 [3/4] 영상 로드...")
+    print("\n📺 [3/4] 영상 및 광고 로드...")
     videos = get_videos()
+    ads    = get_ads()
 
     print("\n🏗️  [4/4] HTML 조립 및 푸시...")
-    html = build_html(weather, eco, pol, videos, date_info)
+    html = build_html(weather, eco, pol, videos, ads, date_info)
     push(html, date_info["date_str"])
 
     print("\n" + "=" * 50)

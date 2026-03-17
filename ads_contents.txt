@@ -1,0 +1,8 @@
+# 커뮤니티 소식 파일
+# 형식: 소개 텍스트 | URL | images/이미지파일명
+# \n 으로 줄바꿈 가능
+# #으로 시작하면 주석
+
+다휘신 미니쇼!\n사랑방 + 보보수입개체 + 블랙&화이트\n📍 다이노마켓 방배본점\n🕑 3월 21일(토) 14시 ~ 18시 | https://naver.me/xeF2HZtc | images/dinomarket.png
+파충류 동반자\n📍 김대중 컨벤션센터 (광주 서구)\n🗓 3월 21일(토) ~ 3월 22일(일) | https://naver.me/5Bwjzogx | images/padong.jpg
+사단법인 작은생명공존연합(작생공)은 파충류를 비롯한 작은 생명들의 권익 보호를 위해 노력하고 있습니다.\n집사님들의 많은 관심과 참여를 부탁드려요! 🦎 | https://www.littlelives.or.kr/ | images/littlelives.png
