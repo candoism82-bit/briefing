@@ -315,7 +315,11 @@ def build_html(weather, eco, pol, videos, ads, date_info):
         ads_section = f'''<!-- ADS -->
 <div class="sec-hd"><span class="sec-hd-label">Community</span><div class="sec-hd-line"></div><span class="sec-tag tag-yt">📌 커뮤니티 소식</span></div>
 <div class="ads-wrap">
-  <div class="ads-tabs">{tabs}</div>
+  <div class="ads-nav">
+    <div class="ads-arrow" id="ad-prev" onclick="moveAd(-1)">&#8249;</div>
+    <div class="ads-tabs">{tabs}</div>
+    <div class="ads-arrow" id="ad-next" onclick="moveAd(1)">&#8250;</div>
+  </div>
   {panels}
 </div>'''
 
@@ -407,8 +411,12 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 .hd-date-big{{font-family:'DM Mono',monospace;font-size:52px;font-weight:700;color:#58a6ff;line-height:1}}
 .hd-date-small{{font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,.4);text-align:right;letter-spacing:.08em}}
 .ads-wrap{{padding:0 16px 16px}}
-.ads-tabs{{display:flex;gap:6px;margin-bottom:10px;overflow-x:auto;scrollbar-width:none}}
+.ads-nav{{display:flex;align-items:center;gap:8px;margin-bottom:10px}}
+.ads-tabs{{display:flex;gap:6px;flex:1;overflow-x:auto;scrollbar-width:none}}
 .ads-tabs::-webkit-scrollbar{{display:none}}
+.ads-arrow{{width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:rgba(255,255,255,.3);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;user-select:none}}
+.ads-arrow.on{{color:#c8f0a0;border-color:#3d7a3a;background:rgba(61,122,58,.2)}}
+.ads-arrow.on:hover{{background:rgba(61,122,58,.4)}}
 .adtab{{flex-shrink:0;padding:5px 12px;border-radius:20px;font-size:11px;background:rgba(255,255,255,.07);color:rgba(255,255,255,.5);cursor:pointer;border:1px solid rgba(255,255,255,.1);transition:.2s}}
 .adtab.active{{background:#3d7a3a;color:#c8f0a0;border-color:#3d7a3a}}
 .adpanel{{display:none;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;overflow:hidden}}
@@ -570,9 +578,30 @@ function showVid(i) {{
   document.querySelectorAll('.mpanel').forEach((p,idx) => p.classList.toggle('active', idx===i));
 }}
 function showAd(i) {{
-  document.querySelectorAll('.adtab').forEach((t,idx) => t.classList.toggle('active', idx===i));
-  document.querySelectorAll('.adpanel').forEach((p,idx) => p.classList.toggle('active', idx===i));
+  const tabs   = document.querySelectorAll('.adtab');
+  const panels = document.querySelectorAll('.adpanel');
+  const total  = tabs.length;
+  if (i < 0 || i >= total) return;
+  tabs.forEach((t,idx)   => t.classList.toggle('active', idx===i));
+  panels.forEach((p,idx) => p.classList.toggle('active', idx===i));
+  // 화살표 활성화
+  const prev = document.getElementById('ad-prev');
+  const next = document.getElementById('ad-next');
+  if (prev) prev.classList.toggle('on', i > 0);
+  if (next) next.classList.toggle('on', i < total - 1);
 }}
+function moveAd(dir) {{
+  const tabs = document.querySelectorAll('.adtab');
+  let cur = 0;
+  tabs.forEach((t,i) => {{ if (t.classList.contains('active')) cur = i; }});
+  showAd(cur + dir);
+}}
+// 초기 화살표 상태 설정
+(function() {{
+  const tabs = document.querySelectorAll('.adtab');
+  const next = document.getElementById('ad-next');
+  if (next && tabs.length > 1) next.classList.add('on');
+}})();
 (function() {{
   const d = new URLSearchParams(location.search).get('d');
   if (d && d.length === 8) {{
