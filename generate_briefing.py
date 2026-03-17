@@ -302,9 +302,14 @@ def build_html(weather, eco, pol, videos, ads, date_info):
             tabs += f'<div class="adtab {active}" onclick="showAd({i})">{i+1}</div>'
             img_html = f'<img src="{ad["image"]}" alt="">' if ad["image"] else ""
             link_html = f'<a class="adpanel-link" href="{ad["url"]}" target="_blank">🔗 {ad["url"]}</a>' if ad["url"] and ad["url"] != "#" else ""
+            # 첫 줄 = 제목, 나머지 = 본문
+            lines = ad["text"].split("\n", 1)
+            title_html = f'<div class="adpanel-title">{lines[0]}</div>'
+            body_html  = f'<div class="adpanel-text">{lines[1]}</div>' if len(lines) > 1 else ""
             panels += f'''<div class="adpanel {active}">
   <a href="{ad['url']}" target="_blank">{img_html}</a>
-  <div class="adpanel-text">{ad['text']}</div>
+  {title_html}
+  {body_html}
   {link_html}
 </div>'''
         ads_section = f'''<!-- ADS -->
@@ -410,7 +415,8 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 .adpanel.active{{display:block}}
 .adpanel a{{display:block;text-decoration:none;color:inherit}}
 .adpanel img{{width:100%;display:block;object-fit:contain}}
-.adpanel-text{{padding:12px 14px;font-size:12px;color:rgba(255,255,255,.7);line-height:1.8;white-space:pre-line}}
+.adpanel-title{{padding:12px 14px 4px;font-size:15px;font-weight:900;color:#fff;line-height:1.4}}
+.adpanel-text{{padding:0 14px 10px;font-size:12px;color:rgba(255,255,255,.7);line-height:1.8;white-space:pre-line}}
 .adpanel-link{{display:inline-block;margin:0 14px 12px;font-size:11px;color:#58a6ff}}
 .sec-hd{{display:flex;align-items:center;gap:8px;padding:20px 20px 12px}}
 .sec-hd-label{{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;color:#58a6ff;text-transform:uppercase}}
