@@ -409,7 +409,7 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 .adpanel{{display:none;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;overflow:hidden}}
 .adpanel.active{{display:block}}
 .adpanel a{{display:block;text-decoration:none;color:inherit}}
-.adpanel img{{width:100%;display:block;max-height:200px;object-fit:cover}}
+.adpanel img{{width:100%;display:block;object-fit:contain}}
 .adpanel-text{{padding:12px 14px;font-size:12px;color:rgba(255,255,255,.7);line-height:1.8;white-space:pre-line}}
 .adpanel-link{{display:inline-block;margin:0 14px 12px;font-size:11px;color:#58a6ff}}
 .sec-hd{{display:flex;align-items:center;gap:8px;padding:20px 20px 12px}}
