@@ -28,8 +28,12 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 .hd-date-big{font-family:'DM Mono',monospace;font-size:52px;font-weight:700;color:#58a6ff;line-height:1}
 .hd-date-small{font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,.4);text-align:right;letter-spacing:.08em}
 .ads-wrap{padding:0 16px 16px}
-.ads-tabs{display:flex;gap:6px;margin-bottom:10px;overflow-x:auto;scrollbar-width:none}
+.ads-nav{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.ads-tabs{display:flex;gap:6px;flex:1;overflow-x:auto;scrollbar-width:none}
 .ads-tabs::-webkit-scrollbar{display:none}
+.ads-arrow{width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:rgba(255,255,255,.3);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;user-select:none}
+.ads-arrow.on{color:#c8f0a0;border-color:#3d7a3a;background:rgba(61,122,58,.2)}
+.ads-arrow.on:hover{background:rgba(61,122,58,.4)}
 .adtab{flex-shrink:0;padding:5px 12px;border-radius:20px;font-size:11px;background:rgba(255,255,255,.07);color:rgba(255,255,255,.5);cursor:pointer;border:1px solid rgba(255,255,255,.1);transition:.2s}
 .adtab.active{background:#3d7a3a;color:#c8f0a0;border-color:#3d7a3a}
 .adpanel{display:none;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;overflow:hidden}
@@ -131,7 +135,7 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 <div class="weather-ov">
   <div class="weather-ov-icon">🌤</div>
   <div style="flex:1">
-    <div class="weather-ov-title">서울 현재 14°~14°</div>
+    <div class="weather-ov-title">서울 현재 14°~15°</div>
     <div class="weather-ov-sub">OpenWeatherMap 제공</div>
   </div>
   <div class="ov-dust-box">
@@ -150,21 +154,21 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 </div>
 <div class="cities"><div class="city-card">
           <div class="city-name">서울</div>
-          <div class="city-icon">☀️</div>
-          <div class="city-high">14°</div>
+          <div class="city-icon">🌫️</div>
+          <div class="city-high">15°</div>
           <div class="city-low">14°</div>
           <div class="city-dust"><span class="dust-label">미세</span><span class="dust-val">79㎍</span><span class="dust-grade">보통</span></div>
           <div class="city-dust"><span class="dust-label">초미세</span><span class="dust-val">70㎍</span><span class="dust-grade">나쁨</span></div>
         </div><div class="city-card">
           <div class="city-name">부산</div>
           <div class="city-icon">⛅</div>
-          <div class="city-high">12°</div>
-          <div class="city-low">12°</div>
+          <div class="city-high">14°</div>
+          <div class="city-low">14°</div>
           <div class="city-dust"><span class="dust-label">미세</span><span class="dust-val">6㎍</span><span class="dust-grade">좋음</span></div>
           <div class="city-dust"><span class="dust-label">초미세</span><span class="dust-val">5㎍</span><span class="dust-grade">좋음</span></div>
         </div><div class="city-card">
           <div class="city-name">대구</div>
-          <div class="city-icon">☀️</div>
+          <div class="city-icon">⛅</div>
           <div class="city-high">17°</div>
           <div class="city-low">17°</div>
           <div class="city-dust"><span class="dust-label">미세</span><span class="dust-val">10㎍</span><span class="dust-grade">좋음</span></div>
@@ -185,7 +189,7 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
           <div class="city-dust"><span class="dust-label">초미세</span><span class="dust-val">49㎍</span><span class="dust-grade">나쁨</span></div>
         </div><div class="city-card">
           <div class="city-name">제주</div>
-          <div class="city-icon">🌥</div>
+          <div class="city-icon">☁️</div>
           <div class="city-high">14°</div>
           <div class="city-low">14°</div>
           <div class="city-dust"><span class="dust-label">미세</span><span class="dust-val">22㎍</span><span class="dust-grade">좋음</span></div>
@@ -194,7 +198,7 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 <div class="weekly"><div class="week-day">
           <div class="wd-label">03/17(화)</div>
           <div class="wd-icon">☀️</div>
-          <div class="wd-high">13°</div>
+          <div class="wd-high">14°</div>
           <div class="wd-low">7°</div>
         </div><div class="week-day">
           <div class="wd-label">03/18(수)</div>
@@ -257,30 +261,30 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 <div class="news-list"><div class="news-item">
           <span class="news-num">01</span>
           <div class="news-body">
+            <a class="news-title" href="https://www.bizhankook.com/bk/article/31763" target="_blank">&quot;투자 안 해요&quot; 코스피 6000 열풍 비켜간 청년들의 선택</a>
+            <div class="news-summary">#“주식 왜 안 하세요?” 투자 종용하는 사회 국내 주식거래 활동계좌 수가 1억 개를 돌파하며 ‘전 국민 투자 시대’가 본격화됐다. 한국경제신문이 조사한 결과에 따르면, 증권 3사(미래에셋·KB·NH)의 신규 개설 계좌... </div>
+            <div class="news-source">▸ bizhankook.com</div>
+          </div>
+        </div><div class="news-item">
+          <span class="news-num">02</span>
+          <div class="news-body">
             <a class="news-title" href="https://biz.sbs.co.kr/article_hub/20000297991?division=NAVER" target="_blank">[이슈체크] '롤러코스피' 장세 속 투자처는…역시나 '기승전-반도체'인...</a>
             <div class="news-summary">■ 경제현장 오늘 '이슈체크' - 채상욱 커넥티드그라운드 대표 작년부터 코스피가 엄청난 상승세를 보이면서 투자가 제2의 직업인 양 주식에 몰입하는 투자자들이 적지 않습니다. 일부 대학생들은 학자금 대출로 주식... </div>
             <div class="news-source">▸ biz.sbs.co.kr</div>
           </div>
         </div><div class="news-item">
-          <span class="news-num">02</span>
+          <span class="news-num">03</span>
           <div class="news-body">
             <a class="news-title" href="https://weekly.cnbnews.com/news/article.html?no=208983" target="_blank">미래에셋자산운용, ‘TIGER ETF’ 테마형 순자산 25조원 돌파…1년 만에...</a>
             <div class="news-summary">사진=미래에셋자산운용 미래에셋자산운용의 ‘TIGER ETF’가 국내 주식 테마형 ETF 시장에서 순자산... 6%를 기록해 코스피 상승률(116.25%) 대비 64.35%p 높은 성과를 나타냈다. 미래에셋자산운용 관계자는 “TIGER... </div>
             <div class="news-source">▸ weekly.cnbnews.com</div>
           </div>
         </div><div class="news-item">
-          <span class="news-num">03</span>
+          <span class="news-num">04</span>
           <div class="news-body">
             <a class="news-title" href="https://www.ajunews.com/view/20260317145818600" target="_blank">3월 IPO 성적표…코스닥은 '따블' 가는데 코스피는 '잠잠'</a>
             <div class="news-summary">아주경제=고혜영 기자 kohy0321@ajunews.com 3월 공모주 시장이 회복세를 보이는 가운데 코스닥과 유가증권시장간의 온도 차는 확연하다. 코스피의 새내기 상장사들은 주춤한 가운데, 코스닥 상장사들은 훨훨 날고 있다.... </div>
             <div class="news-source">▸ ajunews.com</div>
-          </div>
-        </div><div class="news-item">
-          <span class="news-num">04</span>
-          <div class="news-body">
-            <a class="news-title" href="https://www.meconomynews.com/news/articleView.html?idxno=128937" target="_blank">대형 증권사 신용공여 확대 속 키움증권 집중도 높아... 개인 '빚투 창구...</a>
-            <div class="news-summary">당국, 신용 리스크 예의주시 [시장경제=전지윤 기자] 키움증권 본사가 위치한 서울 여의도 TP타워 머릿돌.... 코스피 지수는 지난 한 해 동안 75.63%(2,399.49포인트(p)→4,214.17p) 상승했다. 올해 들어서도 지난 16일(코스피... </div>
-            <div class="news-source">▸ meconomynews.com</div>
           </div>
         </div></div>
 
@@ -289,9 +293,9 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 <div class="news-list"><div class="news-item">
           <span class="news-num">01</span>
           <div class="news-body">
-            <a class="news-title" href="https://www.polinews.co.kr/news/articleView.html?idxno=725686" target="_blank">[2026 폴리뉴스·상생과통일포럼 제26차 금융포럼] 이억원 금융위원장, ...</a>
-            <div class="news-summary">정책과 감독, 시장이 함께 참여하는 구조 속에서 자금 흐름 재편과 금융 역할 변화가 실제 현장에서 어떻게 구현될지에 따라 금융의 성장 기여와 사회적 역할이 가늠될 것이라는 평가다. &lt;폴리뉴스&gt;는 지난 2000년 정치전문... </div>
-            <div class="news-source">▸ polinews.co.kr</div>
+            <a class="news-title" href="https://www.nocutnews.co.kr/news/6486434?utm_source=naver&utm_medium=article&utm_campaign=20260317045354" target="_blank">李 &quot;부처 추가 분산 없다&quot;…세종시 &quot;행정수도 완성 의지 환영&quot;</a>
+            <div class="news-summary">저해하는 정치공세에 대한 실질적이고 분명한 경고&quot;라고 평가했다. 지방선거를 앞두고 세종 소재 부처를 다른 지역으로 가져가겠다는 공약이 이어지면서 지역 사회의 불안이 커져 왔다. 광주전남 통합시장 후보 등 일부... </div>
+            <div class="news-source">▸ nocutnews.co.kr</div>
           </div>
         </div><div class="news-item">
           <span class="news-num">02</span>
@@ -303,23 +307,27 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
         </div><div class="news-item">
           <span class="news-num">03</span>
           <div class="news-body">
-            <a class="news-title" href="http://www.queen.co.kr/news/articleView.html?idxno=453224" target="_blank">기초연금, 저소득 노인 두텁게·부부 감액 단계적 폐지…12년 만의 제도...</a>
-            <div class="news-summary">이재명 대통령은 최근 사회관계망서비스를 통해 &quot;빈곤 노인을 줄이려면 기초연금을 바꿔야 한다&quot;며... 나아가 감액 제도 자체를 폐지하는 방안도 논의되고 있으며, 정치권에서는 3년에 걸쳐 완전 폐지를 추진하는... </div>
-            <div class="news-source">▸ queen.co.kr</div>
+            <a class="news-title" href="https://www.polinews.co.kr/news/articleView.html?idxno=725686" target="_blank">[2026 폴리뉴스·상생과통일포럼 제26차 금융포럼] 이억원 금융위원장, ...</a>
+            <div class="news-summary">정책과 감독, 시장이 함께 참여하는 구조 속에서 자금 흐름 재편과 금융 역할 변화가 실제 현장에서 어떻게 구현될지에 따라 금융의 성장 기여와 사회적 역할이 가늠될 것이라는 평가다. &lt;폴리뉴스&gt;는 지난 2000년 정치전문... </div>
+            <div class="news-source">▸ polinews.co.kr</div>
           </div>
         </div><div class="news-item">
           <span class="news-num">04</span>
           <div class="news-body">
-            <a class="news-title" href="https://daily.hankooki.com/news/articleView.html?idxno=1347994" target="_blank">李대통령, 검찰개혁 '속도·범위' 동시 정리…강경론 선 긋고 입법 급물...</a>
-            <div class="news-summary">연속 사회관계망서비스(SNS)를 통해 검찰개혁의 방향을 직접 제시했다. 이 대통령은 &quot;수사·기소 분리와 검찰... 사진=연합뉴스 ◆ 하루 만에 협의안 도출…당정 '원팀' 복원 이 대통령의 메시지 이후 여당은 즉각 움직였다.... </div>
-            <div class="news-source">▸ daily.hankooki.com</div>
+            <a class="news-title" href="http://www.queen.co.kr/news/articleView.html?idxno=453224" target="_blank">기초연금, 저소득 노인 두텁게·부부 감액 단계적 폐지…12년 만의 제도...</a>
+            <div class="news-summary">이재명 대통령은 최근 사회관계망서비스를 통해 &quot;빈곤 노인을 줄이려면 기초연금을 바꿔야 한다&quot;며... 나아가 감액 제도 자체를 폐지하는 방안도 논의되고 있으며, 정치권에서는 3년에 걸쳐 완전 폐지를 추진하는... </div>
+            <div class="news-source">▸ queen.co.kr</div>
           </div>
         </div></div>
 
 <!-- ADS -->
 <div class="sec-hd"><span class="sec-hd-label">Community</span><div class="sec-hd-line"></div><span class="sec-tag tag-yt">📌 커뮤니티 소식</span></div>
 <div class="ads-wrap">
-  <div class="ads-tabs"><div class="adtab active" onclick="showAd(0)">1</div><div class="adtab " onclick="showAd(1)">2</div><div class="adtab " onclick="showAd(2)">3</div></div>
+  <div class="ads-nav">
+    <div class="ads-arrow" id="ad-prev" onclick="moveAd(-1)">&#8249;</div>
+    <div class="ads-tabs"><div class="adtab active" onclick="showAd(0)">1</div><div class="adtab " onclick="showAd(1)">2</div><div class="adtab " onclick="showAd(2)">3</div></div>
+    <div class="ads-arrow" id="ad-next" onclick="moveAd(1)">&#8250;</div>
+  </div>
   <div class="adpanel active">
   <a href="https://naver.me/xeF2HZtc" target="_blank"><img src="images/dinomarket.png" alt=""></a>
   <div class="adpanel-title">다휘신 미니쇼!</div>
@@ -359,9 +367,30 @@ function showVid(i) {
   document.querySelectorAll('.mpanel').forEach((p,idx) => p.classList.toggle('active', idx===i));
 }
 function showAd(i) {
-  document.querySelectorAll('.adtab').forEach((t,idx) => t.classList.toggle('active', idx===i));
-  document.querySelectorAll('.adpanel').forEach((p,idx) => p.classList.toggle('active', idx===i));
+  const tabs   = document.querySelectorAll('.adtab');
+  const panels = document.querySelectorAll('.adpanel');
+  const total  = tabs.length;
+  if (i < 0 || i >= total) return;
+  tabs.forEach((t,idx)   => t.classList.toggle('active', idx===i));
+  panels.forEach((p,idx) => p.classList.toggle('active', idx===i));
+  // 화살표 활성화
+  const prev = document.getElementById('ad-prev');
+  const next = document.getElementById('ad-next');
+  if (prev) prev.classList.toggle('on', i > 0);
+  if (next) next.classList.toggle('on', i < total - 1);
 }
+function moveAd(dir) {
+  const tabs = document.querySelectorAll('.adtab');
+  let cur = 0;
+  tabs.forEach((t,i) => { if (t.classList.contains('active')) cur = i; });
+  showAd(cur + dir);
+}
+// 초기 화살표 상태 설정
+(function() {
+  const tabs = document.querySelectorAll('.adtab');
+  const next = document.getElementById('ad-next');
+  if (next && tabs.length > 1) next.classList.add('on');
+})();
 (function() {
   const d = new URLSearchParams(location.search).get('d');
   if (d && d.length === 8) {
