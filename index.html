@@ -27,25 +27,17 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 .hd-inner{display:flex;justify-content:space-between;align-items:flex-start}
 .hd-date-big{font-family:'DM Mono',monospace;font-size:52px;font-weight:700;color:#58a6ff;line-height:1}
 .hd-date-small{font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,.4);text-align:right;letter-spacing:.08em}
-.promo-banner{background:linear-gradient(160deg,#0a1f08,#1a3a15,#0e2a0a);border-bottom:3px solid #3d7a3a}
-.promo-inner{padding:22px 24px 20px}
-.promo-badge-row{display:flex;align-items:center;gap:8px;margin-bottom:14px}
-.promo-badge{background:#3d7a3a;color:#c8f0a0;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border-radius:20px}
-.promo-badge-line{flex:1;height:1px;background:rgba(255,255,255,.08)}
-.promo-copy{text-align:center;margin-bottom:18px}
-.promo-heart{font-size:28px;display:block;margin-bottom:8px;animation:hb 1.8s ease infinite}
-@keyframes hb{0%,100%{transform:scale(1)}30%{transform:scale(1.18)}70%{transform:scale(1.1)}}
-.promo-main-text{font-size:18px;font-weight:900;color:#fff;line-height:1.55;margin-bottom:6px}
-.promo-main-text em{color:#7ae050;font-style:normal}
-.promo-sub-text{font-size:13px;color:rgba(255,255,255,.65);line-height:1.7}
-.promo-sub-text strong{color:#a8e060}
-.promo-org-box{background:rgba(106,173,69,.12);border:1px solid rgba(106,173,69,.35);border-radius:8px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.promo-org-name{font-size:16px;font-weight:900;color:#fff;display:flex;align-items:center;gap:6px;margin-bottom:4px}
-.promo-org-url{font-size:11px;color:#6aad45;text-decoration:none;border-bottom:1px solid rgba(106,173,69,.4)}
-.promo-qr-emoji{font-size:36px}
-.promo-qr-label{font-size:9px;color:rgba(255,255,255,.3);display:block;text-align:center}
-.promo-img-wrap{border-radius:8px;overflow:hidden;border:1px solid rgba(106,173,69,.25)}
-.promo-img-wrap img{width:100%;display:block}
+.ads-wrap{padding:0 16px 16px}
+.ads-tabs{display:flex;gap:6px;margin-bottom:10px;overflow-x:auto;scrollbar-width:none}
+.ads-tabs::-webkit-scrollbar{display:none}
+.adtab{flex-shrink:0;padding:5px 12px;border-radius:20px;font-size:11px;background:rgba(255,255,255,.07);color:rgba(255,255,255,.5);cursor:pointer;border:1px solid rgba(255,255,255,.1);transition:.2s}
+.adtab.active{background:#3d7a3a;color:#c8f0a0;border-color:#3d7a3a}
+.adpanel{display:none;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;overflow:hidden}
+.adpanel.active{display:block}
+.adpanel a{display:block;text-decoration:none;color:inherit}
+.adpanel img{width:100%;display:block;max-height:200px;object-fit:cover}
+.adpanel-text{padding:12px 14px;font-size:12px;color:rgba(255,255,255,.7);line-height:1.8;white-space:pre-line}
+.adpanel-link{display:inline-block;margin:0 14px 12px;font-size:11px;color:#58a6ff}
 .sec-hd{display:flex;align-items:center;gap:8px;padding:20px 20px 12px}
 .sec-hd-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;color:#58a6ff;text-transform:uppercase}
 .sec-hd-line{flex:1;height:1px;background:rgba(255,255,255,.08)}
@@ -138,91 +130,89 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 <div class="weather-ov">
   <div class="weather-ov-icon">🌤</div>
   <div style="flex:1">
-    <div class="weather-ov-title">서울 현재 -2°~-2°</div>
+    <div class="weather-ov-title">서울 현재 12°~12°</div>
     <div class="weather-ov-sub">OpenWeatherMap 제공</div>
   </div>
   <div class="ov-dust-box">
     <div class="ov-dust-title">서울 대기질</div>
     <div class="ov-dust-row">
       <span class="ov-dust-lbl">미세</span>
-      <span class="ov-dust-val">73㎍</span>
-      <span class="ov-dust-grade" style="color:#81c784">보통</span>
+      <span class="ov-dust-val">6㎍</span>
+      <span class="ov-dust-grade" style="color:#4fc3f7">좋음</span>
     </div>
     <div class="ov-dust-row">
       <span class="ov-dust-lbl">초미세</span>
-      <span class="ov-dust-val">65㎍</span>
-      <span class="ov-dust-grade" style="color:#ffb74d">나쁨</span>
+      <span class="ov-dust-val">5㎍</span>
+      <span class="ov-dust-grade" style="color:#4fc3f7">좋음</span>
     </div>
   </div>
 </div>
 <div class="cities"><div class="city-card">
-          <div class="city-name">서울</div>
-          <div class="city-icon">🌫️</div>
-          <div class="city-high">-2°</div>
-          <div class="city-low">-2°</div>
-          <div class="city-dust"><span class="dust-label">미세</span><span class="dust-val">73㎍</span><span class="dust-grade">보통</span></div>
-          <div class="city-dust"><span class="dust-label">초미세</span><span class="dust-val">65㎍</span><span class="dust-grade">나쁨</span></div>
-        </div><div class="city-card">
           <div class="city-name">부산</div>
-          <div class="city-icon">☁️</div>
-          <div class="city-high">5°</div>
-          <div class="city-low">5°</div>
-          <div class="city-dust"><span class="dust-label">미세</span><span class="dust-val">5㎍</span><span class="dust-grade">좋음</span></div>
-          <div class="city-dust"><span class="dust-label">초미세</span><span class="dust-val">4㎍</span><span class="dust-grade">좋음</span></div>
+          <div class="city-icon">⛅</div>
+          <div class="city-high">12°</div>
+          <div class="city-low">12°</div>
+          <div class="city-dust"><span class="dust-label">미세</span><span class="dust-val">6㎍</span><span class="dust-grade">좋음</span></div>
+          <div class="city-dust"><span class="dust-label">초미세</span><span class="dust-val">5㎍</span><span class="dust-grade">좋음</span></div>
         </div><div class="city-card">
           <div class="city-name">대구</div>
           <div class="city-icon">☀️</div>
-          <div class="city-high">1°</div>
-          <div class="city-low">1°</div>
-          <div class="city-dust"><span class="dust-label">미세</span><span class="dust-val">31㎍</span><span class="dust-grade">보통</span></div>
-          <div class="city-dust"><span class="dust-label">초미세</span><span class="dust-val">28㎍</span><span class="dust-grade">보통</span></div>
+          <div class="city-high">17°</div>
+          <div class="city-low">17°</div>
+          <div class="city-dust"><span class="dust-label">미세</span><span class="dust-val">10㎍</span><span class="dust-grade">좋음</span></div>
+          <div class="city-dust"><span class="dust-label">초미세</span><span class="dust-val">8㎍</span><span class="dust-grade">좋음</span></div>
         </div><div class="city-card">
           <div class="city-name">대전</div>
-          <div class="city-icon">☁️</div>
-          <div class="city-high">4°</div>
-          <div class="city-low">4°</div>
-          <div class="city-dust"><span class="dust-label">미세</span><span class="dust-val">72㎍</span><span class="dust-grade">보통</span></div>
-          <div class="city-dust"><span class="dust-label">초미세</span><span class="dust-val">63㎍</span><span class="dust-grade">나쁨</span></div>
+          <div class="city-icon">☀️</div>
+          <div class="city-high">15°</div>
+          <div class="city-low">15°</div>
+          <div class="city-dust"><span class="dust-label">미세</span><span class="dust-val">41㎍</span><span class="dust-grade">보통</span></div>
+          <div class="city-dust"><span class="dust-label">초미세</span><span class="dust-val">38㎍</span><span class="dust-grade">나쁨</span></div>
         </div><div class="city-card">
           <div class="city-name">광주</div>
-          <div class="city-icon">☁️</div>
-          <div class="city-high">4°</div>
-          <div class="city-low">4°</div>
-          <div class="city-dust"><span class="dust-label">미세</span><span class="dust-val">49㎍</span><span class="dust-grade">보통</span></div>
-          <div class="city-dust"><span class="dust-label">초미세</span><span class="dust-val">45㎍</span><span class="dust-grade">나쁨</span></div>
+          <div class="city-icon">🌥</div>
+          <div class="city-high">15°</div>
+          <div class="city-low">15°</div>
+          <div class="city-dust"><span class="dust-label">미세</span><span class="dust-val">53㎍</span><span class="dust-grade">보통</span></div>
+          <div class="city-dust"><span class="dust-label">초미세</span><span class="dust-val">49㎍</span><span class="dust-grade">나쁨</span></div>
         </div><div class="city-card">
           <div class="city-name">제주</div>
-          <div class="city-icon">☁️</div>
-          <div class="city-high">6°</div>
-          <div class="city-low">6°</div>
-          <div class="city-dust"><span class="dust-label">미세</span><span class="dust-val">18㎍</span><span class="dust-grade">좋음</span></div>
-          <div class="city-dust"><span class="dust-label">초미세</span><span class="dust-val">13㎍</span><span class="dust-grade">좋음</span></div>
+          <div class="city-icon">🌥</div>
+          <div class="city-high">14°</div>
+          <div class="city-low">14°</div>
+          <div class="city-dust"><span class="dust-label">미세</span><span class="dust-val">22㎍</span><span class="dust-grade">좋음</span></div>
+          <div class="city-dust"><span class="dust-label">초미세</span><span class="dust-val">16㎍</span><span class="dust-grade">보통</span></div>
         </div></div>
 <div class="weekly"><div class="week-day">
           <div class="wd-label">03/17(화)</div>
-          <div class="wd-icon">🌥</div>
+          <div class="wd-icon">☀️</div>
           <div class="wd-high">13°</div>
-          <div class="wd-low">1°</div>
+          <div class="wd-low">7°</div>
         </div><div class="week-day">
           <div class="wd-label">03/18(수)</div>
           <div class="wd-icon">🌦</div>
-          <div class="wd-high">11°</div>
+          <div class="wd-high">10°</div>
           <div class="wd-low">4°</div>
         </div><div class="week-day">
           <div class="wd-label">03/19(목)</div>
-          <div class="wd-icon">☁️</div>
+          <div class="wd-icon">🌥</div>
           <div class="wd-high">9°</div>
           <div class="wd-low">4°</div>
         </div><div class="week-day">
           <div class="wd-label">03/20(금)</div>
           <div class="wd-icon">🌥</div>
           <div class="wd-high">12°</div>
-          <div class="wd-low">5°</div>
+          <div class="wd-low">4°</div>
         </div><div class="week-day">
           <div class="wd-label">03/21(토)</div>
           <div class="wd-icon">☀️</div>
           <div class="wd-high">12°</div>
           <div class="wd-low">6°</div>
+        </div><div class="week-day">
+          <div class="wd-label">03/22(일)</div>
+          <div class="wd-icon">☁️</div>
+          <div class="wd-high">13°</div>
+          <div class="wd-low">8°</div>
         </div></div>
 
 
@@ -259,30 +249,30 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 <div class="news-list"><div class="news-item">
           <span class="news-num">01</span>
           <div class="news-body">
-            <a class="news-title" href="https://www.sisain.co.kr/news/articleView.html?idxno=57511" target="_blank">부동산 시장 말로 휘어잡는 대통령의 ‘본인 등판’</a>
-            <div class="news-summary">이 기준을 각종 경제정책의 최종 책임자인 대통령에게 옮겨 온다면 어떻게 될까? 특히 자산시장, 그중에서도... 그래서 대통령이 가장 자신 있게 언급하는 것이 ‘대체 투자수단’, 바로 주식시장이다. 코스피 지수는... </div>
-            <div class="news-source">▸ sisain.co.kr</div>
+            <a class="news-title" href="https://weekly.cnbnews.com/news/article.html?no=208983" target="_blank">미래에셋자산운용, ‘TIGER ETF’ 테마형 순자산 25조원 돌파…1년 만에...</a>
+            <div class="news-summary">사진=미래에셋자산운용 미래에셋자산운용의 ‘TIGER ETF’가 국내 주식 테마형 ETF 시장에서 순자산... 6%를 기록해 코스피 상승률(116.25%) 대비 64.35%p 높은 성과를 나타냈다. 미래에셋자산운용 관계자는 “TIGER... </div>
+            <div class="news-source">▸ weekly.cnbnews.com</div>
           </div>
         </div><div class="news-item">
           <span class="news-num">02</span>
           <div class="news-body">
-            <a class="news-title" href="https://slownews.kr/156199" target="_blank">“과도한 선명성 경쟁은 반격의 명분”, 김어준과 선을 그은 이재명: 슬...</a>
-            <div class="news-summary">없다” … 주식 시장은 버티는데 “진짜 늑대가 온다” 경고도.환율 1500 터치, 코스피는 반등.늑대가 온다.... 세계 경제가 동반 침체할 가능성이 크고 이란의 힘은 더 세진다. 핵무기와는 다른 강력한 억지력을 갖게... </div>
-            <div class="news-source">▸ slownews.kr</div>
+            <a class="news-title" href="https://www.ajunews.com/view/20260317145818600" target="_blank">3월 IPO 성적표…코스닥은 '따블' 가는데 코스피는 '잠잠'</a>
+            <div class="news-summary">아주경제=고혜영 기자 kohy0321@ajunews.com 3월 공모주 시장이 회복세를 보이는 가운데 코스닥과 유가증권시장간의 온도 차는 확연하다. 코스피의 새내기 상장사들은 주춤한 가운데, 코스닥 상장사들은 훨훨 날고 있다.... </div>
+            <div class="news-source">▸ ajunews.com</div>
           </div>
         </div><div class="news-item">
           <span class="news-num">03</span>
           <div class="news-body">
-            <a class="news-title" href="https://www.sisain.co.kr/news/articleView.html?idxno=57546" target="_blank">이란 전쟁, 글로벌 금융시장의 두 가지 시나리오</a>
-            <div class="news-summary">실물경제에도 치명적 영향을 미치게 된다. 호르무즈 해협 봉쇄가 지속되면, 예컨대 반도체 제조 공정에 필수적인 헬륨 등 중동 의존도가 높은 핵심 소재의 공급에 차질이 빚어질 수 있다. ‘코스피 6000’ 돌파에... </div>
-            <div class="news-source">▸ sisain.co.kr</div>
+            <a class="news-title" href="https://www.meconomynews.com/news/articleView.html?idxno=128937" target="_blank">대형 증권사 신용공여 확대 속 키움증권 집중도 높아... 개인 '빚투 창구...</a>
+            <div class="news-summary">당국, 신용 리스크 예의주시 [시장경제=전지윤 기자] 키움증권 본사가 위치한 서울 여의도 TP타워 머릿돌.... 코스피 지수는 지난 한 해 동안 75.63%(2,399.49포인트(p)→4,214.17p) 상승했다. 올해 들어서도 지난 16일(코스피... </div>
+            <div class="news-source">▸ meconomynews.com</div>
           </div>
         </div><div class="news-item">
           <span class="news-num">04</span>
           <div class="news-body">
-            <a class="news-title" href="https://weekly.donga.com/3/all/11/6138205/1" target="_blank">“4년 물린 삼성전자 주식 8만 원에 팔았더니 20만 원으로 급등, 속이 쓰...</a>
-            <div class="news-summary">서울 명문대를 졸업하고 경제 관련 단체에서 5년째 일하고 있는 직장인 A 씨(31)의 증권사 애플리케이션(앱)... 국내외 주식 활황기였던 코로나19 팬데믹 시기에도 마찬가지였다. 2020년 3월부터 10월까지 코스피는 1987.... </div>
-            <div class="news-source">▸ weekly.donga.com</div>
+            <a class="news-title" href="http://www.hansbiz.co.kr/news/articleView.html?idxno=824904" target="_blank">게임업계, 상법개정안 대응 본격화</a>
+            <div class="news-summary">제미나이 생성 이미지 | 서울=한스경제 석주원 기자 | 정부와 여당이 주도적으로 추진해 온 기업 지배구조... 반면 국내 게임사의 주가는 코스피 불장 속에서도 상승장에 편승하지 못한 소외주로 꼽히는 만큼 이번... </div>
+            <div class="news-source">▸ hansbiz.co.kr</div>
           </div>
         </div></div>
 
@@ -291,50 +281,57 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 <div class="news-list"><div class="news-item">
           <span class="news-num">01</span>
           <div class="news-body">
-            <a class="news-title" href="https://slownews.kr/156199" target="_blank">“과도한 선명성 경쟁은 반격의 명분”, 김어준과 선을 그은 이재명: 슬...</a>
-            <div class="news-summary">정치 과잉의 비논리에 어처구니없는 공상”이라고 비난했다. 구체적으로 밝히지 않았지만 김어준의 ‘뉴스... 얼라인파트너스는 코웨이에 이사회 의장을 독립이사(사외이사)로 선임하라고 요구하고 있다.... </div>
-            <div class="news-source">▸ slownews.kr</div>
+            <a class="news-title" href="https://news.sbs.co.kr/news/endPage.do?news_id=N1008480652&plink=ORI&cooper=NAVER" target="_blank">[인터뷰] 홍익표 &quot;권한과 책임은 비례…뉴미디어, 영향력 만큼 책임의식...</a>
+            <div class="news-summary">언론사하고 정치권력이나 여당이 충돌하고 싸우는 모습은 바람직하지 않다고 생각합니다. 어떠한 형태든 언론의 자유와 그다음에 언론 활동에 언론 활동을 자유로운 언론 활동을 보호하는 것은 민주주의 사회의... </div>
+            <div class="news-source">▸ news.sbs.co.kr</div>
           </div>
         </div><div class="news-item">
           <span class="news-num">02</span>
           <div class="news-body">
-            <a class="news-title" href="http://www.jbsori.com/news/articleView.html?idxno=17033" target="_blank">군산·김제·부안갑 재선거 '빅매치' 가능성 급부상…조국 출마 여부 '최...</a>
-            <div class="news-summary">조 대표, 부산지역 출마 가능성 거론…경기지역도 출마 검토 KBS 3월 14일 뉴스 화면(영상 갈무리) 그가 직접... 그러면서 &quot;개인의 정치적 행보와 직결된다. 지역사회 여론이 좋을 리 없다&quot;는 사설은 &quot;거센 비난의 목소리를... </div>
-            <div class="news-source">▸ jbsori.com</div>
+            <a class="news-title" href="http://www.mdilbo.com/detail/0kIA7d/753914" target="_blank">[무잇슈] 李대통령 “분산 없다” 발언 속 특별시장 후보들 공기관 이전...</a>
+            <div class="news-summary">정치·경제·문화·사회 등 광주 전남 지역에서 화제 된 주요 뉴스를 클리핑하여 제공합니다. ◆요약 및 포인트는? 기사링크: https://www.mdilbo.com/detail/0kIA7d/753881 ▶ 민주당이 전남광주통합특별시장 예비경선... </div>
+            <div class="news-source">▸ mdilbo.com</div>
           </div>
         </div><div class="news-item">
           <span class="news-num">03</span>
           <div class="news-body">
-            <a class="news-title" href="https://www.news1.kr/politics/assembly/6102904" target="_blank">우 의장 요청 '개헌특위' D데이…野 반대에 투표까지 험로</a>
-            <div class="news-summary">정치권에 따르면 여야 지도부는 개헌 자체에 대해선 이견이 없지만 국민투표 시점을 놓고 뚜렷한 시각 차를... 편의성과 사회적 비용을 고려했을 때 합리적인 방안이라고 생각한다&quot;고 적었다. 초선인 채현일 의원도 15일... </div>
-            <div class="news-source">▸ news1.kr</div>
+            <a class="news-title" href="https://www.businesspost.co.kr/BP?command=article_view&num=433139" target="_blank">한은 총재 이창용 임기만료 한 달 앞으로, '3고' 위기 속 차기 인선 안갯...</a>
+            <div class="news-summary">&lt;연합뉴스&gt; 이에 국제금융시장 경험을 갖춘 인물부터 이재명 정부의 성장 기조와 호흡을 맞출 수 있는... 국제결제은행이 현지시각 16일 이사회를 열고 엘렌 레이 런던비즈니스스쿨 교수를 후임으로 임명하면서 신... </div>
+            <div class="news-source">▸ businesspost.co.kr</div>
           </div>
         </div><div class="news-item">
           <span class="news-num">04</span>
           <div class="news-body">
-            <a class="news-title" href="https://www.newsis.com/view/NISX20260317_0003550757" target="_blank">&quot;美 특사–이란 외무장관 메시지 교환…전쟁 후 첫 직접 소통&quot;</a>
-            <div class="news-summary">16일(현지 시간) 미 정치매체 액시오스는 미국 관리와 사정에 정통한 소식통을 인용해 미국 중동 특사인... 앞서 미국 매체 드롭 사이트 뉴스는 이날 윗코프 특사가 먼저 아라그치 장관에게 메시지를 보냈지만 아라그치... </div>
-            <div class="news-source">▸ newsis.com</div>
+            <a class="news-title" href="https://nownews.seoul.co.kr/news/newsView.php?id=20260317601015&wlog_tag3=naver" target="_blank">“여성 100명 몰카 찍고도 ‘무죄급 판결’”…머스크까지 분노, ‘추방...</a>
+            <div class="news-summary">17일(현지시간) 데일리메일 호주판과 뉴스닷컴 등 현지 언론에 따르면 베트남 국적 유학생 바오 푹 까오(23)는 여성 화장실에서 몰래 촬영한 혐의로 유죄를 인정했다. 법원은 징역형 대신 사회교정명령을 선고했다. 정식... </div>
+            <div class="news-source">▸ nownews.seoul.co.kr</div>
           </div>
         </div></div>
 
-<!-- PROMO -->
-<div class="promo-banner"><div class="promo-inner">
-  <div class="promo-badge-row"><span class="promo-badge">🌿 함께해요</span><div class="promo-badge-line"></div><span class="promo-badge">파충류 권익 보호</span></div>
-  <div class="promo-copy">
-    <span class="promo-heart">♥️</span>
-    <div class="promo-main-text">생명을 소중히 여기신다면<br><em>함께해 주시고 힘을 실어주세요</em></div>
-    <div class="promo-sub-text"><strong>집사님들이 관심을 가져주셔야!</strong><br>더 좋은 환경에서 키우실 수 있습니다! 🦎</div>
-  </div>
-  <div class="promo-org-box">
-    <div>
-      <div class="promo-org-name">사단법인 작은생명공존연합 <span>‼️</span></div>
-      <a class="promo-org-url" href="https://www.littlelives.or.kr/" target="_blank">🔗 www.littlelives.or.kr</a>
-    </div>
-    <div><div class="promo-qr-emoji">🐊</div><span class="promo-qr-label">Little Lives</span></div>
-  </div>
-  <div class="promo-img-wrap"><img src="images/littlelives.png" alt="작은생명공존연합"></div>
-</div></div>
+<!-- ADS -->
+<div class="sec-hd"><span class="sec-hd-label">Community</span><div class="sec-hd-line"></div><span class="sec-tag tag-yt">📌 커뮤니티 소식</span></div>
+<div class="ads-wrap">
+  <div class="ads-tabs"><div class="adtab active" onclick="showAd(0)">1</div><div class="adtab " onclick="showAd(1)">2</div><div class="adtab " onclick="showAd(2)">3</div></div>
+  <div class="adpanel active">
+  <a href="https://naver.me/xeF2HZtc" target="_blank"><img src="images/dinomarket.png" alt=""></a>
+  <div class="adpanel-text">다휘신 미니쇼!
+사랑방 + 보보수입개체 + 블랙&화이트
+📍 다이노마켓 방배본점
+🕑 3월 21일(토) 14시 ~ 18시</div>
+  <a class="adpanel-link" href="https://naver.me/xeF2HZtc" target="_blank">🔗 https://naver.me/xeF2HZtc</a>
+</div><div class="adpanel ">
+  <a href="https://naver.me/5Bwjzogx" target="_blank"><img src="images/padong.jpg" alt=""></a>
+  <div class="adpanel-text">파충류 동반자
+📍 김대중 컨벤션센터 (광주 서구)
+🗓 3월 21일(토) ~ 3월 22일(일)</div>
+  <a class="adpanel-link" href="https://naver.me/5Bwjzogx" target="_blank">🔗 https://naver.me/5Bwjzogx</a>
+</div><div class="adpanel ">
+  <a href="https://www.littlelives.or.kr/" target="_blank"><img src="images/littlelives.png" alt=""></a>
+  <div class="adpanel-text">사단법인 작은생명공존연합(작생공)은 파충류를 비롯한 작은 생명들의 권익 보호를 위해 노력하고 있습니다.
+집사님들의 많은 관심과 참여를 부탁드려요! 🦎</div>
+  <a class="adpanel-link" href="https://www.littlelives.or.kr/" target="_blank">🔗 https://www.littlelives.or.kr/</a>
+</div>
+</div>
 
 <!-- FOOTER -->
 <div class="footer">
@@ -351,6 +348,10 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 function showVid(i) {
   document.querySelectorAll('.mtab').forEach((t,idx) => t.classList.toggle('active', idx===i));
   document.querySelectorAll('.mpanel').forEach((p,idx) => p.classList.toggle('active', idx===i));
+}
+function showAd(i) {
+  document.querySelectorAll('.adtab').forEach((t,idx) => t.classList.toggle('active', idx===i));
+  document.querySelectorAll('.adpanel').forEach((p,idx) => p.classList.toggle('active', idx===i));
 }
 (function() {
   const d = new URLSearchParams(location.search).get('d');
