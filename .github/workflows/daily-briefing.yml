@@ -3,6 +3,11 @@ on:
   schedule:
     - cron: '0 22 * * *'
   workflow_dispatch:
+    inputs:
+      force_yt_refresh:
+        description: 'YouTube 영상 목록 강제 갱신 (true 입력)'
+        required: false
+        default: 'false'
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -32,6 +37,7 @@ jobs:
           NAVER_CLIENT_ID:      ${{ secrets.NAVER_CLIENT_ID }}
           NAVER_CLIENT_SECRET:  ${{ secrets.NAVER_CLIENT_SECRET }}
           YOUTUBE_API_KEY:      ${{ secrets.YOUTUBE_API_KEY }}
+          FORCE_YT_REFRESH:     ${{ github.event.inputs.force_yt_refresh || 'false' }}
           GITHUB_TOKEN:         ${{ secrets.GITHUB_TOKEN }}
         run: python generate_briefing.py
 
