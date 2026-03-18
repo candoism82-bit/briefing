@@ -566,91 +566,98 @@ def build_html(weather, eco, pol, videos, ads, date_info):
 <meta property="og:image:height" content="630">
 <meta property="og:url" content="https://크레오늘.com">
 <title>크레오늘 · CreOnel 아침 브리핑 · {date_info['date_ko']}</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Noto+Serif+KR:wght@900&family=DM+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 <style>
 *{{box-sizing:border-box;margin:0;padding:0}}
-body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;display:flex;justify-content:center;padding:16px}}
-.card{{width:100%;max-width:480px;border-radius:16px;overflow:hidden;background:#161b22;box-shadow:0 8px 32px rgba(0,0,0,.5)}}
-.hd{{background:linear-gradient(135deg,#1a2332,#0d1f35);padding:24px;position:relative;overflow:hidden}}
+:root{{
+  --cream:#faf8f4;--white:#ffffff;--ink:#1a1a1a;--ink-soft:#5a5a5a;
+  --ink-light:#9a9a9a;--accent:#4a7c59;--accent-light:#e8f2ec;
+  --accent-soft:#c8dfd0;--border:#e8e4de;--border-soft:#f0ece6;
+  --shadow:0 2px 16px rgba(0,0,0,.06);--shadow-md:0 4px 24px rgba(0,0,0,.08);
+}}
+body{{background:var(--cream);color:var(--ink);font-family:'Gowun Dodum',serif;display:flex;justify-content:center;padding:16px 12px 48px}}
+.card{{width:100%;max-width:480px;border-radius:20px;overflow:hidden;background:var(--white);box-shadow:var(--shadow-md);border:1px solid var(--border)}}
+.hd{{background:linear-gradient(135deg,#2d5a3d,#4a7c59);padding:24px;position:relative;overflow:hidden}}
+.hd::after{{content:'';position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.06)}}
 .hd-logo{{width:52px;height:52px;object-fit:contain;border-radius:10px}}
-.hd-eyebrow{{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;color:#7ec8a0;text-transform:uppercase;margin-bottom:2px}}
-.hd-title{{font-family:'Noto Serif KR',serif;font-size:24px;font-weight:900;color:#fff;line-height:1.2}}
-.hd-sub{{font-size:11px;color:rgba(255,255,255,.4);margin-top:4px}}
+.hd-eyebrow{{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;color:rgba(255,255,255,.7);text-transform:uppercase;margin-bottom:2px}}
+.hd-title{{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#fff;line-height:1.2}}
+.hd-sub{{font-size:11px;color:rgba(255,255,255,.6);margin-top:4px}}
 .hd-inner{{display:flex;justify-content:space-between;align-items:flex-start}}
-.hd-date-big{{font-family:'DM Mono',monospace;font-size:52px;font-weight:700;color:#58a6ff;line-height:1}}
-.hd-date-small{{font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,.4);text-align:right;letter-spacing:.08em}}
+.hd-date-big{{font-family:'DM Mono',monospace;font-size:52px;font-weight:700;color:rgba(255,255,255,.9);line-height:1}}
+.hd-date-small{{font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,.5);text-align:right;letter-spacing:.08em}}
 .ads-wrap{{padding:0 16px 16px}}
 .ads-nav{{display:flex;align-items:center;gap:8px;margin-bottom:10px}}
 .ads-tabs{{display:flex;gap:6px;flex:1;overflow-x:auto;scrollbar-width:none}}
 .ads-tabs::-webkit-scrollbar{{display:none}}
-.ads-arrow{{width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:rgba(255,255,255,.3);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;user-select:none}}
-.ads-arrow.on{{color:#c8f0a0;border-color:#3d7a3a;background:rgba(61,122,58,.2)}}
-.ads-arrow.on:hover{{background:rgba(61,122,58,.4)}}
-.adtab{{flex-shrink:0;padding:5px 12px;border-radius:20px;font-size:11px;background:rgba(255,255,255,.07);color:rgba(255,255,255,.5);cursor:pointer;border:1px solid rgba(255,255,255,.1);transition:.2s}}
-.adtab.active{{background:#3d7a3a;color:#c8f0a0;border-color:#3d7a3a}}
-.adpanel{{display:none;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;overflow:hidden}}
+.ads-arrow{{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:var(--cream);color:var(--ink-light);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;user-select:none}}
+.ads-arrow.on{{color:var(--accent);border-color:var(--accent-soft);background:var(--accent-light)}}
+.ads-arrow.on:hover{{background:var(--accent-soft)}}
+.adtab{{flex-shrink:0;padding:5px 12px;border-radius:20px;font-size:11px;background:var(--cream);color:var(--ink-light);cursor:pointer;border:1px solid var(--border);transition:.2s}}
+.adtab.active{{background:var(--accent);color:#fff;border-color:var(--accent)}}
+.adpanel{{display:none;background:var(--cream);border:1px solid var(--border);border-radius:12px;overflow:hidden}}
 .adpanel.active{{display:block}}
 .adpanel a{{display:block;text-decoration:none;color:inherit}}
 .adpanel img{{width:100%;display:block;object-fit:contain}}
-.adpanel-title{{padding:12px 14px 4px;font-size:15px;font-weight:900;color:#fff;line-height:1.4}}
-.adpanel-text{{padding:0 14px 10px;font-size:12px;color:rgba(255,255,255,.7);line-height:1.8;white-space:pre-line}}
-.adpanel-link{{display:inline-block;margin:0 14px 12px;font-size:11px;color:#58a6ff}}
+.adpanel-title{{padding:12px 14px 4px;font-size:15px;font-weight:700;color:var(--ink);line-height:1.4}}
+.adpanel-text{{padding:0 14px 10px;font-size:12px;color:var(--ink-soft);line-height:1.8;white-space:pre-line}}
+.adpanel-link{{display:inline-block;margin:0 14px 12px;font-size:11px;color:var(--accent)}}
 .sec-hd{{display:flex;align-items:center;gap:8px;padding:20px 20px 12px}}
-.sec-hd-label{{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;color:#58a6ff;text-transform:uppercase}}
-.sec-hd-line{{flex:1;height:1px;background:rgba(255,255,255,.08)}}
+.sec-hd-label{{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--accent);text-transform:uppercase}}
+.sec-hd-line{{flex:1;height:1px;background:var(--border)}}
 .sec-tag{{font-size:9px;padding:2px 8px;border-radius:10px;letter-spacing:.06em}}
-.tag-weather{{background:rgba(88,166,255,.15);color:#58a6ff}}
-.tag-eco{{background:rgba(63,185,80,.15);color:#3fb950}}
-.tag-pol{{background:rgba(248,81,73,.15);color:#f85149}}
-.tag-zod{{background:rgba(210,153,34,.15);color:#d2a61a}}
-.tag-yt{{background:rgba(255,166,87,.15);color:#ffa657}}
+.tag-weather{{background:var(--accent-light);color:var(--accent)}}
+.tag-eco{{background:#e8f4ee;color:#2d7a4f}}
+.tag-pol{{background:#fdecea;color:#b03020}}
+.tag-zod{{background:#fdf6e3;color:#8a6a10}}
+.tag-yt{{background:#fff3e8;color:#b06020}}
 .weather-ov{{display:flex;align-items:center;gap:12px;padding:0 20px 14px}}
 .weather-ov-icon{{font-size:36px}}
-.weather-ov-title{{font-size:15px;font-weight:700;color:#e6edf3;margin-bottom:3px}}
-.weather-ov-sub{{font-size:11px;color:rgba(255,255,255,.45);line-height:1.6}}
-.ov-dust-box{{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 12px;min-width:110px}}
-.ov-dust-title{{font-size:10px;color:rgba(255,255,255,.4);margin-bottom:5px;text-align:center;letter-spacing:.5px}}
+.weather-ov-title{{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:3px}}
+.weather-ov-sub{{font-size:11px;color:var(--ink-light);line-height:1.6}}
+.ov-dust-box{{background:var(--accent-light);border:1px solid var(--accent-soft);border-radius:10px;padding:8px 12px;min-width:110px}}
+.ov-dust-title{{font-size:10px;color:var(--accent);margin-bottom:5px;text-align:center;letter-spacing:.5px}}
 .ov-dust-row{{display:flex;align-items:center;gap:4px;margin-bottom:3px;font-size:11px}}
 .ov-dust-row:last-child{{margin-bottom:0}}
-.ov-dust-lbl{{color:rgba(255,255,255,.4);min-width:30px;font-size:10px}}
-.ov-dust-val{{color:rgba(255,255,255,.75);font-family:'DM Mono',monospace;font-size:11px}}
+.ov-dust-lbl{{color:var(--ink-light);min-width:30px;font-size:10px}}
+.ov-dust-val{{color:var(--ink-soft);font-family:'DM Mono',monospace;font-size:11px}}
 .ov-dust-grade{{font-size:10px;font-weight:700;margin-left:2px}}
 .cities{{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 16px 16px}}
-.city-card{{background:#0d1117;border-radius:8px;padding:10px 8px;text-align:center;border:1px solid rgba(255,255,255,.06)}}
-.city-name{{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;color:#58a6ff;margin-bottom:4px}}
-.city-high{{font-size:16px;font-weight:700;color:#e6edf3}}
-.city-low{{font-size:11px;color:rgba(255,255,255,.4);margin-bottom:2px}}
+.city-card{{background:var(--cream);border-radius:10px;padding:10px 8px;text-align:center;border:1px solid var(--border)}}
+.city-name{{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--accent);margin-bottom:4px}}
+.city-high{{font-size:16px;font-weight:700;color:var(--ink)}}
+.city-low{{font-size:11px;color:var(--ink-light);margin-bottom:2px}}
 .city-icon{{font-size:18px}}
 .city-dust{{display:flex;align-items:center;gap:3px;margin-top:3px;font-size:9px;line-height:1.3}}
-.dust-label{{color:rgba(255,255,255,.35);min-width:26px}}
-.dust-val{{color:rgba(255,255,255,.7);font-family:'DM Mono',monospace}}
-.dust-grade{{color:#58a6ff;font-size:8px}}
+.dust-label{{color:var(--ink-light);min-width:26px}}
+.dust-val{{color:var(--ink-soft);font-family:'DM Mono',monospace}}
+.dust-grade{{color:var(--accent);font-size:8px}}
 .weekly{{display:flex;justify-content:space-between;padding:0 16px 20px;gap:4px;overflow-x:auto}}
-.week-day{{flex:1;min-width:44px;text-align:center;background:#0d1117;border-radius:6px;padding:8px 4px;border:1px solid rgba(255,255,255,.06)}}
-.wd-label{{font-size:9px;color:rgba(255,255,255,.5);margin-bottom:4px}}
+.week-day{{flex:1;min-width:44px;text-align:center;background:var(--cream);border-radius:8px;padding:8px 4px;border:1px solid var(--border)}}
+.wd-label{{font-size:9px;color:var(--ink-light);margin-bottom:4px}}
 .wd-icon{{font-size:16px;margin-bottom:4px}}
-.wd-high{{font-size:12px;font-weight:700;color:#e6edf3}}
-.wd-low{{font-size:10px;color:rgba(255,255,255,.35)}}
+.wd-high{{font-size:12px;font-weight:700;color:var(--ink)}}
+.wd-low{{font-size:10px;color:var(--ink-light)}}
 .news-list{{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px}}
-.news-item{{display:flex;gap:10px;background:#0d1117;border-radius:8px;padding:12px;border:1px solid rgba(255,255,255,.06)}}
-.news-num{{font-family:'DM Mono',monospace;font-size:11px;color:#58a6ff;flex-shrink:0;padding-top:2px}}
-.news-title{{font-size:13px;font-weight:700;color:#e6edf3;text-decoration:none;display:block;margin-bottom:4px;line-height:1.5}}
-.news-title:hover{{color:#58a6ff}}
-.news-summary{{font-size:11px;color:rgba(255,255,255,.55);line-height:1.6;margin-bottom:4px}}
-.news-source{{font-size:10px;color:#3fb950}}
+.news-item{{display:flex;gap:10px;background:var(--cream);border-radius:10px;padding:12px;border:1px solid var(--border)}}
+.news-num{{font-family:'DM Mono',monospace;font-size:11px;color:var(--accent);flex-shrink:0;padding-top:2px}}
+.news-title{{font-size:13px;font-weight:700;color:var(--ink);text-decoration:none;display:block;margin-bottom:4px;line-height:1.5}}
+.news-title:hover{{color:var(--accent)}}
+.news-summary{{font-size:11px;color:var(--ink-soft);line-height:1.6;margin-bottom:4px}}
+.news-source{{font-size:10px;color:var(--accent)}}
 .fortune-img{{padding:0 16px 16px}}
-.fortune-img img{{width:100%;border-radius:8px;display:block;border:1px solid rgba(255,255,255,.08)}}
-.fortune-empty{{padding:20px 16px;text-align:center;color:rgba(255,255,255,.25);font-size:12px;background:#0d1117;border-radius:8px;margin:0 16px 16px;border:1px dashed rgba(255,255,255,.1)}}
+.fortune-img img{{width:100%;border-radius:10px;display:block;border:1px solid var(--border)}}
+.fortune-empty{{padding:20px 16px;text-align:center;color:var(--ink-light);font-size:12px;background:var(--cream);border-radius:10px;margin:0 16px 16px;border:1px dashed var(--border)}}
 .mtabs{{display:flex;gap:6px;padding:0 16px 12px;flex-wrap:wrap}}
-.mtab{{background:#0d1117;border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:5px 12px;font-size:11px;color:rgba(255,255,255,.5);cursor:pointer;transition:.2s}}
-.mtab.active{{background:rgba(255,166,87,.15);border-color:#ffa657;color:#ffa657}}
+.mtab{{background:var(--cream);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--ink-light);cursor:pointer;transition:.2s}}
+.mtab.active{{background:var(--accent-light);border-color:var(--accent-soft);color:var(--accent)}}
 .mpanel{{display:none;padding:0 16px 16px}}
 .mpanel.active{{display:block}}
-.yt-link{{display:block;margin-top:8px;font-size:11px;color:#58a6ff;text-decoration:none;line-height:1.5}}
-.footer{{padding:20px;text-align:center;border-top:1px solid rgba(255,255,255,.06);font-size:10px;color:rgba(255,255,255,.25);line-height:1.8}}
-.footer-credit{{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;opacity:.7}}
+.yt-link{{display:block;margin-top:8px;font-size:11px;color:var(--accent);text-decoration:none;line-height:1.5}}
+.footer{{padding:20px;text-align:center;border-top:1px solid var(--border);font-size:10px;color:var(--ink-light);line-height:1.8}}
+.footer-credit{{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;opacity:.8}}
 .footer-credit img{{width:32px;height:32px;border-radius:50%;object-fit:cover}}
-.footer-credit span{{font-size:12px;color:rgba(255,255,255,.5)}}
+.footer-credit span{{font-size:12px;color:var(--ink-soft)}}
 </style>
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CX33EQ71Y2"></script>
