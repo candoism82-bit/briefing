@@ -69,11 +69,13 @@ def get_weather():
     # ── 에어코리아 미세먼지 (전국 시도별) ──
     air_map = {}  # station → {pm10, pm25}
     try:
+        import urllib.parse as _up
+        airkorea_key = _up.unquote(AIRKOREA_API_KEY)  # URL 인코딩 해제
         for sido in ["서울", "부산", "대구", "대전", "광주", "제주"]:
             ar = requests.get(
                 "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty",
                 params={
-                    "serviceKey": AIRKOREA_API_KEY,
+                    "serviceKey": airkorea_key,
                     "returnType": "json",
                     "numOfRows":  100,
                     "pageNo":     1,
@@ -81,7 +83,9 @@ def get_weather():
                     "ver":        "1.0",
                 },
                 timeout=10
-            ).json()
+            )
+            print(f"    에어코리아 {sido} 상태: {ar.status_code}")
+            ar = ar.json()
             for item in ar.get("response", {}).get("body", {}).get("items", []):
                 stn = item.get("stationName", "")
                 try:
@@ -95,13 +99,15 @@ def get_weather():
         print(f"  ⚠️ 에어코리아 오류: {e}")
 
     # ── 기상청 단기예보 ──
+    import urllib.parse as _up
+    kma_key = _up.unquote(KMA_API_KEY)
     cities_data = []
     for city in CITIES:
         try:
             r = requests.get(
                 "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst",
                 params={
-                    "serviceKey": KMA_API_KEY,
+                    "serviceKey": kma_key,
                     "pageNo":     1,
                     "numOfRows":  300,
                     "dataType":   "JSON",
@@ -159,7 +165,7 @@ def get_weather():
         r = requests.get(
             "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst",
             params={
-                "serviceKey": KMA_API_KEY,
+                "serviceKey": kma_key,
                 "pageNo":     1,
                 "numOfRows":  1000,
                 "dataType":   "JSON",
