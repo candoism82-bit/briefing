@@ -102,12 +102,13 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 .mpanel.active{display:block}
 .yt-link{display:block;margin-top:8px;font-size:11px;color:#58a6ff;text-decoration:none;line-height:1.5}
 .tools-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px 16px}
-.tool-link-card{display:flex;align-items:center;gap:8px;background:rgba(255,166,87,.12);border:1.5px solid rgba(255,166,87,.35);border-radius:12px;padding:14px 16px;text-decoration:none;color:inherit;transition:all .2s}
-.tool-link-card:hover{background:rgba(255,166,87,.22);border-color:#ffa657;transform:translateY(-1px)}
-.tool-link-icon{font-size:22px;flex-shrink:0}
-.tool-link-name{font-size:13px;font-weight:700;color:#ffa657;flex:1}
-.tool-link-arrow{font-size:18px;color:rgba(255,166,87,.5);transition:transform .2s;font-weight:700}
-.tool-link-card:hover .tool-link-arrow{transform:translateX(3px);color:#ffa657}
+.tool-link-card{display:flex;align-items:center;gap:8px;background:#0d1117;border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:12px 14px;text-decoration:none;color:inherit;transition:all .2s}
+.tool-link-card:hover{border-color:rgba(88,166,255,.3);background:rgba(88,166,255,.05)}
+.tool-link-icon{font-size:20px;flex-shrink:0}
+.tool-link-name{font-size:12px;font-weight:700;color:#e6edf3;flex:1}
+.tool-link-arrow{font-size:16px;color:rgba(255,255,255,.25);transition:transform .2s;animation:nudge 2s ease-in-out infinite}
+@keyframes nudge{0%,60%,100%{transform:translateX(0)}70%{transform:translateX(4px)}80%{transform:translateX(0)}90%{transform:translateX(4px)}}
+.tool-link-card:hover .tool-link-arrow{animation:none;transform:translateX(3px);color:#58a6ff}
 .footer{padding:20px;text-align:center;border-top:1px solid rgba(255,255,255,.06);font-size:10px;color:rgba(255,255,255,.25);line-height:1.8}
 .footer-credit{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;opacity:.7}
 .footer-credit img{width:32px;height:32px;border-radius:50%;object-fit:cover}
@@ -321,30 +322,30 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 <div class="news-list"><div class="news-item">
           <span class="news-num">01</span>
           <div class="news-body">
+            <a class="news-title" href="https://www.g-enews.com/view.php?ud=202603181756334681fbbec65dfb_1" target="_blank">S&amp;P500 8000 붕괴 시나리오, 유가 100달러·국채 금리 5% '이중 충격'에 ...</a>
+            <div class="news-summary">성장은 꺾이고, 물가는 오르고… '스태그플레이션' 공포 부활 미 상무부 산하 경제분석국(BEA)이 지난해... 있다&quot;며 &quot;코스피도 그 압력에서 자유롭지 않다&quot;고 말했다. 이란發 유가 충격… 배럴당 120달러 넘으면 '침체... </div>
+            <div class="news-source">▸ g-enews.com</div>
+          </div>
+        </div><div class="news-item">
+          <span class="news-num">02</span>
+          <div class="news-body">
             <a class="news-title" href="https://www.mk.co.kr/article/11991975" target="_blank">AI가 내 일자리 뺏는다면…“주식투자로 돈 버는게 답이죠”</a>
             <div class="news-summary">주식이나 코인에 빚을 내 투자하는 것은 사실상 운에 인생을 맡기는 것과 같습니다. 노후 준비 역시 무리한 투자 전략보다 노동시장 생존력에 초점을 맞춰야 합니다.” 김경록 옵투스자산운용 고문은 지난 16일 매일경제... </div>
             <div class="news-source">▸ mk.co.kr</div>
           </div>
         </div><div class="news-item">
-          <span class="news-num">02</span>
+          <span class="news-num">03</span>
           <div class="news-body">
             <a class="news-title" href="http://www.enewstoday.co.kr/news/articleView.html?idxno=2407823" target="_blank">이 대통령 &quot;정부 조치 지속으로 '코리아 프리미엄' 실현 가능&quot;</a>
             <div class="news-summary">등도 경제 선순환을 위한 개선 과제로 제시했다. 이 대통령은 정부 정책과 계획 과제 준비 관련, 참석자들에게 허심탄회한 제안을 당부했다. 그러면서 &quot;박용진 규제개혁위 부위원장이 저한테 메시지를 보냈다&quot;며 &quot;'왜 주식... </div>
             <div class="news-source">▸ enewstoday.co.kr</div>
           </div>
         </div><div class="news-item">
-          <span class="news-num">03</span>
+          <span class="news-num">04</span>
           <div class="news-body">
             <a class="news-title" href="https://www.newsverse.kr/news/articleView.html?idxno=9940" target="_blank">[오늘의 경제뉴스] 코스닥 1·2부로 나눈다...동전주 퇴출하고 중복상장...</a>
             <div class="news-summary">김동원 KB증권 리서치센터장은 &quot;코스피 전체 시가총액 5,200조원 중 중복상장된 (기업의) 시가총액은 1... 특히 이 대통령은 지정학적 리스크와 관련해 &quot;그동안 같은 주식도 한국 증권거래소에 상장됐다는 이유로 할인되는... </div>
             <div class="news-source">▸ newsverse.kr</div>
-          </div>
-        </div><div class="news-item">
-          <span class="news-num">04</span>
-          <div class="news-body">
-            <a class="news-title" href="http://www.finomy.com/news/articleView.html?idxno=251645" target="_blank">전기차 관련주, '봄날의 햇살' 삼화콘덴서·한온시스템·삼영·기아·LS머...</a>
-            <div class="news-summary">현대경제신문 홍미경 기자 | 전기차 관련주들이 전 거래일 대비 1.29% 상승으로 장을 마감했다. 18일... 디아이씨는 1976년 설립된 자동차 부품 제조업체로 2007년 코스피에 상장했다. 주로 자동차부품, 중장비(지게차... </div>
-            <div class="news-source">▸ finomy.com</div>
           </div>
         </div></div>
 
