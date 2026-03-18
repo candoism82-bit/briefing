@@ -176,74 +176,109 @@ def _parse_duration(iso):
     return int(m.group(1) or 0)*3600 + int(m.group(2) or 0)*60 + int(m.group(3) or 0)
 
 def get_videos():
-    videos = []
-    if not YOUTUBE_API_KEY:
-        print("  ⚠️ YOUTUBE_API_KEY 없음 — 영상 섹션 생략")
-        return videos
+    import datetime as _dt, os as _os
+    kst   = _dt.timezone(_dt.timedelta(hours=9))
+    today = _dt.datetime.now(kst)
 
-    # 검색 키워드 (카테고리별 1개씩 가져옴)
-    QUERIES = [
-        "크레스티드게코 shorts -동요 -어린이 -kids",
-        "동물 귀여운 shorts -동요 -어린이 -kids",
-        "웃긴영상 shorts -동요 -어린이 -kids",
+    # 갱신 여부 판단: 매달 1일 OR 강제 갱신 플래그
+    force_refresh = _os.environ.get("FORCE_YT_REFRESH", "").lower() == "true"
+    is_refresh_day = (today.day == 1) or force_refresh
+
+    # 인덱스 계산: 1일=0, 2일=1, ... 말일까지
+    import calendar
+    days_in_month = calendar.monthrange(today.year, today.month)[1]
+    idx = today.day - 1  # 1일=0, 2일=1, ...
+
+    CATEGORIES = [
+        ("gecko",  "크레스티드게코 shorts"),
+        ("animal", "귀여운 동물 shorts"),
+        ("funny",  "웃긴영상 shorts"),
     ]
+    EXCLUDE_WORDS = ["동요", "어린이", "kids", "유아", "아기", "nursery",
+                     "children", "동화", "뽀로로", "핑크퐁", "baby shark"]
 
+    # ── 매달 1일 또는 강제 갱신: YouTube API로 목록 수집 ──
+    if is_refresh_day and YOUTUBE_API_KEY:
+        reason = "강제 갱신" if force_refresh else "매달 갱신일"
+        print(f"  ▶ {reason}! YouTube API로 영상 목록 수집 중...")
+        lines = [f"# 갱신일: {today.strftime('%Y-%m-%d')}\n"]
+        for cat_key, query in CATEGORIES:
+            lines.append(f"# CATEGORY: {cat_key}\n")
+            fetched = []
+            seen = set()
+            page_token = ""
+            while len(fetched) < 31:
+                params = {
+                    "part": "snippet",
+                    "q": query + " -동요 -어린이 -kids -유아",
+                    "type": "video", "videoDuration": "short",
+                    "regionCode": "KR", "relevanceLanguage": "ko",
+                    "order": "viewCount", "safeSearch": "moderate",
+                    "maxResults": 50, "key": YOUTUBE_API_KEY,
+                }
+                if page_token:
+                    params["pageToken"] = page_token
+                sr = requests.get("https://www.googleapis.com/youtube/v3/search",
+                                  params=params, timeout=15).json()
+                for item in sr.get("items", []):
+                    vid   = item["id"].get("videoId", "")
+                    title = item["snippet"]["title"].replace("|", "｜")
+                    if not vid or vid in seen:
+                        continue
+                    if any(w.lower() in title.lower() for w in EXCLUDE_WORDS):
+                        continue
+                    dr = requests.get("https://www.googleapis.com/youtube/v3/videos",
+                                      params={"part": "contentDetails", "id": vid,
+                                              "key": YOUTUBE_API_KEY}, timeout=10).json()
+                    items_d = dr.get("items", [])
+                    if not items_d:
+                        continue
+                    if _parse_duration(items_d[0]["contentDetails"]["duration"]) <= 60:
+                        seen.add(vid)
+                        fetched.append(f"https://www.youtube.com/shorts/{vid} | {title}\n")
+                    if len(fetched) >= 31:
+                        break
+                page_token = sr.get("nextPageToken", "")
+                if not page_token:
+                    break
+            lines.extend(fetched)
+            print(f"    → {cat_key}: {len(fetched)}개 수집")
+        with open("video_contents.txt", "w", encoding="utf-8") as f:
+            f.writelines(lines)
+        print("  ✅ video_contents.txt 갱신 완료")
+
+    # ── 매일: 파일에서 인덱스 해당 영상 읽기 ──
+    videos = []
     try:
-        print("  ▶ YouTube Shorts 검색 중...")
-        seen = set()
-        for query in QUERIES:
-            # 검색 API로 최신 인기 Shorts 탐색
-            sr = requests.get(
-                "https://www.googleapis.com/youtube/v3/search",
-                params={
-                    "part":        "snippet",
-                    "q":           query,
-                    "type":        "video",
-                    "videoDuration": "short",
-                    "regionCode":  "KR",
-                    "relevanceLanguage": "ko",
-                    "order":       "viewCount",
-                    "safeSearch":  "moderate",
-                    "maxResults":  5,
-                    "key":         YOUTUBE_API_KEY,
-                },
-                timeout=15
-            ).json()
-
-            # 제목에 어린이/동요 관련 키워드 있으면 제외
-            EXCLUDE_WORDS = ["동요", "어린이", "kids", "유아", "아기", "nursery",
-                             "children", "동화", "뽀로로", "핑크퐁", "baby shark"]
-
-            for item in sr.get("items", []):
-                vid   = item["id"].get("videoId", "")
-                title = item["snippet"]["title"]
-                if not vid or vid in seen:
+        cats = {}
+        cur_cat = None
+        with open("video_contents.txt", "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line:
                     continue
-                # 제목 필터링
-                if any(w.lower() in title.lower() for w in EXCLUDE_WORDS):
-                    continue
-                # contentDetails로 실제 duration 확인 (60초 이하 = Shorts)
-                dr = requests.get(
-                    "https://www.googleapis.com/youtube/v3/videos",
-                    params={"part": "contentDetails", "id": vid, "key": YOUTUBE_API_KEY},
-                    timeout=10
-                ).json()
-                items_d = dr.get("items", [])
-                if not items_d:
-                    continue
-                duration = _parse_duration(items_d[0]["contentDetails"]["duration"])
-                if duration <= 60:
-                    seen.add(vid)
-                    videos.append({
-                        "title": title,
-                        "embed": f"https://www.youtube.com/embed/{vid}",
-                        "url":   f"https://www.youtube.com/shorts/{vid}",
-                    })
-                    break  # 카테고리당 1개만
-
-        print(f"  → 영상 {len(videos)}개 로드")
-    except Exception as e:
-        print(f"  ⚠️ YouTube API 오류: {e}")
+                if line.startswith("# CATEGORY:"):
+                    cur_cat = line.split(":", 1)[1].strip()
+                    cats[cur_cat] = []
+                elif not line.startswith("#") and cur_cat:
+                    parts = [p.strip() for p in line.split("|")]
+                    url   = parts[0]
+                    title = parts[1] if len(parts) > 1 else "오늘의 영상"
+                    import re as _re
+                    m = _re.search(r"shorts/([A-Za-z0-9_-]+)", url)
+                    if m:
+                        cats[cur_cat].append({
+                            "title": title,
+                            "embed": f"https://www.youtube.com/embed/{m.group(1)}",
+                            "url":   url,
+                        })
+        for cat_key, _ in CATEGORIES:
+            pool = cats.get(cat_key, [])
+            if pool:
+                videos.append(pool[idx % len(pool)])
+        print(f"  → 영상 {len(videos)}개 로드 (인덱스: {idx})")
+    except FileNotFoundError:
+        print("  ⚠️ video_contents.txt 없음 — 영상 섹션 생략")
     return videos
 
 
