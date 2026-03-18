@@ -481,7 +481,22 @@ def build_html(weather, eco, pol, videos, ads, date_info):
   {body_html}
   {link_html}
 </div>'''
-        ads_section = f'''<!-- ADS -->
+        ads_section = f'''<!-- TOOLS -->
+<div class="sec-hd"><span class="sec-hd-label">Tools</span><div class="sec-hd-line"></div><span class="sec-tag tag-weather">🛠 유용한 툴</span></div>
+<div class="tools-row">
+  <a class="tool-link-card" href="https://크레오늘.com/tools/hatching_calculator" target="_blank">
+    <span class="tool-link-icon">🥚</span>
+    <span class="tool-link-name">해칭 계산기</span>
+    <span class="tool-link-arrow">›</span>
+  </a>
+  <a class="tool-link-card" href="https://크레오늘.com/tools/morph_calculator" target="_blank">
+    <span class="tool-link-icon">🧬</span>
+    <span class="tool-link-name">모프 계산기</span>
+    <span class="tool-link-arrow">›</span>
+  </a>
+</div>
+
+<!-- ADS -->
 <div class="sec-hd"><span class="sec-hd-label">Community</span><div class="sec-hd-line"></div><span class="sec-tag tag-yt">📌 커뮤니티 소식</span></div>
 <div class="ads-wrap">
   <div class="ads-nav">
@@ -647,6 +662,13 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 .mpanel{{display:none;padding:0 16px 16px}}
 .mpanel.active{{display:block}}
 .yt-link{{display:block;margin-top:8px;font-size:11px;color:#58a6ff;text-decoration:none;line-height:1.5}}
+.tools-row{{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px 16px}}
+.tool-link-card{{display:flex;align-items:center;gap:8px;background:#0d1117;border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:12px 14px;text-decoration:none;color:inherit;transition:all .2s}}
+.tool-link-card:hover{{border-color:rgba(88,166,255,.3);background:rgba(88,166,255,.05)}}
+.tool-link-icon{{font-size:20px;flex-shrink:0}}
+.tool-link-name{{font-size:12px;font-weight:700;color:#e6edf3;flex:1}}
+.tool-link-arrow{{font-size:16px;color:rgba(255,255,255,.25);transition:transform .2s}}
+.tool-link-card:hover .tool-link-arrow{{transform:translateX(3px);color:#58a6ff}}
 .footer{{padding:20px;text-align:center;border-top:1px solid rgba(255,255,255,.06);font-size:10px;color:rgba(255,255,255,.25);line-height:1.8}}
 .footer-credit{{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;opacity:.7}}
 .footer-credit img{{width:32px;height:32px;border-radius:50%;object-fit:cover}}
