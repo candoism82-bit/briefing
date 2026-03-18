@@ -1,1 +1,505 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🥚 해칭 계산기 · 크레오늘</title>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #faf8f4;
+    --white: #ffffff;
+    --ink: #1a1a1a;
+    --ink-soft: #5a5a5a;
+    --ink-lighter: #9a9a9a;
+    --accent: #4a7c59;
+    --accent-light: #e8f2ec;
+    --accent-soft: #c8dfd0;
+    --warn: #b85c38;
+    --warn-light: #fdf0ec;
+    --border: #e8e4de;
+    --shadow: 0 2px 20px rgba(0,0,0,.06);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,.10);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Gowun Dodum', serif;
+    min-height: 100vh;
+    padding: 0 16px 60px;
+  }
+  .site-header {
+    text-align: center;
+    padding: 48px 0 32px;
+    position: relative;
+  }
+  .site-header::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 2px;
+    background: var(--accent);
+    margin: 16px auto 0;
+    border-radius: 2px;
+  }
+  .site-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .18em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .site-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 6vw, 42px);
+    color: var(--ink);
+    line-height: 1.2;
+  }
+  .site-sub {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+  .card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 32px 28px;
+    max-width: 480px;
+    margin: 0 auto 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+  }
+  .card-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .15em;
+    color: var(--ink-lighter);
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .input-group { margin-bottom: 28px; }
+  .input-label {
+    display: block;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .date-input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    font-size: 16px;
+    font-family: 'DM Mono', monospace;
+    color: var(--ink);
+    background: var(--cream);
+    outline: none;
+    transition: border-color .2s;
+    -webkit-appearance: none;
+  }
+  .date-input:focus {
+    border-color: var(--accent);
+    background: var(--white);
+  }
+  .temp-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .temp-btn {
+    padding: 12px 8px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    background: var(--cream);
+    cursor: pointer;
+    text-align: center;
+    transition: all .2s;
+    font-family: 'Gowun Dodum', serif;
+  }
+  .temp-btn:hover {
+    border-color: var(--accent-soft);
+    background: var(--accent-light);
+  }
+  .temp-btn.active {
+    border-color: var(--accent);
+    background: var(--accent-light);
+  }
+  .temp-btn .temp-c {
+    font-family: 'DM Mono', monospace;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+    display: block;
+  }
+  .temp-btn .temp-days {
+    font-size: 10px;
+    color: var(--ink-lighter);
+    margin-top: 3px;
+    display: block;
+  }
+  .temp-btn.active .temp-c { color: var(--accent); }
+  .temp-btn.active .temp-days { color: var(--accent); }
+  .calc-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-family: 'Gowun Dodum', serif;
+    cursor: pointer;
+    transition: all .2s;
+    margin-top: 28px;
+    letter-spacing: .02em;
+  }
+  .calc-btn:hover { background: #3d6b4a; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(74,124,89,.3); }
+  .calc-btn:active { transform: translateY(0); }
+  .result-card {
+    display: none;
+    background: var(--white);
+    border-radius: 20px;
+    padding: 32px 28px;
+    max-width: 480px;
+    margin: 0 auto 20px;
+    box-shadow: var(--shadow-lg);
+    border: 1.5px solid var(--accent-soft);
+    animation: fadeUp .4s ease;
+  }
+  .result-card.show { display: block; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .result-egg {
+    font-size: 48px;
+    text-align: center;
+    margin-bottom: 16px;
+    animation: wobble 2s ease infinite;
+  }
+  @keyframes wobble {
+    0%,100% { transform: rotate(-3deg); }
+    50%      { transform: rotate(3deg); }
+  }
+  .result-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .15em;
+    color: var(--ink-lighter);
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .result-row:last-of-type { border-bottom: none; }
+  .result-key { font-size: 13px; color: var(--ink-soft); }
+  .result-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    text-align: right;
+  }
+  .result-val.accent { color: var(--accent); font-size: 16px; }
+  .progress-wrap {
+    margin-top: 24px;
+    background: var(--cream);
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+  .progress-bar-bg {
+    background: var(--border);
+    border-radius: 99px;
+    height: 8px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-soft), var(--accent));
+    border-radius: 99px;
+    transition: width .6s ease;
+  }
+  .progress-msg {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    text-align: center;
+    line-height: 1.6;
+  }
+  .info-card {
+    background: var(--accent-light);
+    border-radius: 16px;
+    padding: 20px;
+    max-width: 480px;
+    margin: 0 auto;
+    border: 1px solid var(--accent-soft);
+  }
+  .info-title {
+    font-size: 12px;
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .info-list {
+    list-style: none;
+    font-size: 12px;
+    color: var(--ink-soft);
+    line-height: 2;
+  }
+  .info-list li::before { content: '· '; color: var(--accent); }
+  /* ── 앱 프로모 ── */
+  .app-promo {
+    background: var(--white);
+    border: 1.5px solid var(--accent-soft);
+    border-radius: 20px;
+    padding: 24px;
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto 20px;
+    box-shadow: var(--shadow);
+  }
+  .app-promo-inner { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 18px; }
+  .app-promo-icon { font-size: 36px; flex-shrink: 0; line-height: 1; }
+  .app-promo-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 6px; line-height: 1.4; }
+  .app-promo-desc { font-size: 12px; color: var(--ink-soft); line-height: 1.7; }
+  .app-promo-btn {
+    display: block; width: 100%; padding: 13px;
+    background: var(--accent-light); border: 1.5px solid var(--accent-soft);
+    border-radius: 12px; color: var(--accent); font-size: 13px;
+    font-family: 'Gowun Dodum', serif; text-align: center;
+    text-decoration: none; transition: all .2s;
+  }
+  .app-promo-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
+  /* ── 푸터 ── */
+  .footer {
+    text-align: center;
+    padding: 32px 0 0;
+    font-size: 11px;
+    color: var(--ink-lighter);
+  }
+  .footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
 
+<header class="site-header">
+  <div class="site-tag">CreOnel · 크레오늘</div>
+  <h1 class="site-title">🥚 해칭 계산기</h1>
+  <p class="site-sub">산란일과 인큐베이션 온도를 입력하면<br>예상 해칭일을 알려드려요</p>
+</header>
+
+<div class="card">
+  <div class="card-label">01 · 산란일 입력</div>
+  <div class="input-group">
+    <label class="input-label" for="lay-date">알을 낳은 날짜</label>
+    <input type="date" class="date-input" id="lay-date">
+  </div>
+
+  <div class="card-label">02 · 인큐베이션 온도 선택</div>
+    <div class="temp-grid" id="temp-grid">
+    <button class="temp-btn" data-temp="22" data-avg="91" data-min="85" data-max="98">
+      <span class="temp-c">22°C</span>
+      <span class="temp-days">약 91일</span>
+    </button>
+    <button class="temp-btn" data-temp="22.5" data-avg="87" data-min="81" data-max="94">
+      <span class="temp-c">22.5°C</span>
+      <span class="temp-days">약 87일</span>
+    </button>
+    <button class="temp-btn" data-temp="23" data-avg="80" data-min="74" data-max="87">
+      <span class="temp-c">23°C</span>
+      <span class="temp-days">약 80일</span>
+    </button>
+    <button class="temp-btn" data-temp="23.5" data-avg="76" data-min="70" data-max="83">
+      <span class="temp-c">23.5°C</span>
+      <span class="temp-days">약 76일</span>
+    </button>
+    <button class="temp-btn active" data-temp="24" data-avg="73" data-min="67" data-max="80">
+      <span class="temp-c">24°C</span>
+      <span class="temp-days">약 73일</span>
+    </button>
+    <button class="temp-btn" data-temp="24.5" data-avg="69" data-min="63" data-max="76">
+      <span class="temp-c">24.5°C</span>
+      <span class="temp-days">약 69일</span>
+    </button>
+    <button class="temp-btn" data-temp="25" data-avg="65" data-min="59" data-max="72">
+      <span class="temp-c">25°C</span>
+      <span class="temp-days">약 65일</span>
+    </button>
+    <button class="temp-btn" data-temp="25.5" data-avg="61" data-min="55" data-max="68">
+      <span class="temp-c">25.5°C</span>
+      <span class="temp-days">약 61일</span>
+    </button>
+    <button class="temp-btn" data-temp="26" data-avg="58" data-min="52" data-max="65">
+      <span class="temp-c">26°C</span>
+      <span class="temp-days">약 58일</span>
+    </button>
+  </div>
+
+  <button class="calc-btn" id="calc-btn">🥚 예상 해칭일 계산하기</button>
+</div>
+
+<div class="result-card" id="result-card">
+  <div class="result-egg">🥚</div>
+  <div class="result-title">Expected Hatching Date</div>
+
+  <div class="result-row">
+    <span class="result-key">산란일</span>
+    <span class="result-val" id="r-laydate">—</span>
+  </div>
+  <div class="result-row">
+    <span class="result-key">인큐베이션 온도</span>
+    <span class="result-val" id="r-temp">—</span>
+  </div>
+  <div class="result-row">
+    <span class="result-key">예상 최소 해칭일</span>
+    <span class="result-val" id="r-early">—</span>
+  </div>
+  <div class="result-row">
+    <span class="result-key">예상 최대 해칭일</span>
+    <span class="result-val" id="r-late">—</span>
+  </div>
+  <div class="result-row">
+    <span class="result-key">평균 예상일</span>
+    <span class="result-val accent" id="r-avg">—</span>
+  </div>
+
+  <div class="progress-wrap" id="progress-wrap" style="display:none">
+    <div class="progress-label">
+      <span>산란일</span>
+      <span id="progress-pct">0%</span>
+      <span>예상 해칭일</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+    <div class="progress-msg" id="progress-msg"></div>
+  </div>
+</div>
+
+<div class="app-promo">
+  <div class="app-promo-inner">
+    <div class="app-promo-icon"><img src="../../images/cretoday_logo.png" alt="크레오늘" style="width:52px;height:52px;object-fit:contain;border-radius:10px;"></div>
+    <div class="app-promo-text">
+      <div class="app-promo-title">더 체계적인 산란 관리가 필요하시다면?</div>
+      <div class="app-promo-desc">크레오늘 앱으로 산란일, 해칭일, 개체 정보를<br>한 곳에서 편리하게 관리해보세요!</div>
+    </div>
+  </div>
+  <a class="app-promo-btn" href="https://play.google.com/apps/testing/com.crenote.breeding" target="_blank">
+    🔗 크레오늘 앱 테스트 참여하기
+  </a>
+</div>
+
+<div class="info-card">
+  <div class="info-title">📋 참고 사항</div>
+  <ul class="info-list">
+    <li>인큐베이션 기간은 온도 외에도 습도, 알의 상태에 따라 달라질 수 있어요</li>
+    <li>권장 온도는 22~26°C이며 27°C 이상은 피하는 것이 좋아요</li>
+    <li>알이 꺼지거나 곰팡이가 피면 무정란 또는 사망란일 수 있어요</li>
+  </ul>
+</div>
+
+<footer class="footer">
+  <a href="https://크레오늘.com">← 크레오늘 메인으로</a>
+  <br><br>
+  크레스티드 게코 커뮤니티 · CreOnel
+</footer>
+
+<script>
+const tempBtns = document.querySelectorAll('.temp-btn');
+let selectedBtn = document.querySelector('.temp-btn.active');
+tempBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    tempBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedBtn = btn;
+  });
+});
+
+function fmt(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth()+1).padStart(2,'0');
+  const d = String(date.getDate()).padStart(2,'0');
+  const days = ['일','월','화','수','목','금','토'];
+  return `${y}.${m}.${d} (${days[date.getDay()]})`;
+}
+
+function addDays(date, n) {
+  const d = new Date(date);
+  d.setDate(d.getDate() + n);
+  return d;
+}
+
+document.getElementById('calc-btn').addEventListener('click', () => {
+  const dateVal = document.getElementById('lay-date').value;
+  if (!dateVal) { alert('산란일을 입력해주세요!'); return; }
+  if (!selectedBtn) { alert('온도를 선택해주세요!'); return; }
+
+  const layDate  = new Date(dateVal);
+  const avgDays  = parseInt(selectedBtn.dataset.avg);
+  const minDays  = parseInt(selectedBtn.dataset.min) || Math.round(avgDays * 0.93);
+  const maxDays  = parseInt(selectedBtn.dataset.max) || Math.round(avgDays * 1.07);
+  const tempC    = selectedBtn.dataset.temp;
+
+  const earlyDate = addDays(layDate, minDays);
+  const lateDate  = addDays(layDate, maxDays);
+  const avgDate   = addDays(layDate, avgDays);
+
+  document.getElementById('r-laydate').textContent = fmt(layDate);
+  document.getElementById('r-temp').textContent    = `${tempC}°C`;
+  document.getElementById('r-early').textContent   = fmt(earlyDate);
+  document.getElementById('r-late').textContent    = fmt(lateDate);
+  document.getElementById('r-avg').textContent     = fmt(avgDate);
+
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  const lay0  = new Date(dateVal);
+  lay0.setHours(0,0,0,0);
+  const elapsed = Math.floor((today - lay0) / 86400000);
+
+  const progressWrap = document.getElementById('progress-wrap');
+  if (elapsed >= 0) {
+    progressWrap.style.display = 'block';
+    const pct = Math.min(100, Math.round((elapsed / avgDays) * 100));
+    setTimeout(() => { document.getElementById('progress-fill').style.width = pct + '%'; }, 100);
+    document.getElementById('progress-pct').textContent = pct + '%';
+    const msg = document.getElementById('progress-msg');
+    if (elapsed < minDays) {
+      msg.textContent = `산란 ${elapsed}일째 · 최소 ${minDays - elapsed}일 후부터 해칭 가능해요 🌱`;
+    } else if (elapsed <= maxDays) {
+      msg.textContent = `산란 ${elapsed}일째 · 슬슬 기대해도 좋을 시기예요! 🥚`;
+    } else {
+      msg.innerHTML = `산란 ${elapsed}일째 · 예상 기간을 초과했어요<br>알 상태를 꼭 확인해보세요 🔍`;
+    }
+  } else {
+    progressWrap.style.display = 'none';
+  }
+
+  const resultCard = document.getElementById('result-card');
+  resultCard.classList.add('show');
+  resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+});
+
+const today = new Date();
+document.getElementById('lay-date').value =
+  `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+</script>
+</body>
+</html>
