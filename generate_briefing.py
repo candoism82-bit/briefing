@@ -677,12 +677,12 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 .mpanel.active{{display:block}}
 .yt-link{{display:block;margin-top:8px;font-size:11px;color:#58a6ff;text-decoration:none;line-height:1.5}}
 .tools-row{{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px 16px}}
-.tool-link-card{{display:flex;align-items:center;gap:8px;background:#0d1117;border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:12px 14px;text-decoration:none;color:inherit;transition:all .2s}}
-.tool-link-card:hover{{border-color:rgba(88,166,255,.3);background:rgba(88,166,255,.05)}}
-.tool-link-icon{{font-size:20px;flex-shrink:0}}
-.tool-link-name{{font-size:12px;font-weight:700;color:#e6edf3;flex:1}}
-.tool-link-arrow{{font-size:16px;color:rgba(255,255,255,.25);transition:transform .2s}}
-.tool-link-card:hover .tool-link-arrow{{transform:translateX(3px);color:#58a6ff}}
+.tool-link-card{{display:flex;align-items:center;gap:8px;background:rgba(255,166,87,.12);border:1.5px solid rgba(255,166,87,.35);border-radius:12px;padding:14px 16px;text-decoration:none;color:inherit;transition:all .2s}}
+.tool-link-card:hover{{background:rgba(255,166,87,.22);border-color:#ffa657;transform:translateY(-1px)}}
+.tool-link-icon{{font-size:22px;flex-shrink:0}}
+.tool-link-name{{font-size:13px;font-weight:700;color:#ffa657;flex:1}}
+.tool-link-arrow{{font-size:18px;color:rgba(255,166,87,.5);transition:transform .2s;font-weight:700}}
+.tool-link-card:hover .tool-link-arrow{{transform:translateX(3px);color:#ffa657}}
 .footer{{padding:20px;text-align:center;border-top:1px solid rgba(255,255,255,.06);font-size:10px;color:rgba(255,255,255,.25);line-height:1.8}}
 .footer-credit{{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;opacity:.7}}
 .footer-credit img{{width:32px;height:32px;border-radius:50%;object-fit:cover}}
