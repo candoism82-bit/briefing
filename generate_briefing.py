@@ -658,6 +658,10 @@ def push(html, date_str):
     subprocess.run(["git", "config", "user.email", "actions@github.com"], check=True)
     subprocess.run(["git", "config", "user.name",  "GitHub Actions"],     check=True)
     subprocess.run(["git", "add", "index.html"], check=True)
+    # video_contents.txt 가 있으면 함께 커밋
+    import os as _os
+    if _os.path.exists("video_contents.txt"):
+        subprocess.run(["git", "add", "video_contents.txt"], check=True)
     diff = subprocess.run(["git", "diff", "--cached", "--quiet"])
     if diff.returncode == 0:
         print("  → 변경없음, 스킵")
