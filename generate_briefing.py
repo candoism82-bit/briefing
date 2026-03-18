@@ -733,7 +733,7 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 <!-- FOOTER -->
 <div class="footer">
   🦎 Crested Gecko Community · {date_info['date_ko']}<br>
-  날씨 제공: OpenWeatherMap · 뉴스 제공: 네이버 검색
+  날씨 제공: 기상청 · 미세먼지: 에어코리아 · 뉴스 제공: 네이버 검색
   <div class="footer-credit">
     <img src="images/kkug_cre.png" alt="kkug.cre">
     <span>Designed by @kkug.cre</span>
