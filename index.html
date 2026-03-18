@@ -288,30 +288,30 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 <div class="news-list"><div class="news-item">
           <span class="news-num">01</span>
           <div class="news-body">
+            <a class="news-title" href="https://news.skbroadband.com/news/articleView.html?idxno=221171" target="_blank">&quot;즉각 중단하라&quot; 인천지역사회, 공항기업 통폐합 반발</a>
+            <div class="news-summary">인천지역사회 대책위는 정부가 공항공기업 통합을 강행하면 인천공항에서 청와대까지 1천 대 규모의 차량으로 항의 집회를 이어갈 것이라고 예고했습니다. B tv 뉴스 이재원입니다. 영상취재 : 김동휘</div>
+            <div class="news-source">▸ news.skbroadband.com</div>
+          </div>
+        </div><div class="news-item">
+          <span class="news-num">02</span>
+          <div class="news-body">
             <a class="news-title" href="http://www.tongilnews.com/news/articleView.html?idxno=216074" target="_blank">트럼프는 피스메이커 아닌 워메이커...&quot;침략전쟁을 멈춰라&quot;</a>
             <div class="news-summary">전국 660여개 시민사회종교 단체와 정당, 개인 1,715명이 참여한  '미국과 이스라엘의 이란침략사태에 대한 각계 공동시국선언문 발표 기자회견이 18일 오전 광화문 세종문화회관 계단에서 진행됐다. [사진-토일뉴스 이승현... </div>
             <div class="news-source">▸ tongilnews.com</div>
           </div>
         </div><div class="news-item">
-          <span class="news-num">02</span>
+          <span class="news-num">03</span>
           <div class="news-body">
             <a class="news-title" href="https://www.topstarnews.net/news/articleView.html?idxno=16008418" target="_blank">트럼프 대테러 수장 사임…이란전 명분 논쟁 격화</a>
             <div class="news-summary">○ 정치권·국제사회까지 확산된 논쟁 사임 이후 논란은 정치권과 시민사회로 번졌다. 일부 단체는 켄트의... 특히 이란전이 장기화될 경우 군사 개입의 명분과 비용을 둘러싼 논쟁은 더욱 거세질 전망이다. [톱스타뉴스=]</div>
             <div class="news-source">▸ topstarnews.net</div>
           </div>
         </div><div class="news-item">
-          <span class="news-num">03</span>
+          <span class="news-num">04</span>
           <div class="news-body">
             <a class="news-title" href="http://www.newsprime.co.kr/news/article.html?no=727367" target="_blank">정청래, 당내 비판 속 김어준 유튜브 출연</a>
             <div class="news-summary">18일 강준현 더불어민주당 수석대변인은 CBS라디오 '박성태의 뉴스쇼'에 출연해 정 대표의 출연 배경과 관련해... 정치권에서는 정 대표와 김 씨의 우호적 관계가 영향을 미친 것 아니냐는 해석도 나왔다. 강 수석대변인은... </div>
             <div class="news-source">▸ newsprime.co.kr</div>
-          </div>
-        </div><div class="news-item">
-          <span class="news-num">04</span>
-          <div class="news-body">
-            <a class="news-title" href="https://www.nocutnews.co.kr/news/6486928?utm_source=naver&utm_medium=article&utm_campaign=20260318013304" target="_blank">'저격수' 자처한 박형준 부산시장…3선 길목서 '정부·여당' 정조준</a>
-            <div class="news-summary">사법체계 개편안 놓고 &quot;제왕적 대통령제 폭주&quot; 비판박 시장은 18일 자신의 사회관계망서비스(SNS)를 통해 정부... 특정 정치세력이 음모론을 유포해 국가의 형사사법 체계를 흔드는 중대한 국가 문란 사건&quot;이라고 주장했다.... </div>
-            <div class="news-source">▸ nocutnews.co.kr</div>
           </div>
         </div></div>
 
@@ -348,7 +348,10 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 <!-- FOOTER -->
 <div class="footer">
   🦎 Crested Gecko Community · 2026년 03월 18일<br>
-  날씨 제공: OpenWeatherMap · 뉴스 제공: 네이버 검색
+  날씨 제공: 기상청 · 미세먼지: 에어코리아 · 뉴스 제공: 네이버 검색
+  <div id="admin-counter" style="display:none;margin-top:8px;font-size:11px;color:rgba(255,255,255,.5)">
+    👁 누적 조회수: <span id="view-count">...</span>
+  </div>
   <div class="footer-credit">
     <img src="images/kkug_cre.png" alt="kkug.cre">
     <span>Designed by @kkug.cre</span>
@@ -368,7 +371,6 @@ function showAd(i) {
   if (i < 0 || i >= total) return;
   tabs.forEach((t,idx)   => t.classList.toggle('active', idx===i));
   panels.forEach((p,idx) => p.classList.toggle('active', idx===i));
-  // 화살표 활성화
   const prev = document.getElementById('ad-prev');
   const next = document.getElementById('ad-next');
   if (prev) prev.classList.toggle('on', i > 0);
@@ -380,18 +382,30 @@ function moveAd(dir) {
   tabs.forEach((t,i) => { if (t.classList.contains('active')) cur = i; });
   showAd(cur + dir);
 }
-// 초기 화살표 상태 설정
 (function() {
   const tabs = document.querySelectorAll('.adtab');
   const next = document.getElementById('ad-next');
   if (next && tabs.length > 1) next.classList.add('on');
 })();
 (function() {
-  const d = new URLSearchParams(location.search).get('d');
+  const params = new URLSearchParams(location.search);
+  const hash   = location.hash;
+  // 날짜 표시
+  const d = params.get('d');
   if (d && d.length === 8) {
     const el = document.querySelector('.hd-date-big');
     if (el) el.textContent = d.slice(6,8);
   }
+  // 조회수 카운터 (항상 카운트, 관리자만 표시)
+  fetch('https://api.counterapi.dev/v1/cretoday-briefing/views/up')
+    .then(r => r.json())
+    .then(data => {
+      if (hash === '#admin') {
+        document.getElementById('view-count').textContent = data.count.toLocaleString();
+        document.getElementById('admin-counter').style.display = 'block';
+      }
+    })
+    .catch(() => {});
 })();
 </script>
 </body>
