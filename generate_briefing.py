@@ -2,121 +2,213 @@
 """🦎 Crested Gecko Community - Daily Briefing (Claude API 없음)"""
 import os, re, json, datetime, subprocess, requests
 
-OPENWEATHER_KEY    = os.environ["OPENWEATHER_API_KEY"]
+OPENWEATHER_KEY    = os.environ.get("OPENWEATHER_API_KEY", "")
 NAVER_CLIENT_ID    = os.environ["NAVER_CLIENT_ID"]
 NAVER_CLIENT_SECRET= os.environ["NAVER_CLIENT_SECRET"]
 YOUTUBE_API_KEY    = os.environ.get("YOUTUBE_API_KEY", "")
+KMA_API_KEY        = os.environ.get("KMA_API_KEY", "")
+AIRKOREA_API_KEY   = os.environ.get("AIRKOREA_API_KEY", "")
 
 # ───────────────────────────────────────
-# 날씨 아이콘 / 도시명 변환
+# 날씨 상수
 # ───────────────────────────────────────
-CITY_KO = {
-    "Seoul":"서울","Busan":"부산","Daegu":"대구",
-    "Daejeon":"대전","Gwangju":"광주","Jeju":"제주"
-}
-OWM_ICON = {
-    "01d":"☀️","01n":"🌙","02d":"⛅","02n":"⛅",
-    "03d":"🌥","03n":"🌥","04d":"☁️","04n":"☁️",
-    "09d":"🌧️","09n":"🌧️","10d":"🌦","10n":"🌦",
-    "11d":"⛈️","11n":"⛈️","13d":"❄️","13n":"❄️",
-    "50d":"🌫️","50n":"🌫️",
-}
 DAYS_KO = ["월","화","수","목","금","토","일"]
 
-# ───────────────────────────────────────
-# 1. OpenWeatherMap 날씨
-# ───────────────────────────────────────
+# 기상청 nx/ny 격자 + 에어코리아 측정소
 CITIES = [
-    ("Seoul",   "KR", 37.5665, 126.9780),
-    ("Busan",   "KR", 35.1796, 129.0756),
-    ("Daegu",   "KR", 35.8714, 128.6014),
-    ("Daejeon", "KR", 36.3504, 127.3845),
-    ("Gwangju", "KR", 35.1595, 126.8526),
-    ("Jeju",    "KR", 33.4996, 126.5312),
+    {"name": "서울", "nx": 60, "ny": 127, "air_station": "종로구"},
+    {"name": "부산", "nx": 98, "ny": 76,  "air_station": "연제구"},
+    {"name": "대구", "nx": 89, "ny": 90,  "air_station": "수성구"},
+    {"name": "대전", "nx": 67, "ny": 100, "air_station": "서구"},
+    {"name": "광주", "nx": 58, "ny": 74,  "air_station": "북구"},
+    {"name": "제주", "nx": 52, "ny": 38,  "air_station": "이도이동"},
 ]
 
-# 미세먼지 등급
-def dust_grade(pm, thresholds, labels):
-    for t, l in zip(thresholds, labels):
-        if pm <= t:
-            return l
-    return labels[-1]
+# 기상청 하늘 상태 / 강수 형태 아이콘
+def kma_icon(sky, pty):
+    # pty 우선: 1=비 2=비/눈 3=눈 4=소나기
+    if pty == "1": return "🌧️"
+    if pty == "2": return "🌨"
+    if pty == "3": return "❄️"
+    if pty == "4": return "🌦"
+    # sky: 1=맑음 3=구름많음 4=흐림
+    if sky == "1": return "☀️"
+    if sky == "3": return "🌥"
+    if sky == "4": return "☁️"
+    return "🌤"
 
 def pm10_grade(v):
-    return dust_grade(v, [30,80,150], ["😊 좋음","🙂 보통","😷 나쁨","🚨 매우나쁨"])
+    if v <= 30:  return "😊 좋음"
+    if v <= 80:  return "🙂 보통"
+    if v <= 150: return "😷 나쁨"
+    return "🚨 매우나쁨"
 
 def pm25_grade(v):
-    return dust_grade(v, [15,35,75], ["😊 좋음","🙂 보통","😷 나쁨","🚨 매우나쁨"])
+    if v <= 15:  return "😊 좋음"
+    if v <= 35:  return "🙂 보통"
+    if v <= 75:  return "😷 나쁨"
+    return "🚨 매우나쁨"
 
+# ───────────────────────────────────────
+# 1. 기상청 단기예보 + 에어코리아 미세먼지
+# ───────────────────────────────────────
 def get_weather():
-    print("  날씨 수집 중...")
+    print("  날씨 수집 중 (기상청 API)...")
+    import urllib.parse
+
+    kst  = datetime.timezone(datetime.timedelta(hours=9))
+    now  = datetime.datetime.now(kst)
+    # base_time: 02,05,08,11,14,17,20,23시 중 가장 최근 (발표 후 10분 뒤 제공)
+    base_hours = [2, 5, 8, 11, 14, 17, 20, 23]
+    cur_hour = now.hour
+    # 07시 실행 기준 → 05시 발표 사용
+    base_h = max([h for h in base_hours if h <= max(cur_hour - 0, 2)], default=2)
+    base_date = now.strftime("%Y%m%d")
+    base_time = f"{base_h:02d}00"
+
+    # ── 에어코리아 미세먼지 (전국 시도별) ──
+    air_map = {}  # station → {pm10, pm25}
+    try:
+        for sido in ["서울", "부산", "대구", "대전", "광주", "제주"]:
+            ar = requests.get(
+                "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty",
+                params={
+                    "serviceKey": AIRKOREA_API_KEY,
+                    "returnType": "json",
+                    "numOfRows":  100,
+                    "pageNo":     1,
+                    "sidoName":   sido,
+                    "ver":        "1.0",
+                },
+                timeout=10
+            ).json()
+            for item in ar.get("response", {}).get("body", {}).get("items", []):
+                stn = item.get("stationName", "")
+                try:
+                    pm10 = int(float(item.get("pm10Value") or 0))
+                    pm25 = int(float(item.get("pm25Value") or 0))
+                except:
+                    pm10, pm25 = 0, 0
+                air_map[stn] = {"pm10": pm10, "pm25": pm25}
+        print(f"    → 에어코리아 {len(air_map)}개 측정소")
+    except Exception as e:
+        print(f"  ⚠️ 에어코리아 오류: {e}")
+
+    # ── 기상청 단기예보 ──
     cities_data = []
-    for city, country, lat, lon in CITIES:
+    for city in CITIES:
         try:
             r = requests.get(
-                "https://api.openweathermap.org/data/2.5/weather",
-                params={"q": f"{city},{country}", "appid": OPENWEATHER_KEY,
-                        "units": "metric", "lang": "kr"},
-                timeout=10
+                "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst",
+                params={
+                    "serviceKey": KMA_API_KEY,
+                    "pageNo":     1,
+                    "numOfRows":  300,
+                    "dataType":   "JSON",
+                    "base_date":  base_date,
+                    "base_time":  base_time,
+                    "nx":         city["nx"],
+                    "ny":         city["ny"],
+                },
+                timeout=15
             ).json()
-            icon = OWM_ICON.get(r["weather"][0]["icon"], "🌤")
+            items = r.get("response", {}).get("body", {}).get("items", {}).get("item", [])
+
+            # 오늘 최고/최저 기온, 하늘 상태 파싱
+            today = now.strftime("%Y%m%d")
+            tmx, tmn = None, None
+            sky_val, pty_val = "1", "0"
+            for it in items:
+                if it["fcstDate"] != today:
+                    continue
+                cat = it["category"]
+                val = it["fcstValue"]
+                if cat == "TMX": tmx = float(val)
+                if cat == "TMN": tmn = float(val)
+                # 오전 9시 기준 하늘/강수형태
+                if it["fcstTime"] == "0900":
+                    if cat == "SKY": sky_val = val
+                    if cat == "PTY": pty_val = val
+
+            icon = kma_icon(sky_val, pty_val)
+            high = f"{round(tmx)}°" if tmx is not None else "—"
+            low  = f"{round(tmn)}°" if tmn is not None else "—"
+
             # 미세먼지
-            ar = requests.get(
-                "http://api.openweathermap.org/data/2.5/air_pollution",
-                params={"lat": lat, "lon": lon, "appid": OPENWEATHER_KEY},
-                timeout=10
-            ).json()
-            comp = ar["list"][0]["components"]
-            pm10 = round(comp.get("pm10", 0))
-            pm25 = round(comp.get("pm2_5", 0))
+            stn_data = air_map.get(city["air_station"], {"pm10": 0, "pm25": 0})
+            pm10 = stn_data["pm10"]
+            pm25 = stn_data["pm25"]
+
             cities_data.append({
-                "name": CITY_KO.get(city, city),
-                "high": f"{round(r['main']['temp_max'])}°",
-                "low":  f"{round(r['main']['temp_min'])}°",
+                "name": city["name"],
                 "icon": icon,
+                "high": high,
+                "low":  low,
                 "pm10": pm10,
                 "pm25": pm25,
                 "pm10_grade": pm10_grade(pm10),
                 "pm25_grade": pm25_grade(pm25),
             })
         except Exception as e:
-            print(f"  ⚠️ {city} 날씨 오류: {e}")
+            print(f"  ⚠️ {city['name']} 오류: {e}")
 
-    # 서울 주간 예보 (forecast API)
+    # ── 서울 주간 예보 ──
     weekly = []
     try:
+        seoul = CITIES[0]
         r = requests.get(
-            "https://api.openweathermap.org/data/2.5/forecast",
-            params={"q": "Seoul,KR", "appid": OPENWEATHER_KEY,
-                    "units": "metric", "lang": "kr", "cnt": 40},
-            timeout=10
+            "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst",
+            params={
+                "serviceKey": KMA_API_KEY,
+                "pageNo":     1,
+                "numOfRows":  1000,
+                "dataType":   "JSON",
+                "base_date":  base_date,
+                "base_time":  base_time,
+                "nx":         seoul["nx"],
+                "ny":         seoul["ny"],
+            },
+            timeout=15
         ).json()
-        # 날짜별 최고/최저 집계
+        items = r.get("response", {}).get("body", {}).get("items", {}).get("item", [])
+
         day_map = {}
-        for item in r["list"]:
-            dt   = datetime.datetime.fromtimestamp(item["dt"])
-            key  = dt.strftime("%m/%d")
-            day  = DAYS_KO[dt.weekday()]
-            icon = OWM_ICON.get(item["weather"][0]["icon"], "🌤")
+        for it in items:
+            d   = it["fcstDate"]
+            cat = it["fcstValue"]
+            key = d
             if key not in day_map:
-                day_map[key] = {"day": f"{key}({day})", "icon": icon,
-                                "high": item["main"]["temp_max"],
-                                "low":  item["main"]["temp_min"]}
-            else:
-                day_map[key]["high"] = max(day_map[key]["high"], item["main"]["temp_max"])
-                day_map[key]["low"]  = min(day_map[key]["low"],  item["main"]["temp_min"])
-        for k, v in list(day_map.items())[:7]:
+                dt  = datetime.datetime.strptime(d, "%Y%m%d")
+                day_map[key] = {
+                    "day":  f"{dt.strftime('%m/%d')}({DAYS_KO[dt.weekday()]})",
+                    "sky":  "1", "pty": "0",
+                    "high": None, "low": None
+                }
+            c = it["category"]
+            v = it["fcstValue"]
+            if c == "TMX":
+                try: day_map[key]["high"] = float(v)
+                except: pass
+            if c == "TMN":
+                try: day_map[key]["low"] = float(v)
+                except: pass
+            if it["fcstTime"] == "1200":
+                if c == "SKY": day_map[key]["sky"] = v
+                if c == "PTY": day_map[key]["pty"] = v
+
+        for k in sorted(day_map.keys())[:7]:
+            v = day_map[k]
             weekly.append({
                 "day":  v["day"],
-                "icon": v["icon"],
-                "high": f"{round(v['high'])}°",
-                "low":  f"{round(v['low'])}°",
+                "icon": kma_icon(v["sky"], v["pty"]),
+                "high": f"{round(v['high'])}°" if v["high"] is not None else "—",
+                "low":  f"{round(v['low'])}°"  if v["low"]  is not None else "—",
             })
     except Exception as e:
         print(f"  ⚠️ 주간예보 오류: {e}")
 
-    # 오늘 서울 날씨 요약
-    overview = f"서울 현재 {cities_data[0]['low']}~{cities_data[0]['high']}" if cities_data else "날씨 준비 중"
+    # 서울 요약
+    overview = f"서울 {cities_data[0]['low']}~{cities_data[0]['high']}" if cities_data else "날씨 준비 중"
     seoul_pm = {
         "pm10":       cities_data[0].get("pm10",  0) if cities_data else 0,
         "pm25":       cities_data[0].get("pm25",  0) if cities_data else 0,
@@ -124,7 +216,7 @@ def get_weather():
         "pm25_grade": cities_data[0].get("pm25_grade", "") if cities_data else "",
     }
     print(f"  → 도시 {len(cities_data)}개, 주간예보 {len(weekly)}일")
-    return {"overview": overview, "detail": "OpenWeatherMap 제공", "cities": cities_data, "weekly": weekly, "seoul_pm": seoul_pm}
+    return {"overview": overview, "detail": "기상청 제공", "cities": cities_data, "weekly": weekly, "seoul_pm": seoul_pm}
 
 
 # ───────────────────────────────────────
