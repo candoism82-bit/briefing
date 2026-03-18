@@ -190,9 +190,9 @@ def get_videos():
     idx = today.day - 1  # 1일=0, 2일=1, ...
 
     CATEGORIES = [
-        ("gecko",  "크레스티드게코 shorts"),
-        ("animal", "귀여운 동물 shorts"),
-        ("funny",  "웃긴영상 shorts"),
+        ("gecko",  ["크레스티드게코 shorts", "도마뱀 귀여운 shorts", "파충류 shorts"]),
+        ("animal", ["귀여운 동물 shorts", "동물 웃긴 shorts", "반려동물 귀여운 shorts"]),
+        ("funny",  ["웃긴 순간 shorts", "개그 shorts", "반전 웃긴 shorts", "한국 인기 shorts"]),
     ]
     EXCLUDE_WORDS = ["동요", "어린이", "kids", "유아", "아기", "nursery",
                      "children", "동화", "뽀로로", "핑크퐁", "baby shark"]
@@ -202,45 +202,70 @@ def get_videos():
         reason = "강제 갱신" if force_refresh else "매달 갱신일"
         print(f"  ▶ {reason}! YouTube API로 영상 목록 수집 중...")
         lines = [f"# 갱신일: {today.strftime('%Y-%m-%d')}\n"]
-        for cat_key, query in CATEGORIES:
+        for cat_key, queries in CATEGORIES:
             lines.append(f"# CATEGORY: {cat_key}\n")
             fetched = []
             seen = set()
-            page_token = ""
-            while len(fetched) < 31:
-                params = {
-                    "part": "snippet",
-                    "q": query + " -동요 -어린이 -kids -유아",
-                    "type": "video", "videoDuration": "short",
-                    "regionCode": "KR", "relevanceLanguage": "ko",
-                    "order": "viewCount", "safeSearch": "moderate",
-                    "maxResults": 50, "key": YOUTUBE_API_KEY,
-                }
-                if page_token:
-                    params["pageToken"] = page_token
-                sr = requests.get("https://www.googleapis.com/youtube/v3/search",
-                                  params=params, timeout=15).json()
-                for item in sr.get("items", []):
-                    vid   = item["id"].get("videoId", "")
+            for query in queries:  # 부족하면 대체 쿼리로 이어서 수집
+                if len(fetched) >= 31:
+                    break
+                page_token = ""
+                while len(fetched) < 31:
+                    params = {
+                        "part": "snippet",
+                        "q": query + " -동요 -어린이 -kids -유아",
+                        "type": "video", "videoDuration": "short",
+                        "regionCode": "KR", "relevanceLanguage": "ko",
+                        "order": "viewCount", "safeSearch": "moderate",
+                        "maxResults": 50, "key": YOUTUBE_API_KEY,
+                    }
+                    if page_token:
+                        params["pageToken"] = page_token
+                    sr = requests.get("https://www.googleapis.com/youtube/v3/search",
+                                      params=params, timeout=15).json()
+                    for item in sr.get("items", []):
+                        vid   = item["id"].get("videoId", "")
+                        title = item["snippet"]["title"].replace("|", "｜")
+                        if not vid or vid in seen:
+                            continue
+                        if any(w.lower() in title.lower() for w in EXCLUDE_WORDS):
+                            continue
+                        dr = requests.get("https://www.googleapis.com/youtube/v3/videos",
+                                          params={"part": "contentDetails", "id": vid,
+                                                  "key": YOUTUBE_API_KEY}, timeout=10).json()
+                        items_d = dr.get("items", [])
+                        if not items_d:
+                            continue
+                        if _parse_duration(items_d[0]["contentDetails"]["duration"]) <= 60:
+                            seen.add(vid)
+                            fetched.append(f"https://www.youtube.com/shorts/{vid} | {title}\n")
+                        if len(fetched) >= 31:
+                            break
+                    page_token = sr.get("nextPageToken", "")
+                    if not page_token:
+                        break
+            # funny 카테고리가 31개 미달이면 전체 인기 Shorts로 보충
+            if cat_key == "funny" and len(fetched) < 31:
+                print(f"    → funny 부족({len(fetched)}개), 전체 인기 Shorts로 보충...")
+                pr = requests.get(
+                    "https://www.googleapis.com/youtube/v3/videos",
+                    params={"part": "snippet,contentDetails", "chart": "mostPopular",
+                            "regionCode": "KR", "maxResults": 50,
+                            "key": YOUTUBE_API_KEY},
+                    timeout=15
+                ).json()
+                for item in pr.get("items", []):
+                    vid   = item["id"]
                     title = item["snippet"]["title"].replace("|", "｜")
                     if not vid or vid in seen:
                         continue
                     if any(w.lower() in title.lower() for w in EXCLUDE_WORDS):
                         continue
-                    dr = requests.get("https://www.googleapis.com/youtube/v3/videos",
-                                      params={"part": "contentDetails", "id": vid,
-                                              "key": YOUTUBE_API_KEY}, timeout=10).json()
-                    items_d = dr.get("items", [])
-                    if not items_d:
-                        continue
-                    if _parse_duration(items_d[0]["contentDetails"]["duration"]) <= 60:
+                    if _parse_duration(item["contentDetails"]["duration"]) <= 60:
                         seen.add(vid)
                         fetched.append(f"https://www.youtube.com/shorts/{vid} | {title}\n")
                     if len(fetched) >= 31:
                         break
-                page_token = sr.get("nextPageToken", "")
-                if not page_token:
-                    break
             lines.extend(fetched)
             print(f"    → {cat_key}: {len(fetched)}개 수집")
         with open("video_contents.txt", "w", encoding="utf-8") as f:
