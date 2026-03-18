@@ -734,6 +734,9 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 <div class="footer">
   🦎 Crested Gecko Community · {date_info['date_ko']}<br>
   날씨 제공: 기상청 · 미세먼지: 에어코리아 · 뉴스 제공: 네이버 검색
+  <div id="admin-counter" style="display:none;margin-top:8px;font-size:11px;color:rgba(255,255,255,.5)">
+    👁 누적 조회수: <span id="view-count">...</span>
+  </div>
   <div class="footer-credit">
     <img src="images/kkug_cre.png" alt="kkug.cre">
     <span>Designed by @kkug.cre</span>
@@ -753,7 +756,6 @@ function showAd(i) {{
   if (i < 0 || i >= total) return;
   tabs.forEach((t,idx)   => t.classList.toggle('active', idx===i));
   panels.forEach((p,idx) => p.classList.toggle('active', idx===i));
-  // 화살표 활성화
   const prev = document.getElementById('ad-prev');
   const next = document.getElementById('ad-next');
   if (prev) prev.classList.toggle('on', i > 0);
@@ -765,18 +767,30 @@ function moveAd(dir) {{
   tabs.forEach((t,i) => {{ if (t.classList.contains('active')) cur = i; }});
   showAd(cur + dir);
 }}
-// 초기 화살표 상태 설정
 (function() {{
   const tabs = document.querySelectorAll('.adtab');
   const next = document.getElementById('ad-next');
   if (next && tabs.length > 1) next.classList.add('on');
 }})();
 (function() {{
-  const d = new URLSearchParams(location.search).get('d');
+  const params = new URLSearchParams(location.search);
+  const hash   = location.hash;
+  // 날짜 표시
+  const d = params.get('d');
   if (d && d.length === 8) {{
     const el = document.querySelector('.hd-date-big');
     if (el) el.textContent = d.slice(6,8);
   }}
+  // 조회수 카운터 (항상 카운트, 관리자만 표시)
+  fetch('https://api.counterapi.dev/v1/cretoday-briefing/views/up')
+    .then(r => r.json())
+    .then(data => {{
+      if (hash === '#admin') {{
+        document.getElementById('view-count').textContent = data.count.toLocaleString();
+        document.getElementById('admin-counter').style.display = 'block';
+      }}
+    }})
+    .catch(() => {{}});
 }})();
 </script>
 </body>
