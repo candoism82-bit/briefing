@@ -174,7 +174,7 @@ def get_weather():
             params={
                 "serviceKey": kma_key,
                 "pageNo":     1,
-                "numOfRows":  1000,
+                "numOfRows":  2000,
                 "dataType":   "JSON",
                 "base_date":  base_date,
                 "base_time":  base_time,
@@ -188,34 +188,38 @@ def get_weather():
         day_map = {}
         for it in items:
             d   = it["fcstDate"]
-            cat = it["fcstValue"]
-            key = d
-            if key not in day_map:
-                dt  = datetime.datetime.strptime(d, "%Y%m%d")
-                day_map[key] = {
+            c   = it["category"]
+            v   = it["fcstValue"]
+            if d not in day_map:
+                dt = datetime.datetime.strptime(d, "%Y%m%d")
+                day_map[d] = {
                     "day":  f"{dt.strftime('%m/%d')}({DAYS_KO[dt.weekday()]})",
                     "sky":  "1", "pty": "0",
-                    "high": None, "low": None
+                    "high": None, "low": None, "tmp": []
                 }
-            c = it["category"]
-            v = it["fcstValue"]
             if c == "TMX":
-                try: day_map[key]["high"] = float(v)
+                try: day_map[d]["high"] = float(v)
                 except: pass
             if c == "TMN":
-                try: day_map[key]["low"] = float(v)
+                try: day_map[d]["low"] = float(v)
+                except: pass
+            if c == "TMP":
+                try: day_map[d]["tmp"].append(float(v))
                 except: pass
             if it["fcstTime"] == "1200":
-                if c == "SKY": day_map[key]["sky"] = v
-                if c == "PTY": day_map[key]["pty"] = v
+                if c == "SKY": day_map[d]["sky"] = v
+                if c == "PTY": day_map[d]["pty"] = v
 
         for k in sorted(day_map.keys())[:7]:
             v = day_map[k]
+            # TMX/TMN 없으면 TMP 시간별 최고/최저로 대체
+            high = v["high"] if v["high"] is not None else (max(v["tmp"]) if v["tmp"] else None)
+            low  = v["low"]  if v["low"]  is not None else (min(v["tmp"]) if v["tmp"] else None)
             weekly.append({
                 "day":  v["day"],
                 "icon": kma_icon(v["sky"], v["pty"]),
-                "high": f"{round(v['high'])}°" if v["high"] is not None else "—",
-                "low":  f"{round(v['low'])}°"  if v["low"]  is not None else "—",
+                "high": f"{round(high)}°" if high is not None else "—",
+                "low":  f"{round(low)}°"  if low  is not None else "—",
             })
     except Exception as e:
         print(f"  ⚠️ 주간예보 오류: {e}")
