@@ -14,91 +14,98 @@
 <meta property="og:image:height" content="630">
 <meta property="og:url" content="https://크레오늘.com">
 <title>크레오늘 · CreOnel 아침 브리핑 · 2026년 03월 18일</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Noto+Serif+KR:wght@900&family=DM+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;display:flex;justify-content:center;padding:16px}
-.card{width:100%;max-width:480px;border-radius:16px;overflow:hidden;background:#161b22;box-shadow:0 8px 32px rgba(0,0,0,.5)}
-.hd{background:linear-gradient(135deg,#1a2332,#0d1f35);padding:24px;position:relative;overflow:hidden}
+:root{
+  --cream:#faf8f4;--white:#ffffff;--ink:#1a1a1a;--ink-soft:#5a5a5a;
+  --ink-light:#9a9a9a;--accent:#4a7c59;--accent-light:#e8f2ec;
+  --accent-soft:#c8dfd0;--border:#e8e4de;--border-soft:#f0ece6;
+  --shadow:0 2px 16px rgba(0,0,0,.06);--shadow-md:0 4px 24px rgba(0,0,0,.08);
+}
+body{background:var(--cream);color:var(--ink);font-family:'Gowun Dodum',serif;display:flex;justify-content:center;padding:16px 12px 48px}
+.card{width:100%;max-width:480px;border-radius:20px;overflow:hidden;background:var(--white);box-shadow:var(--shadow-md);border:1px solid var(--border)}
+.hd{background:linear-gradient(135deg,#2d5a3d,#4a7c59);padding:24px;position:relative;overflow:hidden}
+.hd::after{content:'';position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.06)}
 .hd-logo{width:52px;height:52px;object-fit:contain;border-radius:10px}
-.hd-eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;color:#7ec8a0;text-transform:uppercase;margin-bottom:2px}
-.hd-title{font-family:'Noto Serif KR',serif;font-size:24px;font-weight:900;color:#fff;line-height:1.2}
-.hd-sub{font-size:11px;color:rgba(255,255,255,.4);margin-top:4px}
+.hd-eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;color:rgba(255,255,255,.7);text-transform:uppercase;margin-bottom:2px}
+.hd-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#fff;line-height:1.2}
+.hd-sub{font-size:11px;color:rgba(255,255,255,.6);margin-top:4px}
 .hd-inner{display:flex;justify-content:space-between;align-items:flex-start}
-.hd-date-big{font-family:'DM Mono',monospace;font-size:52px;font-weight:700;color:#58a6ff;line-height:1}
-.hd-date-small{font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,.4);text-align:right;letter-spacing:.08em}
+.hd-date-big{font-family:'DM Mono',monospace;font-size:52px;font-weight:700;color:rgba(255,255,255,.9);line-height:1}
+.hd-date-small{font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,.5);text-align:right;letter-spacing:.08em}
 .ads-wrap{padding:0 16px 16px}
 .ads-nav{display:flex;align-items:center;gap:8px;margin-bottom:10px}
 .ads-tabs{display:flex;gap:6px;flex:1;overflow-x:auto;scrollbar-width:none}
 .ads-tabs::-webkit-scrollbar{display:none}
-.ads-arrow{width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:rgba(255,255,255,.3);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;user-select:none}
-.ads-arrow.on{color:#c8f0a0;border-color:#3d7a3a;background:rgba(61,122,58,.2)}
-.ads-arrow.on:hover{background:rgba(61,122,58,.4)}
-.adtab{flex-shrink:0;padding:5px 12px;border-radius:20px;font-size:11px;background:rgba(255,255,255,.07);color:rgba(255,255,255,.5);cursor:pointer;border:1px solid rgba(255,255,255,.1);transition:.2s}
-.adtab.active{background:#3d7a3a;color:#c8f0a0;border-color:#3d7a3a}
-.adpanel{display:none;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;overflow:hidden}
+.ads-arrow{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:var(--cream);color:var(--ink-light);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;user-select:none}
+.ads-arrow.on{color:var(--accent);border-color:var(--accent-soft);background:var(--accent-light)}
+.ads-arrow.on:hover{background:var(--accent-soft)}
+.adtab{flex-shrink:0;padding:5px 12px;border-radius:20px;font-size:11px;background:var(--cream);color:var(--ink-light);cursor:pointer;border:1px solid var(--border);transition:.2s}
+.adtab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.adpanel{display:none;background:var(--cream);border:1px solid var(--border);border-radius:12px;overflow:hidden}
 .adpanel.active{display:block}
 .adpanel a{display:block;text-decoration:none;color:inherit}
 .adpanel img{width:100%;display:block;object-fit:contain}
-.adpanel-title{padding:12px 14px 4px;font-size:15px;font-weight:900;color:#fff;line-height:1.4}
-.adpanel-text{padding:0 14px 10px;font-size:12px;color:rgba(255,255,255,.7);line-height:1.8;white-space:pre-line}
-.adpanel-link{display:inline-block;margin:0 14px 12px;font-size:11px;color:#58a6ff}
+.adpanel-title{padding:12px 14px 4px;font-size:15px;font-weight:700;color:var(--ink);line-height:1.4}
+.adpanel-text{padding:0 14px 10px;font-size:12px;color:var(--ink-soft);line-height:1.8;white-space:pre-line}
+.adpanel-link{display:inline-block;margin:0 14px 12px;font-size:11px;color:var(--accent)}
 .sec-hd{display:flex;align-items:center;gap:8px;padding:20px 20px 12px}
-.sec-hd-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;color:#58a6ff;text-transform:uppercase}
-.sec-hd-line{flex:1;height:1px;background:rgba(255,255,255,.08)}
+.sec-hd-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--accent);text-transform:uppercase}
+.sec-hd-line{flex:1;height:1px;background:var(--border)}
 .sec-tag{font-size:9px;padding:2px 8px;border-radius:10px;letter-spacing:.06em}
-.tag-weather{background:rgba(88,166,255,.15);color:#58a6ff}
-.tag-eco{background:rgba(63,185,80,.15);color:#3fb950}
-.tag-pol{background:rgba(248,81,73,.15);color:#f85149}
-.tag-zod{background:rgba(210,153,34,.15);color:#d2a61a}
-.tag-yt{background:rgba(255,166,87,.15);color:#ffa657}
+.tag-weather{background:var(--accent-light);color:var(--accent)}
+.tag-eco{background:#e8f4ee;color:#2d7a4f}
+.tag-pol{background:#fdecea;color:#b03020}
+.tag-zod{background:#fdf6e3;color:#8a6a10}
+.tag-yt{background:#fff3e8;color:#b06020}
 .weather-ov{display:flex;align-items:center;gap:12px;padding:0 20px 14px}
 .weather-ov-icon{font-size:36px}
-.weather-ov-title{font-size:15px;font-weight:700;color:#e6edf3;margin-bottom:3px}
-.weather-ov-sub{font-size:11px;color:rgba(255,255,255,.45);line-height:1.6}
-.ov-dust-box{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 12px;min-width:110px}
-.ov-dust-title{font-size:10px;color:rgba(255,255,255,.4);margin-bottom:5px;text-align:center;letter-spacing:.5px}
+.weather-ov-title{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.weather-ov-sub{font-size:11px;color:var(--ink-light);line-height:1.6}
+.ov-dust-box{background:var(--accent-light);border:1px solid var(--accent-soft);border-radius:10px;padding:8px 12px;min-width:110px}
+.ov-dust-title{font-size:10px;color:var(--accent);margin-bottom:5px;text-align:center;letter-spacing:.5px}
 .ov-dust-row{display:flex;align-items:center;gap:4px;margin-bottom:3px;font-size:11px}
 .ov-dust-row:last-child{margin-bottom:0}
-.ov-dust-lbl{color:rgba(255,255,255,.4);min-width:30px;font-size:10px}
-.ov-dust-val{color:rgba(255,255,255,.75);font-family:'DM Mono',monospace;font-size:11px}
+.ov-dust-lbl{color:var(--ink-light);min-width:30px;font-size:10px}
+.ov-dust-val{color:var(--ink-soft);font-family:'DM Mono',monospace;font-size:11px}
 .ov-dust-grade{font-size:10px;font-weight:700;margin-left:2px}
 .cities{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 16px 16px}
-.city-card{background:#0d1117;border-radius:8px;padding:10px 8px;text-align:center;border:1px solid rgba(255,255,255,.06)}
-.city-name{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;color:#58a6ff;margin-bottom:4px}
-.city-high{font-size:16px;font-weight:700;color:#e6edf3}
-.city-low{font-size:11px;color:rgba(255,255,255,.4);margin-bottom:2px}
+.city-card{background:var(--cream);border-radius:10px;padding:10px 8px;text-align:center;border:1px solid var(--border)}
+.city-name{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--accent);margin-bottom:4px}
+.city-high{font-size:16px;font-weight:700;color:var(--ink)}
+.city-low{font-size:11px;color:var(--ink-light);margin-bottom:2px}
 .city-icon{font-size:18px}
 .city-dust{display:flex;align-items:center;gap:3px;margin-top:3px;font-size:9px;line-height:1.3}
-.dust-label{color:rgba(255,255,255,.35);min-width:26px}
-.dust-val{color:rgba(255,255,255,.7);font-family:'DM Mono',monospace}
-.dust-grade{color:#58a6ff;font-size:8px}
+.dust-label{color:var(--ink-light);min-width:26px}
+.dust-val{color:var(--ink-soft);font-family:'DM Mono',monospace}
+.dust-grade{color:var(--accent);font-size:8px}
 .weekly{display:flex;justify-content:space-between;padding:0 16px 20px;gap:4px;overflow-x:auto}
-.week-day{flex:1;min-width:44px;text-align:center;background:#0d1117;border-radius:6px;padding:8px 4px;border:1px solid rgba(255,255,255,.06)}
-.wd-label{font-size:9px;color:rgba(255,255,255,.5);margin-bottom:4px}
+.week-day{flex:1;min-width:44px;text-align:center;background:var(--cream);border-radius:8px;padding:8px 4px;border:1px solid var(--border)}
+.wd-label{font-size:9px;color:var(--ink-light);margin-bottom:4px}
 .wd-icon{font-size:16px;margin-bottom:4px}
-.wd-high{font-size:12px;font-weight:700;color:#e6edf3}
-.wd-low{font-size:10px;color:rgba(255,255,255,.35)}
+.wd-high{font-size:12px;font-weight:700;color:var(--ink)}
+.wd-low{font-size:10px;color:var(--ink-light)}
 .news-list{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px}
-.news-item{display:flex;gap:10px;background:#0d1117;border-radius:8px;padding:12px;border:1px solid rgba(255,255,255,.06)}
-.news-num{font-family:'DM Mono',monospace;font-size:11px;color:#58a6ff;flex-shrink:0;padding-top:2px}
-.news-title{font-size:13px;font-weight:700;color:#e6edf3;text-decoration:none;display:block;margin-bottom:4px;line-height:1.5}
-.news-title:hover{color:#58a6ff}
-.news-summary{font-size:11px;color:rgba(255,255,255,.55);line-height:1.6;margin-bottom:4px}
-.news-source{font-size:10px;color:#3fb950}
+.news-item{display:flex;gap:10px;background:var(--cream);border-radius:10px;padding:12px;border:1px solid var(--border)}
+.news-num{font-family:'DM Mono',monospace;font-size:11px;color:var(--accent);flex-shrink:0;padding-top:2px}
+.news-title{font-size:13px;font-weight:700;color:var(--ink);text-decoration:none;display:block;margin-bottom:4px;line-height:1.5}
+.news-title:hover{color:var(--accent)}
+.news-summary{font-size:11px;color:var(--ink-soft);line-height:1.6;margin-bottom:4px}
+.news-source{font-size:10px;color:var(--accent)}
 .fortune-img{padding:0 16px 16px}
-.fortune-img img{width:100%;border-radius:8px;display:block;border:1px solid rgba(255,255,255,.08)}
-.fortune-empty{padding:20px 16px;text-align:center;color:rgba(255,255,255,.25);font-size:12px;background:#0d1117;border-radius:8px;margin:0 16px 16px;border:1px dashed rgba(255,255,255,.1)}
+.fortune-img img{width:100%;border-radius:10px;display:block;border:1px solid var(--border)}
+.fortune-empty{padding:20px 16px;text-align:center;color:var(--ink-light);font-size:12px;background:var(--cream);border-radius:10px;margin:0 16px 16px;border:1px dashed var(--border)}
 .mtabs{display:flex;gap:6px;padding:0 16px 12px;flex-wrap:wrap}
-.mtab{background:#0d1117;border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:5px 12px;font-size:11px;color:rgba(255,255,255,.5);cursor:pointer;transition:.2s}
-.mtab.active{background:rgba(255,166,87,.15);border-color:#ffa657;color:#ffa657}
+.mtab{background:var(--cream);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--ink-light);cursor:pointer;transition:.2s}
+.mtab.active{background:var(--accent-light);border-color:var(--accent-soft);color:var(--accent)}
 .mpanel{display:none;padding:0 16px 16px}
 .mpanel.active{display:block}
-.yt-link{display:block;margin-top:8px;font-size:11px;color:#58a6ff;text-decoration:none;line-height:1.5}
-.footer{padding:20px;text-align:center;border-top:1px solid rgba(255,255,255,.06);font-size:10px;color:rgba(255,255,255,.25);line-height:1.8}
-.footer-credit{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;opacity:.7}
+.yt-link{display:block;margin-top:8px;font-size:11px;color:var(--accent);text-decoration:none;line-height:1.5}
+.footer{padding:20px;text-align:center;border-top:1px solid var(--border);font-size:10px;color:var(--ink-light);line-height:1.8}
+.footer-credit{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;opacity:.8}
 .footer-credit img{width:32px;height:32px;border-radius:50%;object-fit:cover}
-.footer-credit span{font-size:12px;color:rgba(255,255,255,.5)}
+.footer-credit span{font-size:12px;color:var(--ink-soft)}
 </style>
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CX33EQ71Y2"></script>
@@ -142,12 +149,12 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
     <div class="ov-dust-title">서울 대기질</div>
     <div class="ov-dust-row">
       <span class="ov-dust-lbl">미세</span>
-      <span class="ov-dust-val">32㎍</span>
-      <span class="ov-dust-grade" style="color:#81c784">보통</span>
+      <span class="ov-dust-val">25㎍</span>
+      <span class="ov-dust-grade" style="color:#4fc3f7">좋음</span>
     </div>
     <div class="ov-dust-row">
       <span class="ov-dust-lbl">초미세</span>
-      <span class="ov-dust-val">29㎍</span>
+      <span class="ov-dust-val">20㎍</span>
       <span class="ov-dust-grade" style="color:#81c784">보통</span>
     </div>
   </div>
@@ -157,8 +164,8 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
           <div class="city-icon">☀️</div>
           <div class="city-high">10°</div>
           <div class="city-low">5°</div>
-          <div class="city-dust"><span class="dust-label">미세</span><span class="dust-val">32㎍</span><span class="dust-grade">보통</span></div>
-          <div class="city-dust"><span class="dust-label">초미세</span><span class="dust-val">29㎍</span><span class="dust-grade">보통</span></div>
+          <div class="city-dust"><span class="dust-label">미세</span><span class="dust-val">25㎍</span><span class="dust-grade">좋음</span></div>
+          <div class="city-dust"><span class="dust-label">초미세</span><span class="dust-val">20㎍</span><span class="dust-grade">보통</span></div>
         </div><div class="city-card">
           <div class="city-name">부산</div>
           <div class="city-icon">☀️</div>
@@ -256,30 +263,30 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 <div class="news-list"><div class="news-item">
           <span class="news-num">01</span>
           <div class="news-body">
-            <a class="news-title" href="https://www.ajunews.com/view/20260318135851387" target="_blank">레버리지 ETF 투자 급증…금감원 &quot;고위험 상품, 각별한 주의 필요&quot;</a>
-            <div class="news-summary">아주경제=신동근 기자 sdk6425@ajunews.com 서울 여의도에 위치한 금융감독원 전경. [사진=유대길 기자... 같은 기간 코스피 지수가 4214포인트에서 5532포인트로 31.3% 상승하는 등 주식시장 강세 영향으로 관련 상품... </div>
-            <div class="news-source">▸ ajunews.com</div>
+            <a class="news-title" href="https://economist.co.kr/article/view/ecn202603180057" target="_blank">중동 전쟁에 흔들린 ‘서학개미’…미국 떠나 다시 ‘국장’으로</a>
+            <div class="news-summary">여야는 3월 17일 국회 재정경제기획위원회 전체회의에서 해당 법안을 포함한 ‘환율안정 3법’을 의결했다. 개정안에 따르면 해외 주식을 매도한 투자자가 RIA를 통해 국내 주식시장에 재투자할 경우, 매도 시점에... </div>
+            <div class="news-source">▸ economist.co.kr</div>
           </div>
         </div><div class="news-item">
           <span class="news-num">02</span>
           <div class="news-body">
-            <a class="news-title" href="https://www.ajunews.com/view/20260318135534379" target="_blank">'자금 블랙홀' 국내 주식펀드, 설정액 전년比 31배 늘었다</a>
-            <div class="news-summary">아주경제=신동근 기자 sdk6425@ajunews.com 국내 주식형 펀드가 올해 들어 자금을 흡수하는 ‘블랙홀’ 역할을... 올해 들어 지난 17일까지 코스피는 약 34% 상승했고 ETF 시가총액은 이날 기준 297조원에서 378조원으로 약... </div>
-            <div class="news-source">▸ ajunews.com</div>
+            <a class="news-title" href="https://news.bizwatch.co.kr/article/market/2026/03/18/0037" target="_blank">한국증시 기초체력 강해졌다...&quot;변동성 커도 낙폭 제한적&quot;</a>
+            <div class="news-summary">말 코스피가 2400, 그리고 지난 2월 달에 6300을 찍었습니다. 사실은 너무 빠른 로켓 상승이었고 예전에는 감히 상상도 못할 일이 벌어졌습니다. 이로 인해 많은 이제 개미 투자자분들이 주식을 안 하면 이제 나는 포모인가... </div>
+            <div class="news-source">▸ news.bizwatch.co.kr</div>
           </div>
         </div><div class="news-item">
           <span class="news-num">03</span>
           <div class="news-body">
-            <a class="news-title" href="https://www.ohmynews.com/NWS_Web/View/at_pg.aspx?CNTN_CD=A0003215675&CMPT_CD=P0010&utm_source=naver&utm_medium=newsearch&utm_campaign=naver_news" target="_blank">전쟁 속에서 웃는 사람들... 진짜 무서운 게 오는지 모르고</a>
-            <div class="news-summary">소리 높여 많은 이들이 전쟁과 공습에 대해 이야기하고 있지만, 대다수의 렌즈는 코스피와 증시, 기름값에... 이란의 중동 내 영향력을 제한하는 일은 미국의 달러 중심의 경제 패권을 유지하는 일과 연결된다. 이때... </div>
-            <div class="news-source">▸ ohmynews.com</div>
+            <a class="news-title" href="https://weekly.cnbnews.com/news/article.html?no=209162" target="_blank">삼성운용 KODEX 삼성전자채권혼합 ETF, 순자산 1조 돌파</a>
+            <div class="news-summary">글로벌 지정학적 불확실성으로 국내 주식시장 상승세가 둔화된 가운데, 주식과 채권에 동시에... KODEX 200미국채혼합은 코스피200과 미국 10년물 국채에 각각 40%, 60% 비중으로 투자해 분산 효과를 높였다. 두... </div>
+            <div class="news-source">▸ weekly.cnbnews.com</div>
           </div>
         </div><div class="news-item">
           <span class="news-num">04</span>
           <div class="news-body">
-            <a class="news-title" href="http://www.thevaluenews.co.kr/news/view.php?idx=197482" target="_blank">[더밸류 브리핑] 오늘의 증권업계 소식…한국투자증권·하나증권</a>
-            <div class="news-summary">김성환)이 주식워런트증권(ELW) 585종목을 신규 상장한다. 한국투자증권이 ELW 585종목을 신규 상장했다. [자료=한국투자증권]이번 상장 물량은 코스피200을 기초자산으로 하는 지수형 ELW 154종목과 삼성전자, SK하이닉스... </div>
-            <div class="news-source">▸ thevaluenews.co.kr</div>
+            <a class="news-title" href="https://www.hankyung.com/article/2026031801196" target="_blank">李대통령 &quot;지정학적 리스크 과장…증시 '코리아 프리미엄' 가능&quot; [종합]</a>
+            <div class="news-summary">산업·경제 정책의 예측 가능성 부족 등을 언급했다. 그는 &quot;같은 주식인데 한국 증권거래소에 상장됐다는... 또 &quot;지난해에 주가가 (코스피지스) 2500~2600선에서 조정 없이 6000 중반대까지 올라 사실 매우 불안한 느낌이... </div>
+            <div class="news-source">▸ hankyung.com</div>
           </div>
         </div></div>
 
@@ -288,30 +295,30 @@ body{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;disp
 <div class="news-list"><div class="news-item">
           <span class="news-num">01</span>
           <div class="news-body">
-            <a class="news-title" href="https://news.skbroadband.com/news/articleView.html?idxno=221171" target="_blank">&quot;즉각 중단하라&quot; 인천지역사회, 공항기업 통폐합 반발</a>
-            <div class="news-summary">인천지역사회 대책위는 정부가 공항공기업 통합을 강행하면 인천공항에서 청와대까지 1천 대 규모의 차량으로 항의 집회를 이어갈 것이라고 예고했습니다. B tv 뉴스 이재원입니다. 영상취재 : 김동휘</div>
-            <div class="news-source">▸ news.skbroadband.com</div>
+            <a class="news-title" href="https://www.etnews.com/20260318000335" target="_blank">[뉴스해설] '메타버스라서 예외' 5년... 로블록스 규제 공백, 해법은</a>
+            <div class="news-summary">최근 계엄 상황을 소재로 군·경이 시민을 향해 발포하는 내용을 담은 '그날의 국회'가 유통됐다 삭제되는 등 사회적 논란이 반복되고 있다. 5·18 민주화운동을 왜곡한 콘텐츠나 정치 편향 게임도 등장했다. 현행... </div>
+            <div class="news-source">▸ etnews.com</div>
           </div>
         </div><div class="news-item">
           <span class="news-num">02</span>
           <div class="news-body">
-            <a class="news-title" href="http://www.tongilnews.com/news/articleView.html?idxno=216074" target="_blank">트럼프는 피스메이커 아닌 워메이커...&quot;침략전쟁을 멈춰라&quot;</a>
-            <div class="news-summary">전국 660여개 시민사회종교 단체와 정당, 개인 1,715명이 참여한  '미국과 이스라엘의 이란침략사태에 대한 각계 공동시국선언문 발표 기자회견이 18일 오전 광화문 세종문화회관 계단에서 진행됐다. [사진-토일뉴스 이승현... </div>
-            <div class="news-source">▸ tongilnews.com</div>
+            <a class="news-title" href="https://www.polinews.co.kr/news/articleView.html?idxno=725854" target="_blank">민주, 경남 민심 잡기 '김경수도 함께'…정청래 &quot;공무원 검사들 태세전...</a>
+            <div class="news-summary">꽃피는 사회, 반칙과 특권이 없는 정의로운 나라가 실현되고 있다&quot;며 &quot;경남은 3·15 의거와 부마항쟁으로... 서해 공무원 피격 사건 정치적 기소 의혹 등 공권력을 제멋대로 흔든 검찰에 메스를 댈 때&quot;라고 말했다. [폴리뉴스 ]</div>
+            <div class="news-source">▸ polinews.co.kr</div>
           </div>
         </div><div class="news-item">
           <span class="news-num">03</span>
           <div class="news-body">
-            <a class="news-title" href="https://www.topstarnews.net/news/articleView.html?idxno=16008418" target="_blank">트럼프 대테러 수장 사임…이란전 명분 논쟁 격화</a>
-            <div class="news-summary">○ 정치권·국제사회까지 확산된 논쟁 사임 이후 논란은 정치권과 시민사회로 번졌다. 일부 단체는 켄트의... 특히 이란전이 장기화될 경우 군사 개입의 명분과 비용을 둘러싼 논쟁은 더욱 거세질 전망이다. [톱스타뉴스=]</div>
-            <div class="news-source">▸ topstarnews.net</div>
+            <a class="news-title" href="https://weeklytrade.co.kr/news/view.html?section=1&category=136&item=&no=98951" target="_blank">쿠바 전력시스템 완전 붕괴… 트럼프 “쿠바 접수” 언급</a>
+            <div class="news-summary">오스카 페레스올리바 프라가 쿠바 부총리는 이날 NBC 뉴스와의 인터뷰에서 “쿠바는 미국 기업뿐만 아니라... 또 사회주의 혁명을 일으킨 피델 카스트로의 이념을 고수하고 있는 일부 고위급 관료들의 퇴진과 정치범... </div>
+            <div class="news-source">▸ weeklytrade.co.kr</div>
           </div>
         </div><div class="news-item">
           <span class="news-num">04</span>
           <div class="news-body">
-            <a class="news-title" href="http://www.newsprime.co.kr/news/article.html?no=727367" target="_blank">정청래, 당내 비판 속 김어준 유튜브 출연</a>
-            <div class="news-summary">18일 강준현 더불어민주당 수석대변인은 CBS라디오 '박성태의 뉴스쇼'에 출연해 정 대표의 출연 배경과 관련해... 정치권에서는 정 대표와 김 씨의 우호적 관계가 영향을 미친 것 아니냐는 해석도 나왔다. 강 수석대변인은... </div>
-            <div class="news-source">▸ newsprime.co.kr</div>
+            <a class="news-title" href="https://www.ajunews.com/view/20260318135640381" target="_blank">'김건희 청탁 의혹' 윤영호 &quot;신빙성 없는 진술로 1심 유죄&quot;…내달 27일 ...</a>
+            <div class="news-summary">com 윤영호 전 통일교 세계본부장 [사진=연합뉴스] 김건희 여사에게 통일교 현안을 청탁하고 금품을 제공한... 등 정치·사회적으로 막대한 피해가 발생한 사건&quot;이라고 언급했다. 이어 &quot;항소심에서 이를 바로 잡아 달라&quot;며... </div>
+            <div class="news-source">▸ ajunews.com</div>
           </div>
         </div></div>
 
