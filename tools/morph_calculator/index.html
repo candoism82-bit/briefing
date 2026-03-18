@@ -1,1 +1,566 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🦎 모프 계산기 · 크레오늘</title>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:#faf8f4; --white:#fff; --ink:#1a1a1a; --ink-soft:#5a5a5a;
+  --ink-light:#9a9a9a; --accent:#4a7c59; --accent-light:#e8f2ec;
+  --accent-soft:#c8dfd0; --border:#e8e4de;
+  --shadow:0 2px 16px rgba(0,0,0,.06); --shadow-md:0 4px 24px rgba(0,0,0,.09);
+  --lw:#8b5cf6; --lw-light:#f3eeff;
+  --dom:#d97706; --dom-light:#fff8ed;
+  --rec:#dc2626; --rec-light:#fff1f1;
+  --het:#0369a1; --het-light:#eff8ff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--cream);color:var(--ink);font-family:'Gowun Dodum',serif;min-height:100vh;padding:0 12px 60px}
 
+/* 헤더 */
+.site-header{text-align:center;padding:40px 0 28px;position:relative}
+.site-header::after{content:'';display:block;width:50px;height:2px;background:var(--accent);margin:14px auto 0;border-radius:2px}
+.site-tag{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.18em;color:var(--accent);text-transform:uppercase;margin-bottom:8px}
+.site-title{font-family:'Playfair Display',serif;font-size:clamp(26px,6vw,38px);color:var(--ink)}
+.site-sub{margin-top:8px;font-size:13px;color:var(--ink-soft);line-height:1.7}
+
+/* 버전 탭 */
+.ver-tabs{display:flex;gap:8px;max-width:520px;margin:0 auto 20px;padding:0 4px}
+.ver-tab{flex:1;padding:12px;border:1.5px solid var(--border);border-radius:14px;background:var(--white);cursor:pointer;text-align:center;transition:all .2s;font-family:'Gowun Dodum',serif}
+.ver-tab .vtitle{font-size:14px;font-weight:700;color:var(--ink-soft);display:block;margin-bottom:3px}
+.ver-tab .vsub{font-size:11px;color:var(--ink-light)}
+.ver-tab.active{border-color:var(--accent);background:var(--accent-light)}
+.ver-tab.active .vtitle{color:var(--accent)}
+.ver-tab.active .vsub{color:var(--accent)}
+.ver-panel{display:none;max-width:520px;margin:0 auto}
+.ver-panel.active{display:block}
+
+/* 카드 */
+.card{background:var(--white);border-radius:18px;padding:24px;margin-bottom:16px;box-shadow:var(--shadow);border:1px solid var(--border)}
+.card-title{font-size:13px;color:var(--ink-light);font-family:'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px}
+
+/* 버전A - 모프 선택 */
+.parent-label{font-size:13px;color:var(--ink-soft);margin-bottom:8px;display:block}
+.morph-select{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:12px;font-size:14px;font-family:'Gowun Dodum',serif;color:var(--ink);background:var(--cream);outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239a9a9a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.morph-select:focus{border-color:var(--accent)}
+.parent-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:4px}
+.vs-badge{text-align:center;font-family:'DM Mono',monospace;font-size:12px;color:var(--ink-light);padding:4px 0 12px}
+
+/* 버전B - 유전자 체크박스 */
+.morph-toggle-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
+.morph-toggle-grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:8px}
+.mtog{padding:10px 6px;border:1.5px solid var(--border);border-radius:12px;background:var(--cream);cursor:pointer;text-align:center;font-size:13px;font-family:'Gowun Dodum',serif;color:var(--ink-soft);transition:all .15s;line-height:1.3}
+.mtog:hover{border-color:var(--accent-soft);background:var(--accent-light)}
+.mtog.on-lw{background:var(--lw-light);border-color:var(--lw);color:var(--lw);font-weight:700}
+.mtog.on-dom{background:var(--dom-light);border-color:var(--dom);color:var(--dom);font-weight:700}
+.mtog.on-rec{background:var(--rec-light);border-color:var(--rec);color:var(--rec);font-weight:700}
+.mtog.on-het{background:var(--het-light);border-color:var(--het);color:var(--het);font-weight:700}
+.mtog-label{font-size:9px;color:var(--ink-light);display:block;margin-top:2px}
+
+/* 계산 버튼 */
+.calc-btn{width:100%;padding:15px;background:var(--accent);color:#fff;border:none;border-radius:14px;font-size:15px;font-family:'Gowun Dodum',serif;cursor:pointer;transition:all .2s;letter-spacing:.02em}
+.calc-btn:hover{background:#3d6b4a;transform:translateY(-1px);box-shadow:0 4px 16px rgba(74,124,89,.3)}
+
+/* 결과 */
+.result-card{background:var(--white);border-radius:18px;padding:24px;margin-bottom:16px;box-shadow:var(--shadow-md);border:1.5px solid var(--accent-soft);display:none;animation:fadeUp .35s ease}
+.result-card.show{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.result-title{font-size:11px;font-family:'DM Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-light);margin-bottom:16px}
+.offspring-grid{display:grid;gap:10px}
+.offspring-item{display:flex;align-items:center;gap:12px;background:var(--cream);border-radius:12px;padding:12px 14px;border:1px solid var(--border)}
+.offspring-pct{font-family:'DM Mono',monospace;font-size:18px;font-weight:500;color:var(--accent);min-width:48px}
+.offspring-name{font-size:13px;font-weight:700;color:var(--ink);line-height:1.4}
+.offspring-genes{font-size:11px;color:var(--ink-light);font-family:'DM Mono',monospace;margin-top:2px}
+.badge-row{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.badge{font-size:9px;padding:2px 7px;border-radius:10px;font-family:'DM Mono',monospace;letter-spacing:.05em}
+.badge-lw{background:var(--lw-light);color:var(--lw)}
+.badge-dom{background:var(--dom-light);color:var(--dom)}
+.badge-rec{background:var(--rec-light);color:var(--rec)}
+.badge-het{background:var(--het-light);color:var(--het)}
+.badge-normal{background:var(--cream);color:var(--ink-light);border:1px solid var(--border)}
+.bar-wrap{flex:1;background:var(--border);border-radius:99px;height:6px;overflow:hidden}
+.bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent-soft),var(--accent))}
+
+/* 유전자 범례 */
+.legend{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.legend-item{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--ink-soft)}
+.legend-dot{width:8px;height:8px;border-radius:50%}
+
+/* 안내 */
+.info-box{background:var(--accent-light);border:1px solid var(--accent-soft);border-radius:14px;padding:16px;max-width:520px;margin:0 auto 16px;font-size:12px;color:var(--ink-soft);line-height:1.8}
+.info-box strong{color:var(--accent)}
+
+/* 푸터 */
+.footer{text-align:center;padding:24px 0 0;font-size:11px;color:var(--ink-light)}
+.footer a{color:var(--accent);text-decoration:none}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-tag">CreOnel · 크레오늘</div>
+  <h1 class="site-title">🧬 모프 계산기</h1>
+  <p class="site-sub">부모 조합으로 자식 크레의 예상 모프를<br>확률과 함께 확인해보세요</p>
+</header>
+
+<!-- 버전 탭 -->
+<div class="ver-tabs">
+  <div class="ver-tab active" onclick="switchVer('a')">
+    <span class="vtitle">🔰 버전 A</span>
+    <span class="vsub">모프 이름으로 선택</span>
+  </div>
+  <div class="ver-tab" onclick="switchVer('b')">
+    <span class="vtitle">🔬 버전 B</span>
+    <span class="vsub">유전자 직접 조합</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ 버전 A ══════════════════════════════ -->
+<div class="ver-panel active" id="panel-a">
+  <div class="card">
+    <div class="card-title">부모 모프 선택</div>
+    <div class="parent-row">
+      <div>
+        <label class="parent-label">♀ 암컷</label>
+        <select class="morph-select" id="a-female">
+          <option value="normal">노멀</option>
+          <optgroup label="── 릴리화이트 (치사우성) ──">
+            <option value="lw">릴리화이트</option>
+          </optgroup>
+          <optgroup label="── 우성 ──">
+            <option value="sb">세이블</option>
+            <option value="sb2">슈퍼 세이블</option>
+            <option value="cap">카푸치노</option>
+          </optgroup>
+          <optgroup label="── 열성 ──">
+            <option value="ax_het">100헷 아잔틱</option>
+            <option value="ax">아잔틱</option>
+            <option value="cc_het">100헷 초초</option>
+            <option value="cc">초초</option>
+          </optgroup>
+          <optgroup label="── 릴리화이트 조합 ──">
+            <option value="lw_sb">릴리 세이블</option>
+            <option value="lw_cap">릴리 카푸치노</option>
+            <option value="lw_ax_het">릴리 100헷 아잔틱</option>
+            <option value="lw_ax">릴리 아잔틱</option>
+            <option value="lw_cc_het">릴리 100헷 초초</option>
+            <option value="lw_cc">릴리 초초</option>
+          </optgroup>
+          <optgroup label="── 세이블 조합 ──">
+            <option value="sb_cap">세이블 카푸치노</option>
+            <option value="sb_ax_het">세이블 100헷 아잔틱</option>
+            <option value="sb_ax">세이블 아잔틱</option>
+            <option value="sb_cc_het">세이블 100헷 초초</option>
+            <option value="sb_cc">세이블 초초</option>
+          </optgroup>
+          <optgroup label="── 카푸치노 조합 ──">
+            <option value="cap_ax_het">카푸치노 100헷 아잔틱</option>
+            <option value="cap_ax">카푸치노 아잔틱</option>
+            <option value="cap_cc_het">카푸치노 100헷 초초</option>
+            <option value="cap_cc">카푸치노 초초</option>
+          </optgroup>
+          <optgroup label="── 열성 조합 ──">
+            <option value="ax_het_cc_het">100헷 아잔틱 100헷 초초</option>
+            <option value="ax_cc_het">아잔틱 100헷 초초</option>
+            <option value="ax_cc">아잔틱 초초</option>
+            <option value="cc_ax_het">초초 100헷 아잔틱</option>
+          </optgroup>
+        </select>
+      </div>
+      <div>
+        <label class="parent-label">♂ 수컷</label>
+        <select class="morph-select" id="a-male">
+          <option value="normal">노멀</option>
+          <optgroup label="── 릴리화이트 (치사우성) ──">
+            <option value="lw">릴리화이트</option>
+          </optgroup>
+          <optgroup label="── 우성 ──">
+            <option value="sb">세이블</option>
+            <option value="sb2">슈퍼 세이블</option>
+            <option value="cap">카푸치노</option>
+          </optgroup>
+          <optgroup label="── 열성 ──">
+            <option value="ax_het">100헷 아잔틱</option>
+            <option value="ax">아잔틱</option>
+            <option value="cc_het">100헷 초초</option>
+            <option value="cc">초초</option>
+          </optgroup>
+          <optgroup label="── 릴리화이트 조합 ──">
+            <option value="lw_sb">릴리 세이블</option>
+            <option value="lw_cap">릴리 카푸치노</option>
+            <option value="lw_ax_het">릴리 100헷 아잔틱</option>
+            <option value="lw_ax">릴리 아잔틱</option>
+            <option value="lw_cc_het">릴리 100헷 초초</option>
+            <option value="lw_cc">릴리 초초</option>
+          </optgroup>
+          <optgroup label="── 세이블 조합 ──">
+            <option value="sb_cap">세이블 카푸치노</option>
+            <option value="sb_ax_het">세이블 100헷 아잔틱</option>
+            <option value="sb_ax">세이블 아잔틱</option>
+            <option value="sb_cc_het">세이블 100헷 초초</option>
+            <option value="sb_cc">세이블 초초</option>
+          </optgroup>
+          <optgroup label="── 카푸치노 조합 ──">
+            <option value="cap_ax_het">카푸치노 100헷 아잔틱</option>
+            <option value="cap_ax">카푸치노 아잔틱</option>
+            <option value="cap_cc_het">카푸치노 100헷 초초</option>
+            <option value="cap_cc">카푸치노 초초</option>
+          </optgroup>
+          <optgroup label="── 열성 조합 ──">
+            <option value="ax_het_cc_het">100헷 아잔틱 100헷 초초</option>
+            <option value="ax_cc_het">아잔틱 100헷 초초</option>
+            <option value="ax_cc">아잔틱 초초</option>
+            <option value="cc_ax_het">초초 100헷 아잔틱</option>
+          </optgroup>
+        </select>
+      </div>
+    </div>
+    <div class="vs-badge">× 교배</div>
+    <button class="calc-btn" onclick="calcA()">🧬 자식 모프 계산하기</button>
+  </div>
+  <div class="result-card" id="result-a">
+    <div class="result-title">예상 자식 모프 비율</div>
+    <div class="offspring-grid" id="offspring-a"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ 버전 B ══════════════════════════════ -->
+<div class="ver-panel" id="panel-b">
+  <div class="card">
+    <div class="card-title">♀ 암컷 유전자</div>
+    <div id="b-female-genes"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">♂ 수컷 유전자</div>
+    <div id="b-male-genes"></div>
+  </div>
+  <div class="card" style="padding:20px">
+    <button class="calc-btn" onclick="calcB()">🧬 자식 모프 계산하기</button>
+  </div>
+  <div class="result-card" id="result-b">
+    <div class="result-title">예상 자식 모프 비율</div>
+    <div class="offspring-grid" id="offspring-b"></div>
+  </div>
+</div>
+
+<!-- 유전자 안내 -->
+<div class="info-box">
+  <strong>유전 방식 안내</strong><br>
+  🟣 <strong>치사우성</strong> (릴리화이트) — 1카피=릴리화이트 표현, 2카피=치사<br>
+  🟠 <strong>우성</strong> (세이블·카푸치노) — 1카피=표현, 2카피=슈퍼 표현<br>
+  🔴 <strong>열성</strong> (아잔틱·초초) — 1카피=100헷(보인자), 2카피=표현<br>
+  <br>
+  ※ 폴리제닉 형질(핀스트라이프, 달마시안 등)은 유전 예측이 어려워 미포함
+</div>
+
+<div style="background:#fff;border:1.5px solid var(--accent-soft);border-radius:18px;padding:24px;max-width:520px;margin:0 auto 16px;box-shadow:var(--shadow)">
+  <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:18px">
+    <img src="../../images/cretoday_logo.png" alt="크레오늘" style="width:52px;height:52px;object-fit:contain;border-radius:10px;flex-shrink:0">
+    <div>
+      <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;line-height:1.4">더 체계적인 산란 관리가 필요하시다면?</div>
+      <div style="font-size:12px;color:var(--ink-soft);line-height:1.7">크레오늘 앱으로 산란일, 해칭일, 개체 정보를<br>한 곳에서 편리하게 관리해보세요!</div>
+    </div>
+  </div>
+  <a href="https://play.google.com/apps/testing/com.crenote.breeding" target="_blank" style="display:block;width:100%;padding:13px;background:var(--accent-light);border:1.5px solid var(--accent-soft);border-radius:12px;color:var(--accent);font-size:13px;font-family:'Gowun Dodum',serif;text-align:center;text-decoration:none;box-sizing:border-box">
+    🔗 크레오늘 앱 테스트 참여하기
+  </a>
+</div>
+
+<footer class="footer">
+  <a href="https://크레오늘.com">← 크레오늘 메인으로</a><br><br>
+  크레스티드 게코 커뮤니티 · CreOnel
+</footer>
+
+<script>
+// ══════════════════════════════════════════════════════
+// 유전자 정의
+// ══════════════════════════════════════════════════════
+const GENES = {
+  LW:  { name:'릴리화이트', type:'codominant', color:'lw'  },
+  SB:  { name:'세이블',     type:'dominant',   color:'dom' },
+  CAP: { name:'카푸치노',   type:'dominant',   color:'dom' },
+  AX:  { name:'아잔틱',     type:'recessive',  color:'rec' },
+  CC:  { name:'초초',       type:'recessive',  color:'rec' },
+};
+
+// 모프 이름 → 유전자형 맵 (버전A)
+// 각 유전자: 0=없음, 1=1카피, 2=2카피
+const MORPH_MAP = {
+  // 단일
+  normal:        { LW:0, SB:0, CAP:0, AX:0, CC:0 },
+  lw:            { LW:1, SB:0, CAP:0, AX:0, CC:0 },
+  sb:            { LW:0, SB:1, CAP:0, AX:0, CC:0 },
+  sb2:           { LW:0, SB:2, CAP:0, AX:0, CC:0 },
+  cap:           { LW:0, SB:0, CAP:1, AX:0, CC:0 },
+  ax_het:        { LW:0, SB:0, CAP:0, AX:1, CC:0 },
+  ax:            { LW:0, SB:0, CAP:0, AX:2, CC:0 },
+  cc_het:        { LW:0, SB:0, CAP:0, AX:0, CC:1 },
+  cc:            { LW:0, SB:0, CAP:0, AX:0, CC:2 },
+  // 릴리 조합
+  lw_sb:         { LW:1, SB:1, CAP:0, AX:0, CC:0 },
+  lw_cap:        { LW:1, SB:0, CAP:1, AX:0, CC:0 },
+  lw_ax:         { LW:1, SB:0, CAP:0, AX:2, CC:0 },
+  lw_ax_het:     { LW:1, SB:0, CAP:0, AX:1, CC:0 },
+  lw_cc:         { LW:1, SB:0, CAP:0, AX:0, CC:2 },
+  lw_cc_het:     { LW:1, SB:0, CAP:0, AX:0, CC:1 },
+  // 세이블 조합
+  sb_cap:        { LW:0, SB:1, CAP:1, AX:0, CC:0 },
+  sb_ax:         { LW:0, SB:1, CAP:0, AX:2, CC:0 },
+  sb_ax_het:     { LW:0, SB:1, CAP:0, AX:1, CC:0 },
+  sb_cc:         { LW:0, SB:1, CAP:0, AX:0, CC:2 },
+  sb_cc_het:     { LW:0, SB:1, CAP:0, AX:0, CC:1 },
+  // 카푸치노 조합
+  cap_ax:        { LW:0, SB:0, CAP:1, AX:2, CC:0 },
+  cap_ax_het:    { LW:0, SB:0, CAP:1, AX:1, CC:0 },
+  cap_cc:        { LW:0, SB:0, CAP:1, AX:0, CC:2 },
+  cap_cc_het:    { LW:0, SB:0, CAP:1, AX:0, CC:1 },
+  // 열성 조합
+  ax_cc:         { LW:0, SB:0, CAP:0, AX:2, CC:2 },
+  ax_cc_het:     { LW:0, SB:0, CAP:0, AX:2, CC:1 },
+  cc_ax_het:     { LW:0, SB:0, CAP:0, AX:1, CC:2 },
+  ax_het_cc_het: { LW:0, SB:0, CAP:0, AX:1, CC:1 },
+};
+
+// ══════════════════════════════════════════════════════
+// 유전자 교배 계산 엔진
+// ══════════════════════════════════════════════════════
+function crossGene(p1copies, p2copies, type) {
+  // p1copies, p2copies: 0, 1, 2
+  // return: { copies: probability }
+  const p1alleles = p1copies === 0 ? [0,0] : p1copies === 1 ? [0,1] : [1,1];
+  const p2alleles = p2copies === 0 ? [0,0] : p2copies === 1 ? [0,1] : [1,1];
+  const results = {};
+  for (const a1 of p1alleles) {
+    for (const a2 of p2alleles) {
+      const copies = a1 + a2;
+      results[copies] = (results[copies] || 0) + 0.25;
+    }
+  }
+  return results;
+}
+
+function calcOffspring(parent1, parent2) {
+  // 각 유전자별로 독립적으로 교배 계산 후 조합
+  const geneKeys = Object.keys(GENES);
+  let combinations = [{ genes: {}, prob: 1.0 }];
+
+  for (const gene of geneKeys) {
+    const cross = crossGene(parent1[gene], parent2[gene], GENES[gene].type);
+    const newCombinations = [];
+    for (const combo of combinations) {
+      for (const [copies, prob] of Object.entries(cross)) {
+        const newGenes = { ...combo.genes, [gene]: parseInt(copies) };
+        newCombinations.push({ genes: newGenes, prob: combo.prob * prob });
+      }
+    }
+    combinations = newCombinations;
+  }
+
+  // 치사 조합 제거 (LW 2카피 = 치사) 후 재정규화
+  const lethalProb = combinations.filter(c => c.genes.LW === 2).reduce((s,c) => s + c.prob, 0);
+  let viableCombos = combinations.filter(c => c.genes.LW !== 2);
+  const totalProb = viableCombos.reduce((s, c) => s + c.prob, 0);
+  viableCombos = viableCombos.map(c => ({ ...c, prob: c.prob / totalProb }));
+
+  // 동일 유전자형 합산
+  const merged = {};
+  for (const combo of viableCombos) {
+    const key = JSON.stringify(combo.genes);
+    if (!merged[key]) merged[key] = { genes: combo.genes, prob: 0 };
+    merged[key].prob += combo.prob;
+  }
+
+  return { offspring: Object.values(merged).sort((a, b) => b.prob - a.prob), lethalProb };
+}
+
+// ══════════════════════════════════════════════════════
+// 표현형 이름 생성
+// ══════════════════════════════════════════════════════
+function phenotypeName(genes) {
+  const parts = [];
+  const badges = [];
+
+  // LW
+  if (genes.LW === 1) { parts.push('릴리화이트'); badges.push({text:'치사우성 1카피', cls:'badge-lw'}); }
+
+  // SB
+  if (genes.SB === 2) { parts.push('슈퍼 세이블'); badges.push({text:'우성 2카피', cls:'badge-dom'}); }
+  else if (genes.SB === 1) { parts.push('세이블'); badges.push({text:'우성 1카피', cls:'badge-dom'}); }
+
+  // CAP
+  if (genes.CAP === 2) { parts.push('슈퍼 카푸치노'); badges.push({text:'우성 2카피', cls:'badge-dom'}); }
+  else if (genes.CAP === 1) { parts.push('카푸치노'); badges.push({text:'우성 1카피', cls:'badge-dom'}); }
+
+  // AX
+  if (genes.AX === 2) { parts.push('아잔틱'); badges.push({text:'열성 표현', cls:'badge-rec'}); }
+  else if (genes.AX === 1) { parts.push('100헷 아잔틱'); badges.push({text:'열성 보인자', cls:'badge-het'}); }
+
+  // CC
+  if (genes.CC === 2) { parts.push('초초'); badges.push({text:'열성 표현', cls:'badge-rec'}); }
+  else if (genes.CC === 1) { parts.push('100헷 초초'); badges.push({text:'열성 보인자', cls:'badge-het'}); }
+
+  const name = parts.length === 0 ? '노멀' : parts.join(' ');
+  if (parts.length === 0) badges.push({text:'노멀', cls:'badge-normal'});
+  return { name, badges };
+}
+
+// ══════════════════════════════════════════════════════
+// 결과 렌더링
+// ══════════════════════════════════════════════════════
+function renderResults(offspring, containerId, lethalProb, cardId) {
+  const container = document.getElementById(containerId);
+  const card = document.getElementById(cardId);
+
+  container.innerHTML = '';
+
+  // 카푸치노 × 카푸치노 경고 (슈퍼 카푸치노 발생 가능성)
+  const hasSuperCap = offspring.some(o => o.genes.CAP === 2);
+  if (hasSuperCap) {
+    container.innerHTML += `
+      <div style="background:#fff7ed;border:1.5px solid #d97706;border-radius:12px;padding:14px 16px;margin-bottom:12px">
+        <div style="font-size:13px;font-weight:700;color:#d97706;margin-bottom:6px">⚠️ 슈퍼 카푸치노 발생 주의</div>
+        <div style="font-size:12px;color:#b45309;line-height:1.7">이 조합에서 슈퍼 카푸치노가 발생할 수 있습니다. 슈퍼 카푸치노는 치사 유전은 아니나 건강상 문제와 급사 비율이 높아 한국에서는 이 조합을 권장하지 않습니다.</div>
+      </div>`;
+  }
+
+  // 치사 경고
+  const lethalPct = Math.round(lethalProb * 1000) / 10;
+  if (lethalPct > 0) {
+    container.innerHTML = `
+      <div style="background:#fff1f1;border:1.5px solid #dc2626;border-radius:12px;padding:14px 16px;margin-bottom:12px">
+        <div style="font-size:13px;font-weight:700;color:#dc2626;margin-bottom:4px">⚠️ 치사 유전 ${lethalPct}% 발생</div>
+        <div style="font-size:12px;color:#b91c1c;line-height:1.6">이 조합은 릴리화이트 2카피(치사) 자손이 나옵니다.<br>해당 조합은 추천하지 않습니다.</div>
+      </div>`;
+  }
+
+  // 헷 아잔틱 경고: 100헷(AX=1)와 노멀(AX=0)이 동시에 나오는 경우 → 비율 자동 계산
+  const hasAxHet    = offspring.some(o => o.genes.AX === 1);
+  const hasAxNormal = offspring.some(o => o.genes.AX === 0);
+  if (hasAxHet && hasAxNormal) {
+    const axHetProb    = offspring.filter(o => o.genes.AX === 1).reduce((s,o) => s + o.prob, 0);
+    const axNormalProb = offspring.filter(o => o.genes.AX === 0).reduce((s,o) => s + o.prob, 0);
+    const axHetAmong   = Math.round((axHetProb / (axHetProb + axNormalProb)) * 100);
+    container.innerHTML += `
+      <div style="background:#fff7ed;border:1.5px solid #d97706;border-radius:12px;padding:14px 16px;margin-bottom:12px">
+        <div style="font-size:13px;font-weight:700;color:#d97706;margin-bottom:6px">⚠️ ${axHetAmong}헷 아잔틱 주의</div>
+        <div style="font-size:12px;color:#b45309;line-height:1.7">유전학적으로 아잔틱이 발현되는 경우를 제외하고 100헷 아잔틱 ${axHetAmong}%, 노멀 ${100-axHetAmong}%로 나오지만, 육안으로 구분이 불가능하므로 <strong>'${axHetAmong}% 헷아잔틱'</strong>이라고 부르며 검증이 필요합니다.</div>
+      </div>`;
+  }
+
+  // 헷 초초 경고: 100헷(CC=1)와 노멀(CC=0)이 동시에 나오는 경우 → 비율 자동 계산
+  const hasCcHet    = offspring.some(o => o.genes.CC === 1);
+  const hasCcNormal = offspring.some(o => o.genes.CC === 0);
+  if (hasCcHet && hasCcNormal) {
+    const ccHetProb    = offspring.filter(o => o.genes.CC === 1).reduce((s,o) => s + o.prob, 0);
+    const ccNormalProb = offspring.filter(o => o.genes.CC === 0).reduce((s,o) => s + o.prob, 0);
+    const ccHetAmong   = Math.round((ccHetProb / (ccHetProb + ccNormalProb)) * 100);
+    container.innerHTML += `
+      <div style="background:#fff7ed;border:1.5px solid #d97706;border-radius:12px;padding:14px 16px;margin-bottom:12px">
+        <div style="font-size:13px;font-weight:700;color:#d97706;margin-bottom:6px">⚠️ ${ccHetAmong}헷 초초 주의</div>
+        <div style="font-size:12px;color:#b45309;line-height:1.7">유전학적으로 초초가 발현되는 경우를 제외하고 100헷 초초 ${ccHetAmong}%, 노멀 ${100-ccHetAmong}%로 나오지만, 육안으로 구분이 불가능하므로 <strong>'${ccHetAmong}% 헷초초'</strong>라고 부르며 검증이 필요합니다.</div>
+      </div>`;
+  }
+
+  for (const item of offspring) {
+    const pct = Math.round(item.prob * 1000) / 10;
+    const { name, badges } = phenotypeName(item.genes);
+    const badgeHtml = badges.map(b => `<span class="badge ${b.cls}">${b.text}</span>`).join('');
+    container.innerHTML += `
+      <div class="offspring-item">
+        <div class="offspring-pct">${pct}%</div>
+        <div style="flex:1">
+          <div class="offspring-name">${name}</div>
+          <div class="badge-row">${badgeHtml}</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-fill" style="width:${pct}%"></div>
+        </div>
+      </div>`;
+  }
+
+  card.classList.add('show');
+  card.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+// ══════════════════════════════════════════════════════
+// 버전 A 계산
+// ══════════════════════════════════════════════════════
+function calcA() {
+  const femaleKey = document.getElementById('a-female').value;
+  const maleKey   = document.getElementById('a-male').value;
+  const female = MORPH_MAP[femaleKey];
+  const male   = MORPH_MAP[maleKey];
+  const { offspring, lethalProb } = calcOffspring(female, male);
+  renderResults(offspring, 'offspring-a', lethalProb, 'result-a');
+}
+
+// ══════════════════════════════════════════════════════
+// 버전 B 유전자 패널 생성
+// ══════════════════════════════════════════════════════
+const bState = { female:{LW:0,SB:0,CAP:0,AX:0,CC:0}, male:{LW:0,SB:0,CAP:0,AX:0,CC:0} };
+
+function buildGenePanel(parentId) {
+  const p = parentId === 'b-female-genes' ? 'female' : 'male';
+  const id = s => `${parentId}-${s}`;
+  const html = `
+    <div class="morph-toggle-grid-2">
+      <button class="mtog" id="${id('LW')}" onclick="btog('${p}','LW',1,'on-lw',this)">릴리화이트<span class="mtog-label">치사우성</span></button>
+      <button class="mtog" id="${id('SB1')}" onclick="btog('${p}','SB',1,'on-dom',this)">세이블<span class="mtog-label">우성</span></button>
+    </div>
+    <div class="morph-toggle-grid-2">
+      <button class="mtog" id="${id('CAP')}" onclick="btog('${p}','CAP',1,'on-dom',this)">카푸치노<span class="mtog-label">우성</span></button>
+      <button class="mtog" id="${id('SB2')}" onclick="btog('${p}','SB',2,'on-dom',this)">슈퍼 세이블<span class="mtog-label">우성 2카피</span></button>
+    </div>
+    <div class="morph-toggle-grid-2">
+      <button class="mtog" id="${id('AX1')}" onclick="btog('${p}','AX',1,'on-het',this)">100헷 아잔틱<span class="mtog-label">열성 보인자</span></button>
+      <button class="mtog" id="${id('AX2')}" onclick="btog('${p}','AX',2,'on-rec',this)">아잔틱<span class="mtog-label">열성 표현</span></button>
+    </div>
+    <div class="morph-toggle-grid-2">
+      <button class="mtog" id="${id('CC1')}" onclick="btog('${p}','CC',1,'on-het',this)">100헷 초초<span class="mtog-label">열성 보인자</span></button>
+      <button class="mtog" id="${id('CC2')}" onclick="btog('${p}','CC',2,'on-rec',this)">초초<span class="mtog-label">열성 표현</span></button>
+    </div>`;
+  document.getElementById(parentId).innerHTML = html;
+}
+
+function btog(parent, gene, copies, onClass, btn) {
+  const pid = parent === 'female' ? 'b-female-genes' : 'b-male-genes';
+  // 유전자별 그룹 버튼 ID (상호 배타적)
+  const groupMap = { SB:['SB1','SB2'], AX:['AX1','AX2'], CC:['CC1','CC2'] };
+  const geneGroup = groupMap[gene] || [gene];
+
+  // 토글: 이미 선택된 값 누르면 해제
+  const current = bState[parent][gene];
+  const newVal = (current === copies) ? 0 : copies;
+  bState[parent][gene] = newVal;
+
+  // 그룹 내 모든 버튼 초기화
+  geneGroup.forEach(gid => {
+    const el = document.getElementById(`${pid}-${gid}`);
+    if (el) el.className = 'mtog';
+  });
+  // 선택된 경우 활성화
+  if (newVal > 0) btn.className = `mtog ${onClass}`;
+}
+
+function calcB() {
+  const { offspring, lethalProb } = calcOffspring(bState.female, bState.male);
+  renderResults(offspring, 'offspring-b', lethalProb, 'result-b');
+}
+
+// ══════════════════════════════════════════════════════
+// 버전 탭 전환
+// ══════════════════════════════════════════════════════
+function switchVer(v) {
+  document.querySelectorAll('.ver-tab').forEach((t,i) => t.classList.toggle('active', (i===0&&v==='a')||(i===1&&v==='b')));
+  document.getElementById('panel-a').classList.toggle('active', v==='a');
+  document.getElementById('panel-b').classList.toggle('active', v==='b');
+}
+
+// 초기화
+buildGenePanel('b-female-genes');
+buildGenePanel('b-male-genes');
+</script>
+</body>
+</html>
