@@ -109,7 +109,7 @@ def get_weather():
                 params={
                     "serviceKey": kma_key,
                     "pageNo":     1,
-                    "numOfRows":  300,
+                    "numOfRows":  1000,
                     "dataType":   "JSON",
                     "base_date":  base_date,
                     "base_time":  base_time,
@@ -124,6 +124,7 @@ def get_weather():
             today = now.strftime("%Y%m%d")
             tmx, tmn = None, None
             sky_val, pty_val = "1", "0"
+            tmp_vals = []  # TMX/TMN 없을 때 TMP로 대체
             for it in items:
                 if it["fcstDate"] != today:
                     continue
@@ -131,10 +132,16 @@ def get_weather():
                 val = it["fcstValue"]
                 if cat == "TMX": tmx = float(val)
                 if cat == "TMN": tmn = float(val)
-                # 오전 9시 기준 하늘/강수형태
+                if cat == "TMP":
+                    try: tmp_vals.append(float(val))
+                    except: pass
                 if it["fcstTime"] == "0900":
                     if cat == "SKY": sky_val = val
                     if cat == "PTY": pty_val = val
+
+            # TMX/TMN 없으면 TMP 시간별 최고/최저로 대체
+            if tmx is None and tmp_vals: tmx = max(tmp_vals)
+            if tmn is None and tmp_vals: tmn = min(tmp_vals)
 
             icon = kma_icon(sky_val, pty_val)
             high = f"{round(tmx)}°" if tmx is not None else "—"
