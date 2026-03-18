@@ -66,34 +66,34 @@ def get_weather():
     base_date = now.strftime("%Y%m%d")
     base_time = f"{base_h:02d}00"
 
-    # ── 에어코리아 미세먼지 (전국 시도별) ──
-    air_map = {}  # station → {pm10, pm25}
+    # ── 에어코리아 미세먼지 (전국 한 번에) ──
+    air_map = {}
     try:
         import urllib.parse as _up
-        airkorea_key = _up.unquote(AIRKOREA_API_KEY)  # URL 인코딩 해제
-        for sido in ["서울", "부산", "대구", "대전", "광주", "제주"]:
-            ar = requests.get(
-                "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty",
-                params={
-                    "serviceKey": airkorea_key,
-                    "returnType": "json",
-                    "numOfRows":  100,
-                    "pageNo":     1,
-                    "sidoName":   sido,
-                    "ver":        "1.0",
-                },
-                timeout=10
-            )
-            print(f"    에어코리아 {sido} 상태: {ar.status_code}")
-            ar = ar.json()
-            for item in ar.get("response", {}).get("body", {}).get("items", []):
-                stn = item.get("stationName", "")
-                try:
-                    pm10 = int(float(item.get("pm10Value") or 0))
-                    pm25 = int(float(item.get("pm25Value") or 0))
-                except:
-                    pm10, pm25 = 0, 0
-                air_map[stn] = {"pm10": pm10, "pm25": pm25}
+        airkorea_key = _up.unquote(AIRKOREA_API_KEY)
+        # 전국 측정소 실시간 목록 한 번에 조회
+        ar = requests.get(
+            "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty",
+            params={
+                "serviceKey": airkorea_key,
+                "returnType": "json",
+                "numOfRows":  500,
+                "pageNo":     1,
+                "sidoName":   "전국",
+                "ver":        "1.0",
+            },
+            timeout=15
+        )
+        print(f"    에어코리아 상태: {ar.status_code}")
+        ar = ar.json()
+        for item in ar.get("response", {}).get("body", {}).get("items", []):
+            stn = item.get("stationName", "")
+            try:
+                pm10 = int(float(item.get("pm10Value") or 0))
+                pm25 = int(float(item.get("pm25Value") or 0))
+            except:
+                pm10, pm25 = 0, 0
+            air_map[stn] = {"pm10": pm10, "pm25": pm25}
         print(f"    → 에어코리아 {len(air_map)}개 측정소")
     except Exception as e:
         print(f"  ⚠️ 에어코리아 오류: {e}")
