@@ -463,6 +463,20 @@ def build_html(weather, eco, pol, videos, ads, date_info):
 
     # 광고 탭 섹션 생성
     ads_section = ""
+    tools_section = '''<!-- TOOLS -->
+<div class="sec-hd"><span class="sec-hd-label">Tools</span><div class="sec-hd-line"></div><span class="sec-tag tag-weather">🛠 유용한 툴</span></div>
+<div class="tools-row">
+  <a class="tool-link-card" href="https://크레오늘.com/tools/hatching_calculator" target="_blank">
+    <span class="tool-link-icon">🥚</span>
+    <span class="tool-link-name">해칭 계산기</span>
+    <span class="tool-link-arrow">›</span>
+  </a>
+  <a class="tool-link-card" href="https://크레오늘.com/tools/morph_calculator" target="_blank">
+    <span class="tool-link-icon">🧬</span>
+    <span class="tool-link-name">모프 계산기</span>
+    <span class="tool-link-arrow">›</span>
+  </a>
+</div>'''
     if ads:
         tabs = ""
         panels = ""
@@ -481,22 +495,8 @@ def build_html(weather, eco, pol, videos, ads, date_info):
   {body_html}
   {link_html}
 </div>'''
-        ads_section = f'''<!-- TOOLS -->
-<div class="sec-hd"><span class="sec-hd-label">Tools</span><div class="sec-hd-line"></div><span class="sec-tag tag-weather">🛠 유용한 툴</span></div>
-<div class="tools-row">
-  <a class="tool-link-card" href="https://크레오늘.com/tools/hatching_calculator" target="_blank">
-    <span class="tool-link-icon">🥚</span>
-    <span class="tool-link-name">해칭 계산기</span>
-    <span class="tool-link-arrow">›</span>
-  </a>
-  <a class="tool-link-card" href="https://크레오늘.com/tools/morph_calculator" target="_blank">
-    <span class="tool-link-icon">🧬</span>
-    <span class="tool-link-name">모프 계산기</span>
-    <span class="tool-link-arrow">›</span>
-  </a>
-</div>
 
-<!-- ADS -->
+        ads_section = f'''<!-- ADS -->
 <div class="sec-hd"><span class="sec-hd-label">Community</span><div class="sec-hd-line"></div><span class="sec-tag tag-yt">📌 커뮤니티 소식</span></div>
 <div class="ads-wrap">
   <div class="ads-nav">
@@ -548,12 +548,13 @@ def build_html(weather, eco, pol, videos, ads, date_info):
     # YouTube 탭
     yt_tabs = ""
     yt_panels = ""
+    yt_count = len(videos)
     for i, v in enumerate(videos):
         active = "active" if i == 0 else ""
-        yt_tabs   += f'<button class="mtab {active}" onclick="showVid({i})">📺 Shorts {i+1}</button>'
+        yt_tabs   += f'<div class="yt-dot {active}" onclick="showVid({i})"></div>'
         yt_panels += f"""<div class="mpanel {active}" id="vpanel-{i}">
           <iframe src="{v['embed']}" frameborder="0" allowfullscreen
-            style="width:100%;aspect-ratio:9/16;border-radius:8px;display:block;"></iframe>
+            style="width:100%;aspect-ratio:9/16;border-radius:12px;display:block;"></iframe>
           <a class="yt-link" href="{v['url']}" target="_blank">▶ {v['title']}</a>
         </div>"""
 
@@ -562,8 +563,15 @@ def build_html(weather, eco, pol, videos, ads, date_info):
         yt_section = f"""
 <!-- YOUTUBE -->
 <div class="sec-hd"><span class="sec-hd-label">YouTube</span><div class="sec-hd-line"></div><span class="sec-tag tag-yt">🎬 오늘의 Shorts</span></div>
-<div class="mtabs">{yt_tabs}</div>
-{yt_panels}"""
+<div class="yt-nav">
+  <button class="yt-arrow-btn" id="yt-prev" onclick="moveVid(-1)">&#8249;</button>
+  <div class="yt-counter"><span id="yt-cur">1</span> / {yt_count}</div>
+  <div class="yt-dots">{yt_tabs}</div>
+  <button class="yt-arrow-btn on" id="yt-next" onclick="moveVid(1)">&#8250;</button>
+</div>
+<div class="yt-panels-wrap">
+{yt_panels}
+</div>"""
 
     return f"""<!DOCTYPE html>
 <html lang="ko">
@@ -656,10 +664,16 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 .fortune-img{{padding:0 16px 16px}}
 .fortune-img img{{width:100%;border-radius:8px;display:block;border:1px solid rgba(255,255,255,.08)}}
 .fortune-empty{{padding:20px 16px;text-align:center;color:rgba(255,255,255,.25);font-size:12px;background:#0d1117;border-radius:8px;margin:0 16px 16px;border:1px dashed rgba(255,255,255,.1)}}
-.mtabs{{display:flex;gap:6px;padding:0 16px 12px;flex-wrap:wrap}}
-.mtab{{background:#0d1117;border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:5px 12px;font-size:11px;color:rgba(255,255,255,.5);cursor:pointer;transition:.2s}}
-.mtab.active{{background:rgba(255,166,87,.15);border-color:#ffa657;color:#ffa657}}
-.mpanel{{display:none;padding:0 16px 16px}}
+.yt-nav{{display:flex;align-items:center;gap:10px;padding:0 16px 12px}}
+.yt-arrow-btn{{width:36px;height:36px;border-radius:50%;border:none;background:rgba(255,166,87,.15);color:rgba(255,255,255,.3);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;line-height:1}}
+.yt-arrow-btn.on{{background:rgba(255,166,87,.25);color:#ffa657;box-shadow:0 0 0 1px rgba(255,166,87,.4)}}
+.yt-arrow-btn.on:hover{{background:rgba(255,166,87,.4)}}
+.yt-counter{{font-family:'DM Mono',monospace;font-size:13px;color:rgba(255,255,255,.5);flex-shrink:0;min-width:36px;text-align:center}}
+.yt-dots{{display:flex;gap:6px;flex:1;justify-content:center}}
+.yt-dot{{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);cursor:pointer;transition:.2s;font-size:11px;font-family:'DM Mono',monospace;color:rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center}}
+.yt-dot.active{{background:rgba(255,166,87,.25);border-color:#ffa657;color:#ffa657}}
+.yt-panels-wrap{{padding:0 16px 16px}}
+.mpanel{{display:none}}
 .mpanel.active{{display:block}}
 .yt-link{{display:block;margin-top:8px;font-size:11px;color:#58a6ff;text-decoration:none;line-height:1.5}}
 .tools-row{{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px 16px}}
@@ -704,6 +718,8 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
   </div>
 </div>
 
+{tools_section}
+
 <!-- WEATHER -->
 <div class="sec-hd"><span class="sec-hd-label">Weather</span><div class="sec-hd-line"></div><span class="sec-tag tag-weather">전국 날씨</span></div>
 <div class="weather-ov">
@@ -731,6 +747,8 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 
 {yt_section}
 
+{ads_section}
+
 <!-- ZODIAC (이미지) -->
 <div class="sec-hd"><span class="sec-hd-label">Zodiac</span><div class="sec-hd-line"></div><span class="sec-tag tag-zod">띠별 · 별자리 운세</span></div>
 <div class="fortune-img">
@@ -750,8 +768,6 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 <div class="sec-hd"><span class="sec-hd-label">Politics</span><div class="sec-hd-line"></div><span class="sec-tag tag-pol">정치·사회</span></div>
 <div class="news-list">{news_items(pol)}</div>
 
-{ads_section}
-
 <!-- FOOTER -->
 <div class="footer">
   🦎 Crested Gecko Community · {date_info['date_ko']}<br>
@@ -768,9 +784,34 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 </div>
 <script>
 function showVid(i) {{
-  document.querySelectorAll('.mtab').forEach((t,idx) => t.classList.toggle('active', idx===i));
-  document.querySelectorAll('.mpanel').forEach((p,idx) => p.classList.toggle('active', idx===i));
+  const dots   = document.querySelectorAll('.yt-dot');
+  const panels = document.querySelectorAll('.mpanel');
+  const total  = dots.length;
+  if (i < 0 || i >= total) return;
+  dots.forEach((d,idx)   => d.classList.toggle('active', idx===i));
+  panels.forEach((p,idx) => p.classList.toggle('active', idx===i));
+  // 카운터 업데이트
+  const cur = document.getElementById('yt-cur');
+  if (cur) cur.textContent = i + 1;
+  // 화살표 활성화
+  const prev = document.getElementById('yt-prev');
+  const next = document.getElementById('yt-next');
+  if (prev) prev.classList.toggle('on', i > 0);
+  if (next) next.classList.toggle('on', i < total - 1);
 }}
+function moveVid(dir) {{
+  const dots = document.querySelectorAll('.yt-dot');
+  let cur = 0;
+  dots.forEach((d,i) => {{ if (d.classList.contains('active')) cur = i; }});
+  showVid(cur + dir);
+}}
+// 초기 dot 번호 표시
+(function() {{
+  const dots = document.querySelectorAll('.yt-dot');
+  dots.forEach((d,i) => d.textContent = i + 1);
+  const next = document.getElementById('yt-next');
+  if (next && dots.length > 1) next.classList.add('on');
+}})();
 function showAd(i) {{
   const tabs   = document.querySelectorAll('.adtab');
   const panels = document.querySelectorAll('.adpanel');
