@@ -75,10 +75,28 @@ body{background:#1a1a1a;color:var(--ink);font-family:'Gowun Dodum',serif;min-hei
   background:var(--tray-cell);
   position:relative;
   min-height:110px;
+  transition:background .3s;
 }
 .cell:last-child{border-right:none}
-/* 마지막 행의 셀들 */
 .cell.last-row{border-bottom:none}
+/* D-Day 0~7 — 주황 배경 + 테두리 점멸 */
+.cell.cell-soon{
+  background:rgba(217,119,6,.18);
+  animation:cell-warn 1.8s ease-in-out infinite;
+}
+/* D-Day 초과 — 빨간 배경 + 테두리 강한 점멸 */
+.cell.cell-overdue{
+  background:rgba(220,38,38,.22);
+  animation:cell-alert 1s ease-in-out infinite;
+}
+@keyframes cell-warn{
+  0%,100%{background:rgba(217,119,6,.13);box-shadow:inset 0 0 0 1.5px rgba(217,119,6,.3)}
+  50%{background:rgba(217,119,6,.28);box-shadow:inset 0 0 0 1.5px rgba(217,119,6,.8)}
+}
+@keyframes cell-alert{
+  0%,100%{background:rgba(220,38,38,.15);box-shadow:inset 0 0 0 2px rgba(220,38,38,.3)}
+  50%{background:rgba(220,38,38,.35);box-shadow:inset 0 0 0 2px rgba(220,38,38,.9)}
+}
 
 /* D-Day 레이블 */
 .cell-dday{
@@ -93,10 +111,10 @@ body{background:#1a1a1a;color:var(--ink);font-family:'Gowun Dodum',serif;min-hei
 }
 .dd-empty{color:#333}
 .dd-normal{color:#4a7c59}
-.dd-soon{color:#d97706;animation:pulse 1.5s ease-in-out infinite}
-.dd-overdue{color:#dc2626;animation:pulse 1s ease-in-out infinite}
+.dd-soon{color:#fbbf24;animation:pulse 1.5s ease-in-out infinite;text-shadow:0 0 6px rgba(251,191,36,.6)}
+.dd-overdue{color:#f87171;animation:pulse 1s ease-in-out infinite;text-shadow:0 0 8px rgba(248,113,113,.8)}
 .dd-hatched{color:#16a34a}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
 /* 알 2개 나란히 */
 .eggs-row{
@@ -125,6 +143,8 @@ body{background:#1a1a1a;color:var(--ink);font-family:'Gowun Dodum',serif;min-hei
 .egg-wrap:hover .egg-svg{filter:drop-shadow(0 3px 8px rgba(0,0,0,.4)) brightness(1.05)}
 .egg-wrap.empty .egg-svg{opacity:.15}
 .egg-wrap.empty:hover .egg-svg{opacity:.35}
+.egg-wrap.dragging{opacity:.35;transform:scale(.95)}
+.egg-wrap.drop-target .egg-svg{filter:drop-shadow(0 0 8px rgba(255,220,100,.9)) brightness(1.15);transform:scale(1.08)}
 
 /* 알 위 텍스트 */
 .egg-text{
@@ -360,6 +380,7 @@ function renderTrayInto(tray,container){
     </div>`;
 
   renderGrid(tray);
+  attachDragEvents(tray);
 }
 
 function renderGrid(tray){
@@ -371,6 +392,7 @@ function renderGrid(tray){
     for(let c=0;c<tray.cols;c++){
       const cell=document.createElement('div');
       cell.className='cell'+(r===totalRows-1?' last-row':'');
+      cell.dataset.r=r;cell.dataset.c=c;
       // 이 칸의 두 슬롯 D-Day 계산 (더 급한 것 기준)
       const e0=tray.eggs[`${r}-${c}-0`];
       const e1=tray.eggs[`${r}-${c}-1`];
@@ -381,8 +403,8 @@ function renderGrid(tray){
         const dds=eggs.map(e=>calcDDay(e.laydate,tray.temp)).filter(Boolean);
         if(dds.length>0){
           const minDiff=Math.min(...dds.map(d=>d.diff));
-          if(minDiff<0){ddayLabel=`D+${Math.abs(minDiff)}`;ddayClass='dd-overdue';}
-          else if(minDiff<=7){ddayLabel=`D-${minDiff}`;ddayClass='dd-soon';}
+          if(minDiff<0){ddayLabel=`D+${Math.abs(minDiff)}`;ddayClass='dd-overdue';cell.classList.add('cell-overdue');}
+          else if(minDiff<=7){ddayLabel=`D-${minDiff}`;ddayClass='dd-soon';cell.classList.add('cell-soon');}
           else{ddayLabel=`D-${minDiff}`;ddayClass='dd-normal';}
         }
       } else if(e0?.hatched||e1?.hatched){ddayLabel='🐣';ddayClass='dd-hatched';}
@@ -394,10 +416,13 @@ function renderGrid(tray){
           ${renderEgg(tray,r,c,1,e1)}
         </div>`;
 
-      // 클릭 이벤트를 각 알에 직접 달기 위해 이벤트 위임
       cell.querySelectorAll('.egg-wrap').forEach(ew=>{
         const slot=parseInt(ew.dataset.slot);
-        ew.onclick=(ev)=>{ev.stopPropagation();openModal(tray.id,r,c,slot);};
+        ew.onclick=(ev)=>{
+          ev.stopPropagation();
+          if(drag.active)return; // 드래그 중 모달 방지
+          openModal(tray.id,r,c,slot);
+        };
       });
       grid.appendChild(cell);
     }
@@ -518,6 +543,153 @@ load();
 if(trays.length>0){currentTrayId=trays[0].id;render();switchTray(currentTrayId);}
 else render();
 setInterval(()=>trays.forEach(t=>renderGrid(t)),60000);
+
+// ══════════════════════════════════
+// 드래그 & 드랍 (모바일 터치 + PC)
+// ══════════════════════════════════
+let drag={active:false,trayId:null,r:null,c:null,slot:null,ghost:null,longPressTimer:null};
+
+function initDrag(){
+  // 고스트 엘리먼트 생성
+  const g=document.createElement('div');
+  g.id='drag-ghost';
+  g.style.cssText='position:fixed;pointer-events:none;z-index:9999;opacity:0;transition:opacity .15s;transform:translate(-50%,-50%) scale(1.1);filter:drop-shadow(0 4px 12px rgba(0,0,0,.4))';
+  document.body.appendChild(g);
+}
+
+function getDragTarget(x,y){
+  // 현재 좌표 아래의 egg-wrap 찾기
+  const el=document.elementFromPoint(x,y);
+  if(!el)return null;
+  const ew=el.closest('.egg-wrap');
+  if(!ew)return null;
+  const cell=ew.closest('.cell');
+  if(!cell)return null;
+  return{ew,cell,slot:parseInt(ew.dataset.slot),r:parseInt(cell.dataset.r),c:parseInt(cell.dataset.c)};
+}
+
+function startDrag(trayId,r,c,slot,x,y){
+  drag.active=true;drag.trayId=trayId;drag.r=r;drag.c=c;drag.slot=slot;
+  const key=`${r}-${c}-${slot}`;
+  const tray=trays.find(t=>t.id===trayId);
+  const egg=tray?.eggs[key];
+  if(!egg)return cancelDrag();
+
+  // 소스 강조
+  const srcEw=document.querySelector(`#grid-${trayId} .cell[data-r="${r}"][data-c="${c}"] .egg-wrap[data-slot="${slot}"]`);
+  if(srcEw){srcEw.classList.add('dragging');}
+
+  // 고스트 내용
+  const ghost=document.getElementById('drag-ghost');
+  ghost.innerHTML=`<div style="background:#fffdf5;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;width:52px;height:66px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px;box-shadow:0 2px 8px rgba(0,0,0,.2)">
+    <div style="font-size:9px;font-weight:700;color:#5a3e1e;line-height:1.3">${escHtml(egg.dad||'?')}</div>
+    <div style="font-size:7px;color:rgba(90,62,30,.5)">—</div>
+    <div style="font-size:9px;font-weight:700;color:#5a3e1e;line-height:1.3">${escHtml(egg.mom||'?')}</div>
+  </div>`;
+  ghost.style.left=x+'px';ghost.style.top=y+'px';ghost.style.opacity='1';
+  document.body.style.userSelect='none';
+}
+
+function moveDrag(x,y){
+  if(!drag.active)return;
+  const ghost=document.getElementById('drag-ghost');
+  ghost.style.left=x+'px';ghost.style.top=y+'px';
+  // 드랍 대상 하이라이트
+  document.querySelectorAll('.egg-wrap.drop-target').forEach(e=>e.classList.remove('drop-target'));
+  const target=getDragTarget(x,y);
+  if(target&&!(target.r===drag.r&&target.c===drag.c&&target.slot===drag.slot)){
+    target.ew.classList.add('drop-target');
+  }
+}
+
+function endDrag(x,y){
+  if(!drag.active)return;
+  const target=getDragTarget(x,y);
+  document.querySelectorAll('.egg-wrap.dragging,.egg-wrap.drop-target').forEach(e=>{e.classList.remove('dragging','drop-target');});
+  const ghost=document.getElementById('drag-ghost');
+  ghost.style.opacity='0';
+  document.body.style.userSelect='';
+
+  if(target&&!(target.r===drag.r&&target.c===drag.c&&target.slot===drag.slot)){
+    // 스왑
+    const tray=trays.find(t=>t.id===drag.trayId);
+    if(tray){
+      const srcKey=`${drag.r}-${drag.c}-${drag.slot}`;
+      const dstKey=`${target.r}-${target.c}-${target.slot}`;
+      const srcEgg=tray.eggs[srcKey];
+      const dstEgg=tray.eggs[dstKey];
+      if(dstEgg)tray.eggs[srcKey]=dstEgg;
+      else delete tray.eggs[srcKey];
+      tray.eggs[dstKey]=srcEgg;
+      save();
+      renderTrayInto(tray,document.querySelector(`.tray-view[data-id="${drag.trayId}"]`));
+    }
+  }
+  drag.active=false;drag.trayId=null;drag.r=null;drag.c=null;drag.slot=null;
+}
+
+function cancelDrag(){
+  drag.active=false;
+  document.querySelectorAll('.egg-wrap.dragging,.egg-wrap.drop-target').forEach(e=>{e.classList.remove('dragging','drop-target');});
+  const ghost=document.getElementById('drag-ghost');
+  if(ghost)ghost.style.opacity='0';
+  document.body.style.userSelect='';
+  if(drag.longPressTimer){clearTimeout(drag.longPressTimer);drag.longPressTimer=null;}
+}
+
+// 터치 이벤트를 egg-wrap에 붙이는 함수 (renderGrid 이후 호출)
+function attachDragEvents(tray){
+  const grid=document.getElementById(`grid-${tray.id}`);
+  if(!grid)return;
+  grid.querySelectorAll('.egg-wrap:not(.empty)').forEach(ew=>{
+    const slot=parseInt(ew.dataset.slot);
+    const cell=ew.closest('.cell');
+    const r=parseInt(cell.dataset.r),c=parseInt(cell.dataset.c);
+
+    // 터치
+    ew.addEventListener('touchstart',e=>{
+      drag.longPressTimer=setTimeout(()=>{
+        const t=e.touches[0];
+        startDrag(tray.id,r,c,slot,t.clientX,t.clientY);
+      },450);
+    },{passive:true});
+    ew.addEventListener('touchmove',e=>{
+      if(drag.longPressTimer){clearTimeout(drag.longPressTimer);drag.longPressTimer=null;}
+      if(!drag.active)return;
+      e.preventDefault();
+      const t=e.touches[0];moveDrag(t.clientX,t.clientY);
+    },{passive:false});
+    ew.addEventListener('touchend',e=>{
+      if(drag.longPressTimer){clearTimeout(drag.longPressTimer);drag.longPressTimer=null;}
+      if(!drag.active)return;
+      const t=e.changedTouches[0];endDrag(t.clientX,t.clientY);
+    });
+    ew.addEventListener('touchcancel',cancelDrag);
+
+    // 마우스 (PC)
+    ew.addEventListener('mousedown',e=>{
+      if(e.button!==0)return;
+      drag.longPressTimer=setTimeout(()=>{
+        startDrag(tray.id,r,c,slot,e.clientX,e.clientY);
+      },300);
+    });
+    ew.addEventListener('mousemove',e=>{
+      if(!drag.active)return;
+      moveDrag(e.clientX,e.clientY);
+    });
+    ew.addEventListener('mouseup',e=>{
+      if(drag.longPressTimer){clearTimeout(drag.longPressTimer);drag.longPressTimer=null;}
+      if(!drag.active)return;
+      endDrag(e.clientX,e.clientY);
+    });
+  });
+}
+
+// 전역 마우스업 (그리드 밖에서 놓을 때)
+document.addEventListener('mouseup',()=>{if(drag.active)cancelDrag();});
+document.addEventListener('touchend',()=>{if(drag.active&&!drag.r===null)cancelDrag();});
+
+initDrag();
 </script>
 </body>
 </html>
