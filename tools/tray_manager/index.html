@@ -16,6 +16,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#1a1a1a;color:var(--ink);font-family:'Gowun Dodum',serif;min-height:100vh;padding:0 0 80px}
+.page-wrap{max-width:480px;margin:0 auto}
 
 /* 상단 헤더 */
 .top-bar{background:linear-gradient(135deg,#1a2e20,#2d5a3d);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:2px solid #4a7c59}
@@ -169,6 +170,15 @@ body{background:#1a1a1a;color:var(--ink);font-family:'Gowun Dodum',serif;min-hei
 
 /* 빈 상태 */
 .empty-state{text-align:center;padding:60px 20px;color:#444}
+.app-banner{background:#1e1e1e;border:1.5px solid #2d5a3d;border-radius:16px;padding:18px;margin:16px 14px 8px;box-shadow:0 2px 16px rgba(0,0,0,.3)}
+.app-banner-inner{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.app-banner-logo{width:44px;height:44px;object-fit:contain;border-radius:10px;flex-shrink:0}
+.app-banner-title{font-size:13px;font-weight:700;color:#e6edf3;margin-bottom:3px}
+.app-banner-sub{font-size:11px;color:#8b949e;line-height:1.6}
+.app-banner-btn{display:block;width:100%;padding:12px;background:rgba(74,124,89,.2);border:1.5px solid #4a7c59;border-radius:10px;color:#4a7c59;font-size:12px;text-align:center;text-decoration:none;font-family:'Gowun Dodum',serif;transition:.2s}
+.app-banner-btn:hover{background:rgba(74,124,89,.35);color:#6abf7a}
+.footer{text-align:center;padding:20px 0 10px;font-size:11px;color:#444}
+.footer a{color:#4a7c59;text-decoration:none}
 .empty-state .emoji{font-size:48px;display:block;margin-bottom:12px}
 .empty-state p{font-size:13px;line-height:1.8;color:#555}
 .btn-start{background:#4a7c59;color:#fff;border:none;border-radius:12px;padding:12px 24px;font-size:14px;font-family:'Gowun Dodum',serif;cursor:pointer;margin-top:16px}
@@ -198,6 +208,8 @@ body{background:#1a1a1a;color:var(--ink);font-family:'Gowun Dodum',serif;min-hei
 </head>
 <body>
 
+<div class="page-wrap">
+
 <div class="top-bar">
   <div>
     <div class="top-bar-title">🥚 인큐베이터 관리</div>
@@ -222,6 +234,28 @@ body{background:#1a1a1a;color:var(--ink);font-family:'Gowun Dodum',serif;min-hei
     <button class="btn-start" onclick="createTray()">+ 첫 트레이 만들기</button>
   </div>
 </div>
+
+<!-- 앱 배너 -->
+<div class="app-banner">
+  <div class="app-banner-inner">
+    <img class="app-banner-logo" src="../../images/cretoday_logo.png" alt="크레오늘">
+    <div>
+      <div class="app-banner-title">더 체계적인 개체 관리가 필요하시다면?</div>
+      <div class="app-banner-sub">크레오늘 앱으로 산란·해칭·개체 정보를<br>한 곳에서 편리하게 관리해보세요!</div>
+    </div>
+  </div>
+  <a class="app-banner-btn" href="https://play.google.com/apps/testing/com.crenote.breeding" target="_blank">
+    🔗 크레오늘 앱 테스트 참여하기
+  </a>
+</div>
+
+<!-- 푸터 -->
+<div class="footer">
+  <a href="https://크레오늘.com/tools">← 툴 목록으로</a><br><br>
+  크레스티드 게코 커뮤니티 · CreOnel
+</div>
+
+</div><!-- /page-wrap -->
 
 <!-- 모달 -->
 <div class="modal-bg" id="modal-bg" onclick="closeModalBg(event)">
