@@ -325,7 +325,7 @@ def get_videos():
                         "q": query + " -동요 -어린이 -kids -유아",
                         "type": "video", "videoDuration": "short",
                         "regionCode": "KR", "relevanceLanguage": "ko",
-                        "order": "viewCount", "safeSearch": "moderate",
+                        "order": "viewCount", "safeSearch": "strict",
                         "maxResults": 50, "key": YOUTUBE_API_KEY,
                     }
                     if page_token:
@@ -340,12 +340,22 @@ def get_videos():
                         if any(w.lower() in title.lower() for w in EXCLUDE_WORDS):
                             continue
                         dr = requests.get("https://www.googleapis.com/youtube/v3/videos",
-                                          params={"part": "contentDetails", "id": vid,
+                                          params={"part": "contentDetails,status", "id": vid,
                                                   "key": YOUTUBE_API_KEY}, timeout=10).json()
                         items_d = dr.get("items", [])
                         if not items_d:
                             continue
-                        if _parse_duration(items_d[0]["contentDetails"]["duration"]) <= 60:
+                        vd = items_d[0]
+                        st = vd.get("status", {})
+                        cd = vd.get("contentDetails", {})
+                        # 임베드 불가 / 비공개 / 연령제한 제외
+                        if not st.get("embeddable", True):
+                            continue
+                        if st.get("privacyStatus", "public") != "public":
+                            continue
+                        if cd.get("contentRating", {}):
+                            continue
+                        if _parse_duration(cd["duration"]) <= 60:
                             seen.add(vid)
                             fetched.append(f"https://www.youtube.com/shorts/{vid} | {title}\n")
                         if len(fetched) >= 31:
@@ -358,7 +368,7 @@ def get_videos():
                 print(f"    → funny 부족({len(fetched)}개), 전체 인기 Shorts로 보충...")
                 pr = requests.get(
                     "https://www.googleapis.com/youtube/v3/videos",
-                    params={"part": "snippet,contentDetails", "chart": "mostPopular",
+                    params={"part": "snippet,contentDetails,status", "chart": "mostPopular",
                             "regionCode": "KR", "maxResults": 50,
                             "key": YOUTUBE_API_KEY},
                     timeout=15
@@ -370,7 +380,15 @@ def get_videos():
                         continue
                     if any(w.lower() in title.lower() for w in EXCLUDE_WORDS):
                         continue
-                    if _parse_duration(item["contentDetails"]["duration"]) <= 60:
+                    st = item.get("status", {})
+                    cd = item.get("contentDetails", {})
+                    if not st.get("embeddable", True):
+                        continue
+                    if st.get("privacyStatus", "public") != "public":
+                        continue
+                    if cd.get("contentRating", {}):
+                        continue
+                    if _parse_duration(cd["duration"]) <= 60:
                         seen.add(vid)
                         fetched.append(f"https://www.youtube.com/shorts/{vid} | {title}\n")
                     if len(fetched) >= 31:
