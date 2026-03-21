@@ -476,6 +476,11 @@ def build_html(weather, eco, pol, videos, ads, date_info):
     <span class="tool-link-name">모프 계산기</span>
     <span class="tool-link-arrow">›</span>
   </a>
+  <a class="tool-link-card" href="https://크레오늘.com/tools/tray_manager" target="_blank">
+    <span class="tool-link-icon">📦</span>
+    <span class="tool-link-name">트레이 관리</span>
+    <span class="tool-link-arrow">›</span>
+  </a>
 </div>'''
     if ads:
         tabs = ""
@@ -676,7 +681,7 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 .mpanel{{display:none}}
 .mpanel.active{{display:block}}
 .yt-link{{display:block;margin-top:8px;font-size:11px;color:#58a6ff;text-decoration:none;line-height:1.5}}
-.tools-row{{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px 16px}}
+.tools-row{{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:0 16px 16px}}
 .tool-link-card{{display:flex;align-items:center;gap:8px;background:#0d1117;border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:12px 14px;text-decoration:none;color:inherit;transition:all .2s}}
 .tool-link-card:hover{{border-color:rgba(88,166,255,.3);background:rgba(88,166,255,.05)}}
 .tool-link-icon{{font-size:20px;flex-shrink:0}}
