@@ -746,28 +746,14 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 
 <!-- WEATHER -->
 <div class="sec-hd"><span class="sec-hd-label">Weather</span><div class="sec-hd-line"></div><span class="sec-tag tag-weather">전국 날씨</span></div>
-<div class="weather-ov">
-  <div class="weather-ov-icon">🌤</div>
-  <div style="flex:1">
-    <div class="weather-ov-title">{weather.get('overview','')}</div>
-    <div class="weather-ov-sub">{weather.get('detail','')}</div>
-  </div>
-  <div class="ov-dust-box">
-    <div class="ov-dust-title">서울 대기질</div>
-    <div class="ov-dust-row">
-      <span class="ov-dust-lbl">미세</span>
-      <span class="ov-dust-val">{s_pm10}㎍</span>
-      <span class="ov-dust-grade" style="color:{s_pm10_col}">{s_pm10_lbl}</span>
-    </div>
-    <div class="ov-dust-row">
-      <span class="ov-dust-lbl">초미세</span>
-      <span class="ov-dust-val">{s_pm25}㎍</span>
-      <span class="ov-dust-grade" style="color:{s_pm25_col}">{s_pm25_lbl}</span>
-    </div>
-  </div>
+<div class="fortune-img">
+  <img src="images/today_weather.jpg?v={date_info['date_str'].replace('-','')}" alt="오늘의 날씨"
+       onerror="this.parentElement.innerHTML='<div class=\'fortune-empty\'>☀️ 오늘의 날씨 이미지 준비 중<br><small>images/today_weather.jpg 업로드 해주세요</small></div>'">
 </div>
-<div class="cities">{cities_html}</div>
-<div class="weekly">{weekly_html}</div>
+<div class="fortune-img">
+  <img src="images/today_finedust.jpg?v={date_info['date_str'].replace('-','')}" alt="오늘의 미세먼지"
+       onerror="this.parentElement.innerHTML='<div class=\'fortune-empty\'>🌫 오늘의 미세먼지 이미지 준비 중<br><small>images/today_finedust.jpg 업로드 해주세요</small></div>'">
+</div>
 
 {yt_section}
 
