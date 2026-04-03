@@ -757,8 +757,6 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 
 {yt_section}
 
-{ads_section}
-
 <!-- ZODIAC (이미지) -->
 <div class="sec-hd"><span class="sec-hd-label">Zodiac</span><div class="sec-hd-line"></div><span class="sec-tag tag-zod">띠별 · 별자리 운세</span></div>
 <div class="fortune-img">
@@ -777,6 +775,9 @@ body{{background:#0d1117;color:#e6edf3;font-family:'Noto Sans KR',sans-serif;dis
 <!-- POLITICS NEWS -->
 <div class="sec-hd"><span class="sec-hd-label">Politics</span><div class="sec-hd-line"></div><span class="sec-tag tag-pol">정치·사회</span></div>
 <div class="news-list">{news_items(pol)}</div>
+
+{ads_section}
+
 
 <!-- FOOTER -->
 <div class="footer">
